@@ -26,9 +26,19 @@ class Graph(Scene):
         self.add(m2)
         self.add_foreground_mobject(ar1)
         self.add_foreground_mobject(ar2)
+
+        self.SetLabel(p1[0], p1[1], "1")
+        self.SetLabel(p2[0], p2[1], "2")
+        self.SetLabel(p3[0], p3[1], "3")
+
         self.play(Transform(c2, c3, run_time=2))
         self.wait(1)
         self.play(Transform(c4, c5, run_time=2))
+    
+    def SetLabel(self, x, y, label) -> VMobject:
+        label = Tex(label, color=BLACK).set_x(x).set_y(y)
+
+        self.add_foreground_mobject(label)
 
 
 class CustomArrow(Mobject):
@@ -48,9 +58,14 @@ class CustomArrow(Mobject):
 
 
 class GraphSegment(Mobject):
-    def __init__(self, p1, p2, scale, color):
+    def __init__(self, p1, p2, scale, color, label=None):
         super().__init__()
+        
         l = Line(p1, p2)
+
+        if label!= None:
+            label = Text(label, color=BLACK)
+            self.add(label).set_x(p1[0])
 
         l.set_stroke(width=(scale * 16))
 
@@ -61,5 +76,6 @@ class GraphSegment(Mobject):
 
         g.set_fill(color=color)
         g.set_stroke(color=color)
+
 
         self.add(g)
