@@ -1,34 +1,89 @@
 from manim import *
 
 
-class Graph(Scene):
+class Flow(Scene):
     def construct(self):
         self.camera.background_color = WHITE
+        self.camera.frame_center = np.array([2, 0, 0])
+
         p1 = np.array([-4, 0, 0])
-        p2 = np.array([4, 0, 0])
+        p2 = np.array([0, 0, 0])
         p3 = np.array([6, 2, 0])
-        m1 = GraphSegment(p1, p2, 5, WHITE)
-        b1 = GraphSegment(p1, p2, 5.5, BLACK)
-        c2 = GraphSegment(p1, p2, 0, GREY_B)
-        c3 = GraphSegment(p1, p2, 3, GREY_B)
+        p4 = np.array([7, -1, 0])
+        p5 = np.array([8, 2, 0])
 
-        m2 = GraphSegment(p2, p3, 3, WHITE)
-        b2 = GraphSegment(p2, p3, 3.5, BLACK)
-        c4 = GraphSegment(p2, p3, 0, GREY_B)
-        c5 = GraphSegment(p2, p3, 3, GREY_B)
+        edge_points_and_cap = [
+            ((p1, p2), 4),
+            ((p2, p3), 3),
+            ((p2, p4), 2),
+            ((p4, p5), 3),
+            ((p3, p5), 2),
+        ]
 
-        ar1 = CustomArrow(p1, p2)
-        ar2 = CustomArrow(p2, p3)
+        g = BackgroundGraph(edge_points_and_cap)
+        a = ArrowGraph(edge_points_and_cap)
 
-        self.add(b1)
-        self.add(b2)
-        self.add(m1)
-        self.add(m2)
-        self.add_foreground_mobject(ar1)
-        self.add_foreground_mobject(ar2)
-        self.play(Transform(c2, c3, run_time=2))
-        self.wait(1)
-        self.play(Transform(c4, c5, run_time=2))
+        self.add(g)
+        self.add_foreground_mobject(a)
+
+        # Flow
+
+        flow_edges_1 = [
+            (p1, p2),
+            (p2, p3),
+            (p3, p5),
+        ]
+
+        f1 = FlowGraph(flow_edges_1, 0)
+        f2 = FlowGraph(flow_edges_1, 2)
+
+        self.play(Transform(f1, f2, run_time=2))
+
+        # Should be done another way
+
+        custom_flow11 = GraphSegment(p1, p2, 2, GREY)
+        custom_flow12 = GraphSegment(p2, p4, 0, GREY)
+        custom_flow13 = GraphSegment(p4, p5, 0, GREY)
+        g1 = Group(custom_flow11, custom_flow12, custom_flow13)
+
+        custom_flow21 = GraphSegment(p1, p2, 4, GREY)
+        custom_flow22 = GraphSegment(p2, p4, 2, GREY)
+        custom_flow23 = GraphSegment(p4, p5, 2, GREY)
+        g2 = Group(custom_flow21, custom_flow22, custom_flow23)
+        self.play(Transform(g1, g2, run_time=2))
+
+
+class FlowGraph(Mobject):
+    def __init__(self, edge_points, c):
+        super().__init__()
+        for i in range(len(edge_points)):
+            (p1, p2) = edge_points[i]
+            g = GraphSegment(p1, p2, c, GREY)
+            self.add(g)
+
+
+class ArrowGraph(Mobject):
+    def __init__(self, edge_points):
+        super().__init__()
+        for i in range(len(edge_points)):
+            (p1, p2), c = edge_points[i]
+
+            a = CustomArrow(p1, p2)
+
+            self.add(a)
+
+
+class BackgroundGraph(Mobject):
+    def __init__(self, edge_points_and_cap):
+        super().__init__()
+        for i in range(len(edge_points_and_cap)):
+            (p1, p2), c = edge_points_and_cap[i]
+
+            g = GraphSegment(p1, p2, c, WHITE)
+            b = GraphSegment(p1, p2, (c + 0.2), BLACK)
+
+            self.add_to_back(b)
+            self.add(g)
 
 
 class CustomArrow(Mobject):
