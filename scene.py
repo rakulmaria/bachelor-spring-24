@@ -1,5 +1,6 @@
 from manim import *
 from edge import Edge
+from vertex import Vertex
 
 
 class Flow(Scene):
@@ -7,31 +8,37 @@ class Flow(Scene):
         self.camera.background_color = WHITE
         self.camera.frame_center = np.array([2, 0, 0])
         self.edges = {}
+        self.vertices = {}
 
-        p1 = np.array([-4, 0, 0])
-        p2 = np.array([0, 0, 0])
-        p3 = np.array([6, 2, 0])
-        p4 = np.array([7, -1, 0])
-        p5 = np.array([8, 2, 0])
+        self.add_vertices(
+            [
+                ["vertex1", -4, 0],
+                ["vertex2", 0, 0],
+                ["vertex3", 6, 2],
+                ["vertex4", 7, -1],
+                ["vertex5", 8, 2],
+            ]
+        )
 
         self.add_edges(
             [
-                ["edge1", p1, p2, 4],
-                ["edge2", p2, p3, 3],
-                ["edge3", p2, p4, 2],
-                ["edge4", p4, p5, 3],
-                ["edge5", p3, p5, 2],
+                ["edge1", self.vertices["vertex1"], self.vertices["vertex2"], 4],
+                ["edge2", self.vertices["vertex2"], self.vertices["vertex3"], 3],
+                ["edge3", self.vertices["vertex2"], self.vertices["vertex4"], 2],
+                ["edge4", self.vertices["vertex4"], self.vertices["vertex5"], 3],
+                ["edge5", self.vertices["vertex3"], self.vertices["vertex5"], 2],
             ]
         )
 
         g = BackgroundGraph(self.edges.values())
-        a = ArrowGraph(self.edges)
+        a = ArrowGraph(self.edges.values())
+        l = GraphLabel(self.vertices.values())
 
         self.add(g)
         self.add_foreground_mobject(a)
+        self.add_foreground_mobject(l)
 
-        # Flow
-
+        # Flow 1
         flow_edges_1 = [
             self.edges["edge1"],
             self.edges["edge2"],
@@ -43,8 +50,7 @@ class Flow(Scene):
 
         self.play(Transform(f1, f2, run_time=2))
 
-        # Should be done another way
-
+        # Flow 2
         flow_edges_2 = [
             self.edges["edge1"],
             self.edges["edge3"],
@@ -60,41 +66,31 @@ class Flow(Scene):
         for id, start_node, end_node, max_capacity in lst:
             self.edges[id] = Edge(id, start_node, end_node, max_capacity)
 
+    def add_vertices(self, lst):
+        for id, x_coord, y_coord in lst:
+            self.vertices[id] = Vertex(id, x_coord, y_coord)
+
 
 class FlowGraph(Mobject):
     def __init__(self, edge_points, c):
         super().__init__()
         for edge in edge_points:
             g = GraphSegment(
-                edge.start_node, edge.end_node, (c + edge.current_capacity), GREY
+                edge.start_node.to_np_array(),
+                edge.end_node.to_np_array(),
+                (c + edge.current_flow),
+                GREY,
             )
-            edge.add_to_current_capacity(c)
+            edge.add_to_current_flow(c)
             self.add(g)
 
 
 class ArrowGraph(Mobject):
-    def __init__(self, edges: dict):
-        super().__init__()
-        for edge in edges.values():
-
-            a = CustomArrow(edge.start_node, edge.end_node)
-
-            self.add(a)
-
-
-class BackgroundGraph(Mobject):
-    def __init__(self, edges: dict):
+    def __init__(self, edges):
         super().__init__()
         for edge in edges:
-            g = GraphSegment(
-                edge.get_start_node(), edge.end_node, edge.max_capacity, WHITE
-            )
-            b = GraphSegment(
-                edge.start_node, edge.end_node, (edge.max_capacity + 0.2), BLACK
-            )
-
-            self.add_to_back(b)
-            self.add(g)
+            a = CustomArrow(edge.start_node.to_np_array(), edge.end_node.to_np_array())
+            self.add(a)
 
 
 class CustomArrow(Mobject):
@@ -111,6 +107,43 @@ class CustomArrow(Mobject):
         arr.set_stroke(color=RED_E)
 
         self.add(arr)
+
+
+class GraphLabel(Mobject):
+    def __init__(self, vertecies):
+        super().__init__()
+        for i, vertex in enumerate(vertecies):
+            label = Label(vertex, str(i))
+            self.add(label)
+
+
+class Label(Mobject):
+    def __init__(self, vertex, label):
+        super().__init__()
+        label = Tex(label, color=BLACK).set_x(vertex.x_coord).set_y(vertex.y_coord)
+
+        self.add(label)
+
+
+class BackgroundGraph(Mobject):
+    def __init__(self, edges):
+        super().__init__()
+        for edge in edges:
+            g = GraphSegment(
+                edge.start_node.to_np_array(),
+                edge.end_node.to_np_array(),
+                edge.max_capacity,
+                WHITE,
+            )
+            b = GraphSegment(
+                edge.start_node.to_np_array(),
+                edge.end_node.to_np_array(),
+                (edge.max_capacity + 0.2),
+                BLACK,
+            )
+
+            self.add_to_back(b)
+            self.add(g)
 
 
 class GraphSegment(Mobject):
