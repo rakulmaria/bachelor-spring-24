@@ -144,11 +144,6 @@ class Flow(Scene):
 
         self.play(ReplacementTransform(flow_4_before, flow_4_after, run_time=2))
 
-    def SetLabel(self, x, y, label) -> VMobject:
-        label = Tex(label, color=BLACK).set_x(x).set_y(y)
-
-        self.add_foreground_mobject(label)
-
     def add_edges(self, lst):
         for id, start_node, end_node, max_capacity in lst:
             self.edges[id] = Edge(id, start_node, end_node, max_capacity)
