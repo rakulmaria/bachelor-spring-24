@@ -35,6 +35,13 @@ class Flow(Scene):
         g = BackgroundGraph(self.edges.values())
         a = ArrowGraph(self.edges)
 
+        self.SetLabel(v0[0], v0[1], "0")
+        self.SetLabel(v1[0], v1[1], "1")
+        self.SetLabel(v2[0], v2[1], "2")
+        self.SetLabel(v3[0], v3[1], "3")
+        self.SetLabel(v4[0], v4[1], "4")
+        self.SetLabel(v5[0], v5[1], "5")
+
         self.add(g)
         self.add_foreground_mobject(a)
 
@@ -51,6 +58,10 @@ class Flow(Scene):
         flow_1_before = FlowGraph(flow_edges_0_1_3_5, 0)
         flow_1_after = FlowGraph(flow_edges_0_1_3_5, 2)
 
+        t1 = Tex(r"Add 2 units of flow along 0 $\rightarrow$ 1 $\rightarrow$ 3 $\rightarrow$ 5", color=BLACK).set_x(-7).set_y(4)
+        
+        self.play(Write(t1, run_time=1))
+
         self.play(ReplacementTransform(flow_1_before, flow_1_after, run_time=2))
 
         flow_edges_0_2_4_5 = [
@@ -62,6 +73,12 @@ class Flow(Scene):
         flow_2_before = FlowGraph(flow_edges_0_2_4_5, 0)
         flow_2_after = FlowGraph(flow_edges_0_2_4_5, 1)
 
+        self.play(FadeOut(t1))
+        
+        t2 = Tex(r"Add 1 unit of flow along 0 $\rightarrow$ 2  $\rightarrow$ 4 $\rightarrow$ 5", color=BLACK).set_x(-7).set_y(4)
+        
+        self.play(Write(t2, run_time=1))
+
         self.play(ReplacementTransform(flow_2_before, flow_2_after, run_time=2))
 
         flow_edges_0_1_4_5 = [
@@ -70,21 +87,12 @@ class Flow(Scene):
             self.edges["edge4_to_5"],
         ]
 
-        flow_edges_1_3_5 = [
-            self.edges["edge1_to_3"],
-            self.edges["edge3_to_5"],
-        ]
+        self.play(FadeOut(t2))
 
-        flow_edges_4_5 = [
-            self.edges["edge4_to_5"],
-        ]
+        t3 = Tex(r"Redirect 1 unit of flow from 1 $\rightarrow$ 3 $\rightarrow$ 5  to 1 $\rightarrow$ 4 $\rightarrow$ 5", color=BLACK).set_x(-7).set_y(4)
 
+        self.play(Write(t3, run_time=1))
 
-        #flow_1_redirect1 = FlowGraph(flow_edges_1_3_5, 0, False)
-        #flow_1_redirect2 = FlowGraph(flow_edges_1_3_5, 1, False)
-
-        #self.play(Transform(flow_1_after, flow_1_before, run_time=2))
-        
         self.play(ReplacementTransform(flow_1_after, FlowGraph(flow_edges_0_1_3_5, -1), run_time=2))
 
         flow_3_before = FlowGraph(flow_edges_0_1_4_5, 0)
@@ -98,45 +106,16 @@ class Flow(Scene):
             self.edges["edge3_to_5"],
         ]
 
-        flow_edges_0_2 = [
-            self.edges["edge0_to_2"],
-        ]
+        self.play(FadeOut(t3))
+        t4 = Tex(r"Add 1 unit of flow along 0 $\rightarrow$ 2 $\rightarrow$ 3 $\rightarrow$ 5", color=BLACK).set_x(-7).set_y(4)
 
-        flow_edge_3_5 = [
-            self.edges["edge3_to_5"],
-        ]
+        self.play(Write(t4, run_time=1))
 
 
         flow_4_before = FlowGraph(flow_edges_0_2_3_5, 0)
         flow_4_after = FlowGraph(flow_edges_0_2_3_5, 1)
 
         self.play(ReplacementTransform(flow_4_before, flow_4_after, run_time=2))
-
-
-
-        # flow_edges_1 = [
-        #     self.edges["edge1"],
-        #     self.edges["edge2"],
-        #     self.edges["edge5"],
-        # ]
-
-        # f1 = FlowGraph(flow_edges_1, 0)
-        # f2 = FlowGraph(flow_edges_1, 2)
-
-        # self.play(Transform(f1, f2, run_time=2))
-
-        # # Should be done another way
-
-        # flow_edges_2 = [
-        #     self.edges["edge1"],
-        #     self.edges["edge3"],
-        #     self.edges["edge4"],
-        # ]
-
-        # f3 = FlowGraph(flow_edges_2, 0)
-        # f4 = FlowGraph(flow_edges_2, 2)
-
-        # self.play(Transform(f3, f4, run_time=2))
 
     def SetLabel(self, x, y, label) -> VMobject:
         label = Tex(label, color=BLACK).set_x(x).set_y(y)
