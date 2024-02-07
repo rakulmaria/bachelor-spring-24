@@ -1,10 +1,12 @@
 from manim import *
+from edge import Edge
 
 
 class Flow(Scene):
     def construct(self):
         self.camera.background_color = WHITE
         self.camera.frame_center = np.array([2, 0, 0])
+        self.edges = {}
 
         p1 = np.array([-4, 0, 0])
         p2 = np.array([0, 0, 0])
@@ -12,16 +14,18 @@ class Flow(Scene):
         p4 = np.array([7, -1, 0])
         p5 = np.array([8, 2, 0])
 
-        edge_points_and_cap = [
-            ((p1, p2), 4),
-            ((p2, p3), 3),
-            ((p2, p4), 2),
-            ((p4, p5), 3),
-            ((p3, p5), 2),
-        ]
+        self.add_edges(
+            [
+                ["edge1", p1, p2, 4],
+                ["edge2", p2, p3, 3],
+                ["edge3", p2, p4, 2],
+                ["edge4", p4, p5, 3],
+                ["edge5", p3, p5, 2],
+            ]
+        )
 
-        g = BackgroundGraph(edge_points_and_cap)
-        a = ArrowGraph(edge_points_and_cap)
+        g = BackgroundGraph(self.edges.values())
+        a = ArrowGraph(self.edges)
 
         self.add(g)
         self.add_foreground_mobject(a)
@@ -29,9 +33,9 @@ class Flow(Scene):
         # Flow
 
         flow_edges_1 = [
-            (p1, p2),
-            (p2, p3),
-            (p3, p5),
+            self.edges["edge1"],
+            self.edges["edge2"],
+            self.edges["edge5"],
         ]
 
         f1 = FlowGraph(flow_edges_1, 0)
@@ -41,46 +45,53 @@ class Flow(Scene):
 
         # Should be done another way
 
-        custom_flow11 = GraphSegment(p1, p2, 2, GREY)
-        custom_flow12 = GraphSegment(p2, p4, 0, GREY)
-        custom_flow13 = GraphSegment(p4, p5, 0, GREY)
-        g1 = Group(custom_flow11, custom_flow12, custom_flow13)
+        flow_edges_2 = [
+            self.edges["edge1"],
+            self.edges["edge3"],
+            self.edges["edge4"],
+        ]
 
-        custom_flow21 = GraphSegment(p1, p2, 4, GREY)
-        custom_flow22 = GraphSegment(p2, p4, 2, GREY)
-        custom_flow23 = GraphSegment(p4, p5, 2, GREY)
-        g2 = Group(custom_flow21, custom_flow22, custom_flow23)
-        self.play(Transform(g1, g2, run_time=2))
+        f3 = FlowGraph(flow_edges_2, 0)
+        f4 = FlowGraph(flow_edges_2, 2)
+
+        self.play(Transform(f3, f4, run_time=2))
+
+    def add_edges(self, lst):
+        for id, start_node, end_node, max_capacity in lst:
+            self.edges[id] = Edge(id, start_node, end_node, max_capacity)
 
 
 class FlowGraph(Mobject):
     def __init__(self, edge_points, c):
         super().__init__()
-        for i in range(len(edge_points)):
-            (p1, p2) = edge_points[i]
-            g = GraphSegment(p1, p2, c, GREY)
+        for edge in edge_points:
+            g = GraphSegment(
+                edge.start_node, edge.end_node, (c + edge.current_capacity), GREY
+            )
+            edge.add_to_current_capacity(c)
             self.add(g)
 
 
 class ArrowGraph(Mobject):
-    def __init__(self, edge_points):
+    def __init__(self, edges: dict):
         super().__init__()
-        for i in range(len(edge_points)):
-            (p1, p2), c = edge_points[i]
+        for edge in edges.values():
 
-            a = CustomArrow(p1, p2)
+            a = CustomArrow(edge.start_node, edge.end_node)
 
             self.add(a)
 
 
 class BackgroundGraph(Mobject):
-    def __init__(self, edge_points_and_cap):
+    def __init__(self, edges: dict):
         super().__init__()
-        for i in range(len(edge_points_and_cap)):
-            (p1, p2), c = edge_points_and_cap[i]
-
-            g = GraphSegment(p1, p2, c, WHITE)
-            b = GraphSegment(p1, p2, (c + 0.2), BLACK)
+        for edge in edges:
+            g = GraphSegment(
+                edge.get_start_node(), edge.end_node, edge.max_capacity, WHITE
+            )
+            b = GraphSegment(
+                edge.start_node, edge.end_node, (edge.max_capacity + 0.2), BLACK
+            )
 
             self.add_to_back(b)
             self.add(g)
