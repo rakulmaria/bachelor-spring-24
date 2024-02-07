@@ -1,4 +1,5 @@
 from manim import *
+from numpy import ndarray
 from edge import Edge
 from vertex import Vertex
 
@@ -6,6 +7,8 @@ from vertex import Vertex
 class Flow(Scene):
     def construct(self):
         self.camera.background_color = WHITE
+        self.camera.frame_width = 20
+        self.camera.resize_frame_shape(0)
         self.camera.frame_center = np.array([2, 0, 0])
         self.edges = {}
         self.vertices = {}
@@ -48,7 +51,7 @@ class Flow(Scene):
         f1 = FlowGraph(flow_edges_1, 0)
         f2 = FlowGraph(flow_edges_1, 2)
 
-        self.play(Transform(f1, f2, run_time=2))
+        self.play(ReplacementTransform(f1, f2, run_time=2))
 
         # Flow 2
         flow_edges_2 = [
@@ -60,7 +63,7 @@ class Flow(Scene):
         f3 = FlowGraph(flow_edges_2, 0)
         f4 = FlowGraph(flow_edges_2, 2)
 
-        self.play(Transform(f3, f4, run_time=2))
+        self.play(ReplacementTransform(f3, f4, run_time=2))
 
     def add_edges(self, lst):
         for id, start_node, end_node, max_capacity in lst:
@@ -72,13 +75,13 @@ class Flow(Scene):
 
 
 class FlowGraph(Mobject):
-    def __init__(self, edge_points, c):
+    def __init__(self, edges: list[Edge], c):
         super().__init__()
-        for edge in edge_points:
+        for edge in edges:
             g = GraphSegment(
                 edge.start_node.to_np_array(),
                 edge.end_node.to_np_array(),
-                (c + edge.current_flow),
+                (edge.current_flow + c),
                 GREY,
             )
             edge.add_to_current_flow(c)
@@ -86,7 +89,7 @@ class FlowGraph(Mobject):
 
 
 class ArrowGraph(Mobject):
-    def __init__(self, edges):
+    def __init__(self, edges: list[Edge]):
         super().__init__()
         for edge in edges:
             a = CustomArrow(edge.start_node.to_np_array(), edge.end_node.to_np_array())
@@ -94,7 +97,7 @@ class ArrowGraph(Mobject):
 
 
 class CustomArrow(Mobject):
-    def __init__(self, p1, p2):
+    def __init__(self, p1: ndarray, p2: ndarray):
         super().__init__()
         midpoint = (p1 + p2) / 2
         fixed_length = 1.5
@@ -110,7 +113,7 @@ class CustomArrow(Mobject):
 
 
 class GraphLabel(Mobject):
-    def __init__(self, vertecies):
+    def __init__(self, vertecies: list[Vertex]):
         super().__init__()
         for i, vertex in enumerate(vertecies):
             label = Label(vertex, str(i))
@@ -118,7 +121,7 @@ class GraphLabel(Mobject):
 
 
 class Label(Mobject):
-    def __init__(self, vertex, label):
+    def __init__(self, vertex: Vertex, label: str):
         super().__init__()
         label = Tex(label, color=BLACK).set_x(vertex.x_coord).set_y(vertex.y_coord)
 
@@ -126,7 +129,7 @@ class Label(Mobject):
 
 
 class BackgroundGraph(Mobject):
-    def __init__(self, edges):
+    def __init__(self, edges: list[Edge]):
         super().__init__()
         for edge in edges:
             g = GraphSegment(
@@ -147,7 +150,7 @@ class BackgroundGraph(Mobject):
 
 
 class GraphSegment(Mobject):
-    def __init__(self, p1, p2, scale, color):
+    def __init__(self, p1: ndarray, p2: ndarray, scale: int, color):
         super().__init__()
         l = Line(p1, p2)
 
