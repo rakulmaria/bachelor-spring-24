@@ -4,11 +4,17 @@ from manim import *
 class Graph(Scene):
     def construct(self):
         self.camera.background_color = WHITE
-        p1 = np.array([-4, 0, 0])
-        p2 = np.array([4, 0, 0])
-        p3 = np.array([6, 2, 0])
+
+        v0 = np.array([0, 6, 0])
+        v1 = np.array([-4, 2, 0])
+        v2 = np.array([4, 2, 0])
+        v3 = np.array([-4, -2, 0])
+        v4 = np.array([4, -2, 0])
+        v5 = np.array([0, -6, 0])
+
         m1 = GraphSegment(p1, p2, 5, WHITE)
         b1 = GraphSegment(p1, p2, 5.5, BLACK)
+
         c2 = GraphSegment(p1, p2, 0, GREY_B)
         c3 = GraphSegment(p1, p2, 3, GREY_B)
 
