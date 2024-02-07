@@ -1,7 +1,6 @@
 from manim import *
 from edge import Edge
 
-
 class Flow(Scene):
     def construct(self):
         self.camera.background_color = WHITE
@@ -13,27 +12,23 @@ class Flow(Scene):
         v4 = np.array([4, -2, 0])
         v5 = np.array([0, -6, 0])
 
-        m1 = GraphSegment(p1, p2, 5, WHITE)
-        b1 = GraphSegment(p1, p2, 5.5, BLACK)
+        # m1 = GraphSegment(p1, p2, 5, WHITE)
+        # b1 = GraphSegment(p1, p2, 5.5, BLACK)
+        # c2 = GraphSegment(p1, p2, 0, GREY_B)
+        # c3 = GraphSegment(p1, p2, 3, GREY_B)
 
-        c2 = GraphSegment(p1, p2, 0, GREY_B)
-        c3 = GraphSegment(p1, p2, 3, GREY_B)
-        self.camera.frame_center = np.array([2, 0, 0])
         self.edges = {}
-
-        p1 = np.array([-4, 0, 0])
-        p2 = np.array([0, 0, 0])
-        p3 = np.array([6, 2, 0])
-        p4 = np.array([7, -1, 0])
-        p5 = np.array([8, 2, 0])
 
         self.add_edges(
             [
-                ["edge1", p1, p2, 4],
-                ["edge2", p2, p3, 3],
-                ["edge3", p2, p4, 2],
-                ["edge4", p4, p5, 3],
-                ["edge5", p3, p5, 2],
+                ["edge0_to_1", v0, v1, 2],
+                ["edge0_to_2", v0, v2, 3],
+                ["edge1_to_3", v1, v3, 3],
+                ["edge1_to_4", v1, v4, 1],
+                ["edge2_to_3", v2, v3, 1],
+                ["edge2_to_4", v2, v4, 1],
+                ["edge3_to_5", v3, v5, 3],
+                ["edge4_to_5", v4, v5, 3],
             ]
         )
 
@@ -43,31 +38,105 @@ class Flow(Scene):
         self.add(g)
         self.add_foreground_mobject(a)
 
+        self.camera.frame_width = 25
+        self.camera.resize_frame_shape(0)
+
         # Flow
-
-        flow_edges_1 = [
-            self.edges["edge1"],
-            self.edges["edge2"],
-            self.edges["edge5"],
+        flow_edges_0_1_3_5 = [
+            self.edges["edge0_to_1"],
+            self.edges["edge1_to_3"],
+            self.edges["edge3_to_5"],
         ]
 
-        f1 = FlowGraph(flow_edges_1, 0)
-        f2 = FlowGraph(flow_edges_1, 2)
+        flow_1_before = FlowGraph(flow_edges_0_1_3_5, 0)
+        flow_1_after = FlowGraph(flow_edges_0_1_3_5, 2)
 
-        self.play(Transform(f1, f2, run_time=2))
+        self.play(ReplacementTransform(flow_1_before, flow_1_after, run_time=2))
 
-        # Should be done another way
-
-        flow_edges_2 = [
-            self.edges["edge1"],
-            self.edges["edge3"],
-            self.edges["edge4"],
+        flow_edges_0_2_4_5 = [
+            self.edges["edge0_to_2"],
+            self.edges["edge2_to_4"],
+            self.edges["edge4_to_5"],
         ]
 
-        f3 = FlowGraph(flow_edges_2, 0)
-        f4 = FlowGraph(flow_edges_2, 2)
+        flow_2_before = FlowGraph(flow_edges_0_2_4_5, 0)
+        flow_2_after = FlowGraph(flow_edges_0_2_4_5, 1)
 
-        self.play(Transform(f3, f4, run_time=2))
+        self.play(ReplacementTransform(flow_2_before, flow_2_after, run_time=2))
+
+        flow_edges_0_1_4_5 = [
+            self.edges["edge0_to_1"],
+            self.edges["edge1_to_4"],
+            self.edges["edge4_to_5"],
+        ]
+
+        flow_edges_1_3_5 = [
+            self.edges["edge1_to_3"],
+            self.edges["edge3_to_5"],
+        ]
+
+        flow_edges_4_5 = [
+            self.edges["edge4_to_5"],
+        ]
+
+
+        #flow_1_redirect1 = FlowGraph(flow_edges_1_3_5, 0, False)
+        #flow_1_redirect2 = FlowGraph(flow_edges_1_3_5, 1, False)
+
+        #self.play(Transform(flow_1_after, flow_1_before, run_time=2))
+        
+        self.play(ReplacementTransform(flow_1_after, FlowGraph(flow_edges_0_1_3_5, -1), run_time=2))
+
+        flow_3_before = FlowGraph(flow_edges_0_1_4_5, 0)
+        flow_3_after = FlowGraph(flow_edges_0_1_4_5, 1)
+
+        self.play(ReplacementTransform(flow_3_before, flow_3_after, run_time=2))
+
+        flow_edges_0_2_3_5 = [
+            self.edges["edge0_to_2"],
+            self.edges["edge2_to_3"],
+            self.edges["edge3_to_5"],
+        ]
+
+        flow_edges_0_2 = [
+            self.edges["edge0_to_2"],
+        ]
+
+        flow_edge_3_5 = [
+            self.edges["edge3_to_5"],
+        ]
+
+
+        flow_4_before = FlowGraph(flow_edges_0_2_3_5, 0)
+        flow_4_after = FlowGraph(flow_edges_0_2_3_5, 1)
+
+        self.play(ReplacementTransform(flow_4_before, flow_4_after, run_time=2))
+
+
+
+        # flow_edges_1 = [
+        #     self.edges["edge1"],
+        #     self.edges["edge2"],
+        #     self.edges["edge5"],
+        # ]
+
+        # f1 = FlowGraph(flow_edges_1, 0)
+        # f2 = FlowGraph(flow_edges_1, 2)
+
+        # self.play(Transform(f1, f2, run_time=2))
+
+        # # Should be done another way
+
+        # flow_edges_2 = [
+        #     self.edges["edge1"],
+        #     self.edges["edge3"],
+        #     self.edges["edge4"],
+        # ]
+
+        # f3 = FlowGraph(flow_edges_2, 0)
+        # f4 = FlowGraph(flow_edges_2, 2)
+
+        # self.play(Transform(f3, f4, run_time=2))
 
     def SetLabel(self, x, y, label) -> VMobject:
         label = Tex(label, color=BLACK).set_x(x).set_y(y)
@@ -85,7 +154,7 @@ class FlowGraph(Mobject):
         for edge in edge_points:
             g = GraphSegment(
                 edge.start_node, edge.end_node, (c + edge.current_capacity), GREY
-            )
+                )
             edge.add_to_current_capacity(c)
             self.add(g)
 
@@ -113,7 +182,6 @@ class BackgroundGraph(Mobject):
 
             self.add_to_back(b)
             self.add(g)
-
 
 class CustomArrow(Mobject):
     def __init__(self, p1, p2):

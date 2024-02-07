@@ -12,6 +12,12 @@ class Edge:
         else:
             print("Error: New capacity exceeds maximum capacity")
 
+    def decrease_capacity(self, new_capacity):
+        if new_capacity - self.current_capacity > 0:
+            self.current_capacity -= new_capacity
+        else:
+            self.current_capacity = 0 # Sets capacity to 0 ??
+
     def get_current_capacity(self):
         return self.current_capacity
 
