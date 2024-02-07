@@ -1,7 +1,8 @@
 from manim import *
+from edge import Edge
 
 
-class Graph(Scene):
+class Flow(Scene):
     def construct(self):
         self.camera.background_color = WHITE
 
@@ -17,34 +18,101 @@ class Graph(Scene):
 
         c2 = GraphSegment(p1, p2, 0, GREY_B)
         c3 = GraphSegment(p1, p2, 3, GREY_B)
+        self.camera.frame_center = np.array([2, 0, 0])
+        self.edges = {}
 
-        m2 = GraphSegment(p2, p3, 3, WHITE)
-        b2 = GraphSegment(p2, p3, 3.5, BLACK)
-        c4 = GraphSegment(p2, p3, 0, GREY_B)
-        c5 = GraphSegment(p2, p3, 3, GREY_B)
+        p1 = np.array([-4, 0, 0])
+        p2 = np.array([0, 0, 0])
+        p3 = np.array([6, 2, 0])
+        p4 = np.array([7, -1, 0])
+        p5 = np.array([8, 2, 0])
 
-        ar1 = CustomArrow(p1, p2)
-        ar2 = CustomArrow(p2, p3)
+        self.add_edges(
+            [
+                ["edge1", p1, p2, 4],
+                ["edge2", p2, p3, 3],
+                ["edge3", p2, p4, 2],
+                ["edge4", p4, p5, 3],
+                ["edge5", p3, p5, 2],
+            ]
+        )
 
-        self.add(b1)
-        self.add(b2)
-        self.add(m1)
-        self.add(m2)
-        self.add_foreground_mobject(ar1)
-        self.add_foreground_mobject(ar2)
+        g = BackgroundGraph(self.edges.values())
+        a = ArrowGraph(self.edges)
 
-        self.SetLabel(p1[0], p1[1], "1")
-        self.SetLabel(p2[0], p2[1], "2")
-        self.SetLabel(p3[0], p3[1], "3")
+        self.add(g)
+        self.add_foreground_mobject(a)
 
-        self.play(Transform(c2, c3, run_time=2))
-        self.wait(1)
-        self.play(Transform(c4, c5, run_time=2))
-    
+        # Flow
+
+        flow_edges_1 = [
+            self.edges["edge1"],
+            self.edges["edge2"],
+            self.edges["edge5"],
+        ]
+
+        f1 = FlowGraph(flow_edges_1, 0)
+        f2 = FlowGraph(flow_edges_1, 2)
+
+        self.play(Transform(f1, f2, run_time=2))
+
+        # Should be done another way
+
+        flow_edges_2 = [
+            self.edges["edge1"],
+            self.edges["edge3"],
+            self.edges["edge4"],
+        ]
+
+        f3 = FlowGraph(flow_edges_2, 0)
+        f4 = FlowGraph(flow_edges_2, 2)
+
+        self.play(Transform(f3, f4, run_time=2))
+
     def SetLabel(self, x, y, label) -> VMobject:
         label = Tex(label, color=BLACK).set_x(x).set_y(y)
 
         self.add_foreground_mobject(label)
+
+    def add_edges(self, lst):
+        for id, start_node, end_node, max_capacity in lst:
+            self.edges[id] = Edge(id, start_node, end_node, max_capacity)
+
+
+class FlowGraph(Mobject):
+    def __init__(self, edge_points, c):
+        super().__init__()
+        for edge in edge_points:
+            g = GraphSegment(
+                edge.start_node, edge.end_node, (c + edge.current_capacity), GREY
+            )
+            edge.add_to_current_capacity(c)
+            self.add(g)
+
+
+class ArrowGraph(Mobject):
+    def __init__(self, edges: dict):
+        super().__init__()
+        for edge in edges.values():
+
+            a = CustomArrow(edge.start_node, edge.end_node)
+
+            self.add(a)
+
+
+class BackgroundGraph(Mobject):
+    def __init__(self, edges: dict):
+        super().__init__()
+        for edge in edges:
+            g = GraphSegment(
+                edge.get_start_node(), edge.end_node, edge.max_capacity, WHITE
+            )
+            b = GraphSegment(
+                edge.start_node, edge.end_node, (edge.max_capacity + 0.2), BLACK
+            )
+
+            self.add_to_back(b)
+            self.add(g)
 
 
 class CustomArrow(Mobject):
