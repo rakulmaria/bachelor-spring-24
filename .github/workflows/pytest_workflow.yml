@@ -26,7 +26,9 @@ jobs:
       uses: jruipinto/ImageMagick-action@v1
       with:
           # ImageMagick command to be executed
-          command: magick compare -metric PSNR media/images/graph1/graph1_ManimCE_v0.18.0.png  test/test_images/graph1_ManimCE_v0.18.0.png test/image_difference/difference.png
+          command: |
+            manim -ql test/graph1.py graph1
+            magick compare -metric PSNR media/images/graph1/graph1_ManimCE_v0.18.0.png  test/test_images/graph1_ManimCE_v0.18.0.png test/image_difference/difference.png
 
     - name: Run Pytest
       run: |
