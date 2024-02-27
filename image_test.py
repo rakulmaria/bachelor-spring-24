@@ -18,6 +18,7 @@ compare_command_template = "compare -metric PSNR {} {} {}"
 def run_manim(file_path):
     # Extracting filename without extension
     filename = os.path.splitext(os.path.basename(file_path))[0]
+    capitalized_filename = filename[0].upper() + filename[1:]
 
     # Running manim command
     manim_command = manim_command_template.format(file_path, filename)
@@ -25,10 +26,10 @@ def run_manim(file_path):
 
     # Running image comparison command
     image_path_manim = os.path.join(
-        image_directory, filename, f"{filename}_ManimCE_v0.18.0.png"
+        image_directory, filename, f"{capitalized_filename}_ManimCE_v0.18.0.png"
     )
     image_path_test = os.path.join(
-        test_image_directory, f"{filename}_ManimCE_v0.18.0.png"
+        test_image_directory, f"{capitalized_filename}_ManimCE_v0.18.0.png"
     )
     difference_image_path = os.path.join(difference_image_directory, "difference.png")
 
