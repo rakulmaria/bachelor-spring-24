@@ -1,7 +1,7 @@
 from manim import *
 from numpy import ndarray
-from edge import Edge
-from vertex import Vertex
+from src.edge import Edge
+from src.vertex import Vertex
 
 
 class Flow(Scene):

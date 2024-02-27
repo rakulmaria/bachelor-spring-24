@@ -13,3 +13,16 @@ I requirements.txt findes alle de pakker, som vi bruger i projektet. Kør følge
 Når pakkerne er installeret, er det nødvendigt at sætte pre-commit op med projektet. Kør følgende kommando fra terminalen
 
     pre-commit install
+
+## Test
+
+[Imagemagick](https://imagemagick.org/script/download.php) skal installeres før at testene kan køres.
+
+For at køre billede testene:
+
+    pytest image_test.py
+
+For at tilføje nye tests:
+
+- Tilføj ny python fil i `test` mappen, der genererede det billede der skal testes.
+- Kopier det korrekte billede ind i `test/test_images`
