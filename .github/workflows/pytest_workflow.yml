@@ -7,19 +7,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-    - uses: actions/setup-python@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
       with:
         python-version: 3.9
 
-    - uses: jruipinto/ImageMagick-action@v1
-      with:
-          # ImageMagick command to be executed
-          command: |
-            python -m pip install --upgrade pip
-            sudo apt-get install libpango1.0-dev
-            pip install -r requirements.txt
-            pip install pytest
-            magick compare -metric PSNR ./test/test_images/Graph1_ManimCE_v0.18.0.png ./test/test_images/Graph1_ManimCE_v0.18.0.png test/image_difference/difference.png
-            pytest image_test.py
+    - name: Install dependencies and run pytest
+      run: |
+        python -m pip install --upgrade pip
+        sudo apt-get install libpango1.0-dev
+        pip install -r requirements.txt
+        sudo apt install imagemagick
+        magick --version
+        pip install pytest
+        pytest image_test.py
