@@ -197,4 +197,6 @@ pyrightconfig.json
 *.mp4
 *.png
 *.svg
-media
+Tex
+texts
+videos
