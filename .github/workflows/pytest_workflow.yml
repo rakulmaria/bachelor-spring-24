@@ -27,7 +27,7 @@ jobs:
       with:
           # ImageMagick command to be executed
           command: |
-            magick compare -metric PSNR test/test_images/graph1_ManimCE_v0.18.0.png test/test_images/graph1_ManimCE_v0.18.0.png test/image_difference/difference.png
+            magick compare -metric PSNR ./test/test_images/graph1_ManimCE_v0.18.0.png ./test/test_images/graph1_ManimCE_v0.18.0.png test/image_difference/difference.png
 
     - name: Run Pytest
       run: |
