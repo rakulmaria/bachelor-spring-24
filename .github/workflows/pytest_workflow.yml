@@ -7,20 +7,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
+    - uses: actions/setup-python@v2
       with:
         python-version: 3.9
 
-    - name: ImageMagick Action
-      uses: jruipinto/ImageMagick-action@v1
+    - uses: jruipinto/ImageMagick-action@v1
       with:
           # ImageMagick command to be executed
           command: |
-            python3 -m pip install --upgrade pip
+            python -m pip install --upgrade pip
             sudo apt-get install libpango1.0-dev
             pip install -r requirements.txt
             pip install pytest
