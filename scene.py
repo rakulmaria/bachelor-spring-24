@@ -38,11 +38,11 @@ class Flow(Scene):
 
         g = BackgroundGraph(self.edges.values())
         a = ArrowGraph(self.edges.values())
-        l = GraphLabel(self.vertices.values())
+        graghLabel = GraphLabel(self.vertices.values())
 
         self.add(g)
         self.add_foreground_mobject(a)
-        self.add_foreground_mobject(l)
+        self.add_foreground_mobject(graghLabel)
 
         # Flow
         flow_edges_0_1_3_5 = [
@@ -232,14 +232,14 @@ class GraphSegment(Mobject):
     def __init__(self, p1: ndarray, p2: ndarray, scale: int, color):
         super().__init__()
 
-        l = Line(p1, p2)
+        line = Line(p1, p2)
 
-        l.set_stroke(width=(scale * 16))
+        line.set_stroke(width=(scale * 16))
 
         c1 = Dot(p1).scale(scale)
         c2 = Dot(p2).scale(scale)
 
-        g = VGroup(l, c1, c2)
+        g = VGroup(line, c1, c2)
 
         g.set_fill(color=color)
         g.set_stroke(color=color)
