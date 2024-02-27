@@ -23,4 +23,5 @@ jobs:
         sudo apt install imagemagick
         convert -version
         pip install pytest
+        pip install -e .
         pytest image_test.py
