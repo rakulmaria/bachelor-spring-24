@@ -12,7 +12,7 @@ difference_image_directory = "test/image_difference/"
 manim_command_template = "manim -ql {} {}"
 
 # Image comparison command template
-compare_command_template = "magick compare -metric PSNR {} {} {}"
+compare_command_template = "compare -metric PSNR {} {} {}"
 
 
 def run_manim(file_path):
