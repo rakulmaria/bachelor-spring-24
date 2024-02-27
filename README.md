@@ -14,6 +14,10 @@ Når pakkerne er installeret, er det nødvendigt at sætte pre-commit op med pro
 
     pre-commit install
 
+For at sætte projectet op kan det være nødvendigt at køre:
+
+    pip install -e .
+
 ### Test
 
 [Imagemagick](https://imagemagick.org/script/download.php) skal installeres før at testene kan køres.
@@ -50,4 +54,3 @@ Eksempelvis vil følgende kommando generere en Manim animation i lav kvalitet og
             h: 1920x1080 60FPS
             p: 2560x1440 60FPS
             k: 3840x2160 60FPS
-
