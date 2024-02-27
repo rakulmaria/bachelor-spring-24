@@ -196,4 +196,6 @@ pyrightconfig.json
 
 *.mp4
 *.svg
+test/image_difference/*
+!test/image_difference/.gitkeep
 media
