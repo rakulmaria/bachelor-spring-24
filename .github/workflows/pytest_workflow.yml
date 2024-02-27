@@ -22,6 +22,5 @@ jobs:
         sudo apt install texlive texlive-latex-extra
         pip install -r requirements.txt
         sudo apt install imagemagick
-        convert -version
         pip install -e .
         pytest image_test.py
