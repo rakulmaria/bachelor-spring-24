@@ -31,6 +31,19 @@ For at tilføje nye tests:
 - Tilføj ny python fil i `test` mappen, der genererede det billede der skal testes.
 - Kopier det korrekte billede ind i `test/test_images`
 
+Hvis testene fejler kan man køre den test der fejler og se hvordan billederne er anderledes ved at køre:
+
+    > manim -ql <path to test file> <class name we want to test>
+    > compare -metric PSNR <path to test image> <path to manim's generated image> test/image_difference/difference.png
+
+Et eksempel på dette kunne være
+
+    > manim -ql test/Graph1.py Graph1
+    compare -metric PSNR ./test/test_images/
+    > Graph1_ManimCE_v0.18.0.png ./test/test_images/Graph1_ManimCE_v0.18.0.png test/image_difference/difference.png
+
+Her ville man så kunne se, markeret med rød, på `test/image_difference/difference.png` hvordan billederne er forskellige.
+
 ### Manim CLI
 
 Følgende kommandoer bruges til at generere Manim animationer
