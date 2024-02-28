@@ -39,8 +39,7 @@ Hvis testene fejler kan man køre den test der fejler og se hvordan billederne e
 Et eksempel på dette kunne være
 
     > manim -ql test/Graph1.py Graph1
-    compare -metric PSNR ./test/test_images/
-    > Graph1_ManimCE_v0.18.0.png ./test/test_images/Graph1_ManimCE_v0.18.0.png test/image_difference/difference.png
+    > compare -metric PSNR ./test/test_images/Graph1_ManimCE_v0.18.0.png ./media/images/graph1/Graph1_ManimCE_v0.18.0.png test/image_difference/difference.png
 
 Her ville man så kunne se, markeret med rød, på `test/image_difference/difference.png` hvordan billederne er forskellige.
 
