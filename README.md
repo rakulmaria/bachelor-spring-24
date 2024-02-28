@@ -66,3 +66,6 @@ Eksempelvis vil følgende kommando generere en Manim animation i lav kvalitet og
             h: 1920x1080 60FPS
             p: 2560x1440 60FPS
             k: 3840x2160 60FPS
+    -s:
+        screnshot
+        genererer et billede af den sidste frame
