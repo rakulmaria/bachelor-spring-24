@@ -29,14 +29,15 @@ class FlowPolygon(VMobject):
                 obj.set_fill(AS2700.B24_HARBOUR_BLUE, 0.8)
             self.polygons.add(obj)
 
-        self.polygons.arrange(buff=0.01)
+        # set buff to -1.0 if polygons should touch eachother
+        self.polygons.arrange(buff=0.0)
 
         self.add(self.polygons)
 
 
 class PolygonExample(Scene):
     def construct(self):
-        test = FlowPolygon(20)
+        test = FlowPolygon(10)
 
         self.play(Write(test))
         self.wait(1)
