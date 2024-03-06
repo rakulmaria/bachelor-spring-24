@@ -198,3 +198,4 @@ pyrightconfig.json
 *.svg
 difference.png
 media
+.DS_Store
