@@ -2,7 +2,7 @@ from manim import *
 
 
 class FlowPolygon(VMobject):
-    def __init__(self, size):
+    def __init__(self, size, filled):
         super().__init__()
         self.polygons = VGroup()
 
@@ -21,12 +21,12 @@ class FlowPolygon(VMobject):
             obj = Polygon(*position_list)
             obj.scale(scale_factor)
             obj.set_stroke(AS2700.B21_ULTRAMARINE, opacity=1.0)
-
-            # set color of every other object to differ
-            if len(self.polygons) % 2 == 0:
-                obj.set_fill(AS2700.B41_BLUEBELL, 0.8)
-            else:
-                obj.set_fill(AS2700.B24_HARBOUR_BLUE, 0.8)
+            if filled:
+                # set color of every other object to differ
+                if len(self.polygons) % 2 == 0:
+                    obj.set_fill(AS2700.B41_BLUEBELL, 0.8)
+                else:
+                    obj.set_fill(AS2700.B24_HARBOUR_BLUE, 0.8)
             self.polygons.add(obj)
 
         # set buff to -1.0 if polygons should touch eachother
@@ -38,6 +38,8 @@ class FlowPolygon(VMobject):
 class PolygonExample(Scene):
     def construct(self):
         test = FlowPolygon(10)
+
+        test.add_updater()
 
         self.play(Write(test))
         self.wait(1)

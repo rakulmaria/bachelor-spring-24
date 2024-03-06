@@ -1,5 +1,5 @@
 from manim import *
-from src.flow import BackgroundGraph, ArrowGraph, GraphLabel
+from src.graph_segments import BackgroundGraph, ArrowGraph, GraphLabel
 from src.edge import Edge
 from src.vertex import Vertex
 
