@@ -57,4 +57,4 @@ def test_images(filename):
     file_path = os.path.join(test_directory, filename)
     print(file_path)
     res = run_manim(file_path)
-    assert res == "0" or res == "inf"
+    assert res == "0"  # or res == "inf"
