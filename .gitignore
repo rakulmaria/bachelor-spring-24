@@ -197,4 +197,5 @@ pyrightconfig.json
 *.mp4
 *.svg
 media
+.DS_Store
 image_difference
