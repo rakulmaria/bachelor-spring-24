@@ -12,7 +12,7 @@ difference_image_directory = "test/image_difference/"
 manim_command_template = "manim -ql {} {}"
 
 # Image comparison command template
-compare_command_template = "compare -metric PSNR {} {} {}"
+compare_command_template = "compare -metric AE {} {} {}"
 
 
 def run_manim(file_path):
@@ -31,7 +31,9 @@ def run_manim(file_path):
     image_path_test = os.path.join(
         test_image_directory, f"{capitalized_filename}_ManimCE_v0.18.0.png"
     )
-    difference_image_path = os.path.join(difference_image_directory, "difference.png")
+    difference_image_path = os.path.join(
+        difference_image_directory, f"difference_{filename}.png"
+    )
 
     compare_command = compare_command_template.format(
         image_path_manim, image_path_test, difference_image_path
@@ -57,4 +59,4 @@ def test_images(filename):
     file_path = os.path.join(test_directory, filename)
     print(file_path)
     res = run_manim(file_path)
-    assert res == "0 (0)" or res == "inf"
+    assert res == "0"

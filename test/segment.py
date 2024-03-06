@@ -1,5 +1,5 @@
 from manim import *
-from src.flow import GraphSegment
+from src.graph_segments import GraphSegment
 
 
 class Segment(Scene):

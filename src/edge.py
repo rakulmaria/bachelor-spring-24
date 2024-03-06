@@ -1,8 +1,8 @@
 class Edge:
-    def __init__(self, id, start_node, end_node, max_capacity, current_flow=0):
+    def __init__(self, id, start_vertex, end_vertex, max_capacity, current_flow=0):
         self.id = id
-        self.start_node = start_node
-        self.end_node = end_node
+        self.start_vertex = start_vertex
+        self.end_vertex = end_vertex
         self.max_capacity = max_capacity
         self.current_flow = current_flow
 
