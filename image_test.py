@@ -31,7 +31,9 @@ def run_manim(file_path):
     image_path_test = os.path.join(
         test_image_directory, f"{capitalized_filename}_ManimCE_v0.18.0.png"
     )
-    difference_image_path = os.path.join(difference_image_directory, "difference.png")
+    difference_image_path = os.path.join(
+        difference_image_directory, f"difference_{filename}.png"
+    )
 
     compare_command = compare_command_template.format(
         image_path_manim, image_path_test, difference_image_path

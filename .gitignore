@@ -196,5 +196,5 @@ pyrightconfig.json
 
 *.mp4
 *.svg
-difference.png
 media
+image_difference
