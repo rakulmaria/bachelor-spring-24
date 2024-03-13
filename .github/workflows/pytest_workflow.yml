@@ -23,4 +23,5 @@ jobs:
         pip install -r requirements.txt
         pip install .
         brew install --cask mactex
+        sudo tlmgr update --self && sudo tlmgr update --all
         pytest image_test.py
