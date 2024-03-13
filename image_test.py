@@ -56,6 +56,7 @@ def run_manim(file_path):
     [f for f in os.listdir(test_directory) if f.endswith(".py") and f != "__init__.py"],
 )
 def test_images(filename):
+    # comment
     file_path = os.path.join(test_directory, filename)
     print(file_path)
     res = run_manim(file_path)
