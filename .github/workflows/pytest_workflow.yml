@@ -17,8 +17,7 @@ jobs:
 
     - name: Install MacTex
       run: |
-        brew install --cask mactex
-        sudo tlmgr update --self
+        brew install --cask mactex-no-gui
 
     - name: Install dependencies and run pytest
       run: |
