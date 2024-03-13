@@ -20,6 +20,7 @@ jobs:
         python -m pip install --upgrade pip
         brew install cairo pango ffmpeg
         brew install imagemagick
+        brew install --cask mactex
         pip install -r requirements.txt
         pip install .
         pytest image_test.py
