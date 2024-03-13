@@ -1,8 +1,6 @@
 from manim import *
 from src.flow_object import FlowPolygon
 
-# test comment to get file with
-
 
 class Test_Polygon_Example(Scene):
     def construct(self):
