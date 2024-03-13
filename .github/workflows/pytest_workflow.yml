@@ -18,9 +18,9 @@ jobs:
     - name: Install dependencies and run pytest
       run: |
         python -m pip install --upgrade pip
-        brew install pango ffmpeg
+        brew install cairo pango ffmpeg
         brew install imagemagick
-        brew install --cask mactex-no-gui
         pip install -r requirements.txt
         pip install .
+        brew install --cask mactex
         pytest image_test.py
