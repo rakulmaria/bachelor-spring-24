@@ -3,8 +3,6 @@ from manim import *
 
 class Vertex(Dot):
     def __init__(self, id, x_coord, y_coord, max_capacity, **kwargs):
-        super().__init__(**kwargs)
-
         self.id = id
         self.x_coord = x_coord
         self.y_coord = y_coord
@@ -12,17 +10,13 @@ class Vertex(Dot):
         self.opacity = 0
         self.current_flow = 0
 
-        backgroundDot = (
-            Dot(self.to_np_array())
-            .scale(max_capacity + 0.2)
-            .set_fill(BLACK)
-            .set_z_index(0)
-        )
+        super().__init__(point=self.to_np_array(), color=BLACK, z_index=0, **kwargs)
+        super().scale(max_capacity + 0.2)
+
         foregroundDot = (
             Dot(self.to_np_array()).scale(max_capacity).set_fill(WHITE).set_z_index(10)
         )
 
-        self.add(backgroundDot)
         self.add(foregroundDot)
 
     def to_np_array(self):
