@@ -4,18 +4,22 @@ from src.vertex import Vertex
 
 
 def getGraphAsMobjects():
-    vertices, edges = VerticesExamples.SedgewickWayne()
+    vertices, edges, capacities = VerticesExamples.SedgewickWayne()
     graph = Graph(vertices, edges)
 
-    verticesAsObjects = []
+    verticesAsObjects = {}
+    # edgesAsObjects = {}
 
     for dot, i in enumerate(graph.vertices):
         x, y, _ = graph._layout[dot]
 
         vertex = Vertex(i, x, y)
-        verticesAsObjects.append(vertex)
+        verticesAsObjects.update(vertex)
 
-    for vertex in verticesAsObjects:
-        print(vertex.id, vertex.x_coord, vertex.y_coord)
+    for line in graph.edges:
+        print(line)
+
+    # for vertex in verticesAsObjects:
+    #     print(vertex.id, vertex.x_coord, vertex.y_coord)
 
     return verticesAsObjects
