@@ -23,7 +23,7 @@ class Edge(Line):
             Line(
                 start=start_vertex.to_np_array(),
                 end=end_vertex.to_np_array(),
-                # z_index=3,
+                z_index=3,
             )
             .set_stroke(width=(max_capacity * 16), color=WHITE)
             .set_fill(color=WHITE)
