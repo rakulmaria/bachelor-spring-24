@@ -1,25 +1,23 @@
 from manim import *
-from src.vertices_examples import VerticesExamples
 from src.vertex import Vertex
+from src.edge import Edge
 
 
-def getGraphAsMobjects():
-    vertices, edges, capacities = VerticesExamples.SedgewickWayne()
-    graph = Graph(vertices, edges)
+def getGraphAsMobjects(graphData, layout_scale=2, layout="spring"):
+    vertices, edges, capacities = graphData
+    graph = Graph(vertices, edges, layout_scale=layout_scale, layout=layout)
 
     verticesAsObjects = {}
-    # edgesAsObjects = {}
+    edgesAsObjects = []
 
     for dot, i in enumerate(graph.vertices):
         x, y, _ = graph._layout[dot]
 
-        vertex = Vertex(i, x, y)
-        verticesAsObjects.update(vertex)
+        vertex = Vertex(i, x, y, 1)
+        verticesAsObjects.update({i: vertex})
 
-    for line in graph.edges:
-        print(line)
+    for _from, to, capacity in capacities:
+        edge = Edge(verticesAsObjects.get(_from), verticesAsObjects.get(to), capacity)
+        edgesAsObjects.append(edge)
 
-    # for vertex in verticesAsObjects:
-    #     print(vertex.id, vertex.x_coord, vertex.y_coord)
-
-    return verticesAsObjects
+    return verticesAsObjects.values(), edgesAsObjects

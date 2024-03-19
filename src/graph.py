@@ -3,7 +3,7 @@ from src.edge import Edge
 from src.vertex import Vertex
 
 
-class Graph(VMobject):
+class FlowGraph(VMobject):
     def __init__(self, vertices, edges):
         super().__init__()
         self.vertices = vertices
@@ -11,6 +11,7 @@ class Graph(VMobject):
 
         for vertex in vertices:
             self.add(vertex)
+            vertex.draw()
 
         for edge in edges:
             self.add(edge)

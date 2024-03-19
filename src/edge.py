@@ -3,7 +3,7 @@ from manim import *
 
 class Edge(Line):
     def __init__(
-        self, id, start_vertex, end_vertex, max_capacity, current_flow=0, **kwargs
+        self, start_vertex, end_vertex, max_capacity, current_flow=0, **kwargs
     ):
         super().__init__(
             start=start_vertex.to_np_array(),
@@ -13,11 +13,18 @@ class Edge(Line):
             stroke_width=((max_capacity + 0.2) * 16),
         )
 
-        self.id = id
         self.start_vertex = start_vertex
         self.end_vertex = end_vertex
         self.max_capacity = max_capacity
         self.current_flow = current_flow
+
+        # add the max capacity of the edge to the start node and end node
+        start_vertex.add_to_max_capacity(max_capacity)
+        end_vertex.add_to_max_capacity(max_capacity)
+
+        # also add to opacity
+        # start_vertex.add_to_opacity(max_capacity)
+        # end_vertex.add_to_opacity(max_capacity)
 
         forgroundLine = (
             Line(

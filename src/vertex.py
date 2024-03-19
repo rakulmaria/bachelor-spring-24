@@ -11,20 +11,32 @@ class Vertex(Dot):
         self.current_flow = 0
 
         super().__init__(point=self.to_np_array(), color=BLACK, z_index=0, **kwargs)
-        super().scale(max_capacity + 0.2)
+        # super().scale(max_capacity + 0.2)
 
+    def draw(self):
         foregroundDot = (
-            Dot(self.to_np_array()).scale(max_capacity).set_fill(WHITE).set_z_index(10)
+            Dot(self.to_np_array())
+            .scale(self.max_capacity)
+            .set_fill(WHITE)
+            .set_z_index(10)
         )
 
         self.add(foregroundDot)
+
+        backgroundDot = (
+            Dot(self.to_np_array())
+            .scale(self.max_capacity + 0.2)
+            .set_fill(BLACK)
+            .set_z_index(0)
+        )
+
+        self.add(backgroundDot)
 
     def to_np_array(self):
         return np.array([self.x_coord, self.y_coord, 0])
 
     def add_to_max_capacity(self, capacity):
-        if self.max_capacity < capacity:
-            self.max_capacity = capacity
+        self.max_capacity += capacity
 
     def add_to_opacity(self, amount):
         self.opacity += amount
