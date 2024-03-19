@@ -19,6 +19,10 @@ class Vertex(Dot):
 
         self.add(foregroundDot)
 
+        label = Tex(id, color=BLACK).set_x(self.x_coord).set_y(self.y_coord)
+        label.set_z_index(20)
+        self.add(label)
+
     def to_np_array(self):
         return np.array([self.x_coord, self.y_coord, 0])
 
