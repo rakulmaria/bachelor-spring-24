@@ -9,7 +9,7 @@ test_image_directory = "./test/test_images/"
 difference_image_directory = "test/image_difference/"
 
 # Manim command template
-manim_command_template = "manim -ql {} {}"
+manim_command_template = "manim -s {} {}"
 
 # Image comparison command template
 compare_command_template = "compare -metric AE {} {} {}"
