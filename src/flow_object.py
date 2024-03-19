@@ -62,11 +62,11 @@ class FlowPolygon(VMobject):
 
 class PolygonExample(Scene):
     def construct(self):
-        test = FlowPolygon(9)
-        self.add(test)
+        test = FlowPolygon(6)
+        self.play(Create(test))
 
-        d = Dot()
-        d.move_to(UP)
+        # d = Dot()
+        # d.move_to(UP)
 
-        self.play(Create(d), run_time=20)
+        # self.play(Create(d), run_time=20)
         self.wait(2)

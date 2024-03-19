@@ -4,7 +4,7 @@ from src.edge import Edge
 from src.vertex import Vertex
 
 
-class Graph1(Scene):
+class Test_Graph(Scene):
     def construct(self):
         self.camera.background_color = WHITE
         self.camera.frame_width = 25
