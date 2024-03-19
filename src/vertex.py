@@ -36,7 +36,8 @@ class Vertex(Dot):
         return np.array([self.x_coord, self.y_coord, 0])
 
     def add_to_max_capacity(self, capacity):
-        self.max_capacity += capacity
+        if self.max_capacity < capacity:
+            self.max_capacity = capacity
 
     def add_to_opacity(self, amount):
         self.opacity += amount

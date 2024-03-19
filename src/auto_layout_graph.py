@@ -3,8 +3,8 @@ from src.vertex import Vertex
 from src.edge import Edge
 
 
-def getGraphAsMobjects(graphData, layout_scale=2, layout="spring"):
-    vertices, edges, capacities = graphData
+def getGraphAsMobjects(vertices, edges, capacities, layout_scale=2, layout="spring"):
+    # vertices, edges, capacities = graphData
     graph = Graph(vertices, edges, layout_scale=layout_scale, layout=layout)
 
     verticesAsObjects = {}
@@ -16,8 +16,12 @@ def getGraphAsMobjects(graphData, layout_scale=2, layout="spring"):
         vertex = Vertex(i, x, y, 1)
         verticesAsObjects.update({i: vertex})
 
+    highestCapacity = 0
+
     for _from, to, capacity in capacities:
         edge = Edge(verticesAsObjects.get(_from), verticesAsObjects.get(to), capacity)
         edgesAsObjects.append(edge)
+        if highestCapacity < capacity:
+            highestCapacity = capacity
 
-    return verticesAsObjects.values(), edgesAsObjects
+    return verticesAsObjects.values(), edgesAsObjects, capacity
