@@ -39,7 +39,7 @@ class Ex(Scene):
                 ["edge0_to_2", self.vertices["vertex0"], self.vertices["vertex2"], 1],
                 ["edge1_to_2", self.vertices["vertex1"], self.vertices["vertex2"], 3],
                 ["edge1_to_3", self.vertices["vertex1"], self.vertices["vertex3"], 1],
-                ["edge2_to_3", self.vertices["vertex2"], self.vertices["vertex3"], 4],
+                ["edge2_to_3", self.vertices["vertex2"], self.vertices["vertex3"], 6],
                 ["edge0_to_3", self.vertices["vertex0"], self.vertices["vertex3"], 2],
             ]
         )
