@@ -1,14 +1,29 @@
 from manim import *
 
 
-class Vertex:
-    def __init__(self, id, x_coord, y_coord):
+class Vertex(Dot):
+    def __init__(self, id, x_coord, y_coord, max_capacity, **kwargs):
+        super().__init__(**kwargs)
+
         self.id = id
         self.x_coord = x_coord
         self.y_coord = y_coord
-        self.max_capacity = 0
+        self.max_capacity = max_capacity
         self.opacity = 0
         self.current_flow = 0
+
+        backgroundDot = (
+            Dot(self.to_np_array())
+            .scale(max_capacity + 0.2)
+            .set_fill(BLACK)
+            .set_z_index(0)
+        )
+        foregroundDot = (
+            Dot(self.to_np_array()).scale(max_capacity).set_fill(WHITE).set_z_index(10)
+        )
+
+        self.add(backgroundDot)
+        self.add(foregroundDot)
 
     def to_np_array(self):
         return np.array([self.x_coord, self.y_coord, 0])
@@ -31,3 +46,17 @@ class Vertex:
             self.current_flow += new_flow
         else:
             print("Error: New capacity exceeds maximum capacity")
+
+
+"""
+class Ex(Scene):
+    def construct(self):
+        self.camera.background_color = WHITE
+        v = Vertex("vertex0", 0, 0, 5)
+        self.add(v)
+        self.wait(1)
+
+        v2 = Vertex("vertex1", 2, 2, 4)
+        self.add(v2)
+        self.wait(1)
+ """
