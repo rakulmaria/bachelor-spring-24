@@ -10,8 +10,7 @@ class Vertex(Dot):
         self.opacity = 0
         self.current_flow = 0
 
-        super().__init__(point=self.to_np_array(), color=BLACK, z_index=0, **kwargs)
-        # super().scale(max_capacity + 0.2)
+        super().__init__()
 
     def draw(self):
         foregroundDot = (
