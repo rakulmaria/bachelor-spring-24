@@ -7,7 +7,7 @@ from src.graph_segments import ArrowGraph, BackgroundGraph, FlowGraph, GraphLabe
 class NewFlowOpacity(Scene):
     def construct(self):
         self.camera.background_color = WHITE
-        self.camera.frame_width = 25
+        self.camera.frame_width = 30
         self.camera.resize_frame_shape(0)
         self.edges = {}
         self.vertices = {}
@@ -23,11 +23,11 @@ class NewFlowOpacity(Scene):
 
         self.add_edges(
             [
-                ["edge0_to_1", self.vertices["vertex0"], self.vertices["vertex1"], 20],
-                ["edge0_to_2", self.vertices["vertex0"], self.vertices["vertex2"], 10],
-                ["edge1_to_2", self.vertices["vertex1"], self.vertices["vertex2"], 30],
-                ["edge1_to_3", self.vertices["vertex1"], self.vertices["vertex3"], 10],
-                ["edge2_to_3", self.vertices["vertex2"], self.vertices["vertex3"], 20],
+                ["edge0_to_1", self.vertices["vertex0"], self.vertices["vertex1"], 2],
+                ["edge0_to_2", self.vertices["vertex0"], self.vertices["vertex2"], 1],
+                ["edge1_to_2", self.vertices["vertex1"], self.vertices["vertex2"], 3],
+                ["edge1_to_3", self.vertices["vertex1"], self.vertices["vertex3"], 1],
+                ["edge2_to_3", self.vertices["vertex2"], self.vertices["vertex3"], 2],
             ]
         )
 
@@ -52,7 +52,7 @@ class NewFlowOpacity(Scene):
         ]
 
         flow_1_before = FlowGraph(flow_edges_0_1_2_3, 0)
-        flow_1_after = FlowGraph(flow_edges_0_1_2_3, 10)
+        flow_1_after = FlowGraph(flow_edges_0_1_2_3, 1)
 
         self.play(ReplacementTransform(flow_1_before, flow_1_after, run_time=2))
         self.wait(2)
@@ -60,7 +60,7 @@ class NewFlowOpacity(Scene):
         # Flow 2 is same flow
 
         flow_2_before = FlowGraph(flow_edges_0_1_2_3, 0)
-        flow_2_after = FlowGraph(flow_edges_0_1_2_3, 10)
+        flow_2_after = FlowGraph(flow_edges_0_1_2_3, 1)
 
         self.play(ReplacementTransform(flow_2_before, flow_2_after, run_time=2))
         self.wait(2)
