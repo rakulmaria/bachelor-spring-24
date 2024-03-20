@@ -16,12 +16,12 @@ def getGraphAsMobjects(vertices, edges, capacities, layout_scale=2, layout="spri
         vertex = Vertex(i, x, y, 1)
         verticesAsObjects.update({i: vertex})
 
-    highestCapacity = 0
-
     for _from, to, capacity in capacities:
         edge = Edge(verticesAsObjects.get(_from), verticesAsObjects.get(to), capacity)
         edgesAsObjects.append(edge)
-        if highestCapacity < capacity:
-            highestCapacity = capacity
 
-    return verticesAsObjects.values(), edgesAsObjects, capacity
+    return verticesAsObjects.values(), edgesAsObjects
+
+
+def getMaxCapacity(capacities):
+    return max(capacities, key=lambda x: x[2])[2]

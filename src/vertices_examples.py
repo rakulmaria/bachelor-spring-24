@@ -12,8 +12,7 @@ class VerticesExamples:
             (3, 5, 2.0),
             (4, 5, 3.0),
         ]
-        scale = 3
-        return vertices, edges, capacities, scale
+        return vertices, edges, capacities
 
     def KleinbergTardos():
         vertices = [0, 1, 2, 3]
@@ -25,8 +24,7 @@ class VerticesExamples:
             (1, 3, 10.0),
             (2, 3, 20.0),
         ]
-        scale = 20
-        return vertices, edges, capacities, scale
+        return vertices, edges, capacities
 
     def CLRS():
         vertices = [0, 1, 2, 3, 4, 5]
@@ -42,9 +40,8 @@ class VerticesExamples:
             (4, 3, 7),
             (4, 5, 4),
         ]
-        scale = 20
 
-        return vertices, edges, capacities, scale
+        return vertices, edges, capacities
 
     def Jungnickel():
         vertices = [0, 1, 2, 3, 4, 5, 6, 7]
