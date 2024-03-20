@@ -3,9 +3,7 @@ from src.arrow import EdgeArrow
 
 
 class Edge(Line):
-    def __init__(
-        self, start_vertex, end_vertex, max_capacity, current_flow=0, **kwargs
-    ):
+    def __init__(self, start_vertex, end_vertex, max_capacity, current_flow=0):
         super().__init__(
             start=start_vertex.to_np_array(),
             end=end_vertex.to_np_array(),
