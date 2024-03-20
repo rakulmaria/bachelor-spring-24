@@ -1,7 +1,7 @@
 from manim import *
 
 
-class Vertex(Dot):
+class Vertex(VMobject):
     def __init__(self, id, x_coord, y_coord, max_capacity, **kwargs):
         self.id = id
         self.x_coord = x_coord

@@ -8,11 +8,11 @@ class Test_Edge(Scene):
         self.camera.background_color = WHITE
         vertex0 = Vertex("0", 0, 0, 5)
         vertex1 = Vertex("1", 4, 0, 5)
+        edge = Edge(vertex0, vertex1, 5)
 
         vertex0.draw()
         vertex1.draw()
-
-        edge = Edge(vertex0, vertex1, 5)
+        edge.draw()
 
         self.add(edge)
         self.add(vertex0)
