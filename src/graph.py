@@ -27,21 +27,22 @@ class Ex(Scene):
 
         self.add_vertices(
             [
-                ["vertex0", -5, 0],
-                ["vertex1", 0, 5],
-                ["vertex2", 0, -5],
-                ["vertex3", 5, 0],
+                ["0", -5, 2, 8],
+                ["3", 0, 0, 8],
+                ["2", 5, 2, 8],
+                ["1", -2, -3, 4],
+                ["4", 3, -3, 4],
             ]
         )
 
         self.add_edges(
             [
-                ["edge0_to_1", self.vertices["vertex0"], self.vertices["vertex1"], 2],
-                ["edge0_to_2", self.vertices["vertex0"], self.vertices["vertex2"], 1],
-                ["edge1_to_2", self.vertices["vertex1"], self.vertices["vertex2"], 3],
-                ["edge1_to_3", self.vertices["vertex1"], self.vertices["vertex3"], 1],
-                ["edge2_to_3", self.vertices["vertex2"], self.vertices["vertex3"], 6],
-                ["edge0_to_3", self.vertices["vertex0"], self.vertices["vertex3"], 2],
+                ["edge0_to_1", self.vertices["0"], self.vertices["3"], 4],
+                ["edge0_to_2", self.vertices["0"], self.vertices["1"], 4],
+                ["edge1_to_2", self.vertices["1"], self.vertices["3"], 4],
+                ["edge1_to_3", self.vertices["3"], self.vertices["2"], 4],
+                ["edge2_to_3", self.vertices["3"], self.vertices["4"], 4],
+                ["edge0_to_3", self.vertices["4"], self.vertices["2"], 4],
             ]
         )
 
@@ -53,5 +54,5 @@ class Ex(Scene):
             self.edges[id] = Edge(id, start_vertex, end_vertex, max_capacity)
 
     def add_vertices(self, lst):
-        for id, x_coord, y_coord in lst:
-            self.vertices[id] = Vertex(id, x_coord, y_coord, 6)
+        for id, x_coord, y_coord, cap in lst:
+            self.vertices[id] = Vertex(id, x_coord, y_coord, cap)

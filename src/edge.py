@@ -1,4 +1,5 @@
 from manim import *
+from src.arrow import EdgeArrow
 
 
 class Edge(Line):
@@ -37,6 +38,9 @@ class Edge(Line):
         )
 
         self.add(forgroundLine)
+
+        arrow = EdgeArrow(start_vertex.to_np_array(), end_vertex.to_np_array())
+        self.add(arrow)
 
     def add_to_current_flow(self, new_flow):
         if new_flow <= self.max_capacity:
