@@ -3,14 +3,27 @@ from src.vertex import Vertex
 from src.edge import Edge
 
 
-def getGraphAsMobjects(vertices, edges, capacities, layout_scale=3, layout="spring"):
-    graph = Graph(
-        vertices,
-        edges,
-        layout_scale=layout_scale,
-        layout=layout,
-        layout_config={"seed": 100},
-    )
+def getEdgesAndVerticesAsMobjects(
+    vertices, edges, capacities, layout_scale=2, layout="spring", layers=[]
+):
+    partitions = getPartitions(layers)
+    graph = []
+    if partitions != []:
+        graph = Graph(
+            vertices,
+            edges,
+            layout_scale=layout_scale,
+            layout="partite",
+            partitions=partitions,
+        )
+    else:
+        graph = Graph(
+            vertices,
+            edges,
+            layout_scale=layout_scale,
+            layout=layout,
+            layout_config={"seed": 100},
+        )
 
     verticesAsObjects = {}
     edgesAsObjects = []
@@ -26,6 +39,17 @@ def getGraphAsMobjects(vertices, edges, capacities, layout_scale=3, layout="spri
         edgesAsObjects.append(edge)
 
     return verticesAsObjects.values(), edgesAsObjects
+
+
+def getPartitions(layers):
+    partitions = []
+    c = -1
+
+    for i in layers:
+        partitions.append(list(range(c + 1, c + i + 1)))
+        c += i
+
+    return partitions
 
 
 def getMaxCapacity(capacities):
