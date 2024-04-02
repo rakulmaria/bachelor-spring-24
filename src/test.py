@@ -1,6 +1,6 @@
 from manim import *
 from src.graph import FlowGraph
-from src.auto_layout_graph import getEdgesAndVerticesAsMobjects, getMaxCapacity
+from src.auto_layout_graph import getEdgesAndVerticesAsMobjects
 from src.vertices_examples import VerticesExamples as V
 
 
@@ -28,10 +28,7 @@ class Test(Scene):
 class Test2(Scene):
     def construct(self):
         vertices, edges, capacities = V.SedgewickWayne()
-        edgeScale = getMaxCapacity(capacities)
-        vertices, edges = getEdgesAndVerticesAsMobjects(
-            vertices, edges, capacities, layout_scale=edgeScale
-        )
+        vertices, edges = getEdgesAndVerticesAsMobjects(vertices, edges, capacities)
 
         graph = FlowGraph(vertices, edges)
         self.camera.background_color = WHITE
