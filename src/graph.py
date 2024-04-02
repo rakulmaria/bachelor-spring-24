@@ -5,7 +5,7 @@ from src.auto_layout_graph import getMinVertexCapacity
 
 
 class FlowGraph(VMobject):
-    def __init__(self, vertices, edges):
+    def __init__(self, vertices: list[Vertex], edges: list[Edge]):
         super().__init__()
         self.vertices = vertices
         self.edges = edges
