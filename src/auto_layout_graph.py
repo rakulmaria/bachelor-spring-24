@@ -3,7 +3,7 @@ from src.vertex import Vertex
 from src.edge import Edge
 
 
-def getGraphAsMobjects(vertices, edges, capacities, layout_scale=2, layout="spring"):
+def getGraphAsMobjects(vertices, edges, capacities, layout_scale=3, layout="spring"):
     graph = Graph(
         vertices,
         edges,
@@ -30,3 +30,7 @@ def getGraphAsMobjects(vertices, edges, capacities, layout_scale=2, layout="spri
 
 def getMaxCapacity(capacities):
     return max(capacities, key=lambda x: x[2])[2]
+
+
+def getMinVertexCapacity(vertices: list[Vertex]):
+    return min(vertices, key=lambda x: x.max_capacity).max_capacity

@@ -82,3 +82,15 @@ class VerticesExamples:
             (4, 2, 2),
         ]
         return vertices, edges, capacities
+
+    def KleinbergTardosExtreme():
+        vertices = [0, 1, 2, 3]
+        edges = [(0, 1), (0, 2), (1, 2), (1, 3), (2, 3)]
+        capacities = [
+            (0, 1, 200),
+            (0, 2, 1),
+            (1, 2, 30),
+            (1, 3, 100),
+            (2, 3, 2),
+        ]
+        return vertices, edges, capacities

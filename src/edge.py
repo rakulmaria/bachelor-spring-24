@@ -1,5 +1,6 @@
 from manim import *
 from src.arrow import EdgeArrow
+import math
 
 
 class Edge(VMobject):
@@ -24,13 +25,16 @@ class Edge(VMobject):
         else:
             print("Error: New capacity exceeds maximum capacity")
 
+    def get_drawn_capacity(self):
+        return math.sqrt(self.max_capacity) * 8
+
     def draw(self):
         backgroundLine = Line(
             start=self.start_vertex.to_np_array(),
             end=self.end_vertex.to_np_array(),
             z_index=0,
             color=BLACK,
-            stroke_width=((self.max_capacity + 0.2) * 16),
+            stroke_width=(self.get_drawn_capacity() + 1.6),
         )
         foregroundLine = (
             Line(
@@ -38,7 +42,7 @@ class Edge(VMobject):
                 end=self.end_vertex.to_np_array(),
                 z_index=3,
             )
-            .set_stroke(width=(self.max_capacity * 16), color=WHITE)
+            .set_stroke(width=self.get_drawn_capacity(), color=WHITE)
             .set_fill(color=WHITE)
         )
         arrow = EdgeArrow(
