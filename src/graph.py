@@ -1,6 +1,7 @@
 from manim import *
 from src.edge import Edge
 from src.vertex import Vertex
+from src.auto_layout_graph import getMinVertexCapacity
 
 
 class FlowGraph(VMobject):
@@ -11,7 +12,7 @@ class FlowGraph(VMobject):
 
         for vertex in vertices:
             self.add(vertex)
-            vertex.draw()
+            vertex.draw(getMinVertexCapacity(vertices))
 
         for edge in edges:
             self.add(edge)
