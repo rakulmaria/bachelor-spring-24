@@ -36,7 +36,7 @@ class Edge(VMobject):
             color=BLACK,
             stroke_width=(self.get_drawn_capacity() + 1.6),
         )
-        foregroundLine = (
+        self.foregroundLine = (
             Line(
                 start=self.start_vertex.to_np_array(),
                 end=self.end_vertex.to_np_array(),
@@ -50,7 +50,7 @@ class Edge(VMobject):
         )
 
         self.add(backgroundLine)
-        self.add(foregroundLine)
+        self.add(self.foregroundLine)
         self.add(arrow)
 
 

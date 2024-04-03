@@ -3,7 +3,7 @@ import math
 
 
 class Vertex(VMobject):
-    def __init__(self, id, x_coord, y_coord, max_capacity, **kwargs):
+    def __init__(self, id, x_coord, y_coord, max_capacity):
         self.id = id
         self.x_coord = x_coord
         self.y_coord = y_coord
@@ -17,14 +17,14 @@ class Vertex(VMobject):
         return math.sqrt(self.max_capacity) / 2
 
     def draw(self, scale=1):
-        foregroundDot = (
+        self.foregroundDot = (
             Dot(self.to_np_array())
             .scale(self.get_drawn_capacity())
             .set_fill(WHITE)
             .set_z_index(10)
         )
 
-        self.add(foregroundDot)
+        self.add(self.foregroundDot)
 
         backgroundDot = (
             Dot(self.to_np_array())
