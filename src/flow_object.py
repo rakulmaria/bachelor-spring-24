@@ -11,8 +11,7 @@ class FlowPolygon(Line):
         lightBlue = AS2700.B41_BLUEBELL
         borderBlue = AS2700.B21_ULTRAMARINE
         self.times = 0
-        (a, b) = get_flow_coords(edge, cap)
-        print(a, b, "a,b")
+        (a, b), direction = get_flow_coords(edge, cap)
         super().__init__(start=a, end=b, z_index=4)
         super().set_stroke(
             width=((math.sqrt(edge.max_capacity) * 8) / edge.max_capacity * cap),
@@ -35,7 +34,6 @@ class FlowPolygon(Line):
             obj = Polygon(*position_list, z_index=5)
             obj.scale(scale_factor)
             obj.set_stroke(borderBlue, opacity=1.0, width=0.0)
-            obj.rotate(PI / 2)
 
             # set color of every other object to differ
             if len(self.polygons) % 3 == 0:
@@ -44,12 +42,11 @@ class FlowPolygon(Line):
                 obj.set_fill(lightBlue, 0.8)
             self.polygons.add(obj)
 
-        # set buff to -1.0 if polygons should touch eachother
-        # if buff is negative then the direction should be set to LEFT
-        self.polygons.arrange(buff=-1, direction=UP)
+        self.polygons.arrange(buff=-1, direction=LEFT)
         self.polygons.move_to(self.get_center())
-        # self.polygons.stretch_to_fit_height(self.height)
-        self.polygons.stretch_to_fit_width(self.stroke_width / 100)
+        self.polygons.stretch_to_fit_width(self.get_length())
+        self.polygons.stretch_to_fit_height(self.stroke_width / 100)
+        self.polygons.rotate(angle_from_vector(direction))
         self.add(self.polygons)
 
         def update(mobject):
@@ -86,11 +83,11 @@ def get_flow_coords(edge, cap):
     z2 = v1
 
     vector = np.array([z1, z2, 0])
+    original_vector = np.array([v1, v2, 0])
 
     direction = vector / np.linalg.norm(vector)
-    print(direction, "direction")
+    direction_original = original_vector / np.linalg.norm(original_vector)
     scaled_vector = direction * h
-    print(scaled_vector, "scaled_vector")
 
     a = edge.start_vertex.to_np_array() + scaled_vector
     b = edge.end_vertex.to_np_array() + scaled_vector
@@ -98,7 +95,14 @@ def get_flow_coords(edge, cap):
     return (
         a,
         b,
-    )
+    ), direction_original
+
+
+def angle_from_vector(vector):
+    angle_rad = np.arctan2(vector[1], vector[0])
+    angle_rad %= 2 * np.pi
+
+    return angle_rad
 
 
 class PolygonExample(Scene):

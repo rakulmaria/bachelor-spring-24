@@ -31,8 +31,8 @@ class Test2(Scene):
         vertices, edges, capacities = V.SimpleGraph()
 
         lt = {
-            0: [0, 2, 0],
-            1: [0, -2, 0],
+            0: [0, -1, 0],
+            1: [2, 1, 0],
         }
         vertices, edges = getEdgesAndVerticesAsMobjects(
             vertices, edges, capacities, layout=lt
@@ -43,7 +43,16 @@ class Test2(Scene):
 
         self.add(graph)
 
-        flow = FlowPolygon(edges[0], 30)
-        self.add(flow)
+        flow0 = FlowPolygon(edges[0], 0)
 
-        self.play(Create(Dot()), run_time=5)
+        self.play(Create(Dot()), run_time=2)
+
+        flow = FlowPolygon(edges[0], 50)
+        self.play(ReplacementTransform(flow0, flow), run_time=1)
+
+        self.play(Create(Dot()), run_time=2)
+
+        flow2 = FlowPolygon(edges[0], 70)
+        self.play(ReplacementTransform(flow, flow2), run_time=1)
+
+        self.play(Create(Dot()), run_time=2)
