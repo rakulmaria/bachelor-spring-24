@@ -2,7 +2,6 @@ from manim import *
 from src.graph import FlowGraph
 from src.auto_layout_graph import getEdgesAndVerticesAsMobjects
 from src.vertices_examples import VerticesExamples as V
-from src.flow_object import FlowPolygon
 
 
 class Test(Scene):
@@ -43,16 +42,9 @@ class Test2(Scene):
 
         self.add(graph)
 
-        flow0 = FlowPolygon(edges[0], 0)
-
-        self.play(Create(Dot()), run_time=2)
-
-        flow = FlowPolygon(edges[0], 50)
-        self.play(ReplacementTransform(flow0, flow), run_time=1)
-
-        self.play(Create(Dot()), run_time=2)
-
-        flow2 = FlowPolygon(edges[0], 70)
-        self.play(ReplacementTransform(flow, flow2), run_time=1)
-
-        self.play(Create(Dot()), run_time=2)
+        edges[0].add_to_current_flow(20, self)
+        self.wait(3, frozen_frame=False)
+        edges[0].add_to_current_flow(50, self)
+        self.wait(10, frozen_frame=False)
+        edges[0].add_to_current_flow(20, self)
+        self.wait(3, frozen_frame=False)

@@ -1,5 +1,6 @@
 from manim import *
 from src.arrow import EdgeArrow
+from src.flow_object import FlowPolygon
 import math
 
 
@@ -11,6 +12,7 @@ class Edge(VMobject):
         self.end_vertex = end_vertex
         self.max_capacity = max_capacity
         self.current_flow = current_flow
+        self.flow_object = None
 
         start_vertex.add_to_max_capacity(max_capacity)
         end_vertex.add_to_max_capacity(max_capacity)
@@ -19,9 +21,15 @@ class Edge(VMobject):
         # start_vertex.add_to_opacity(max_capacity)
         # end_vertex.add_to_opacity(max_capacity)
 
-    def add_to_current_flow(self, new_flow):
+    def add_to_current_flow(self, new_flow, scene):
         if new_flow <= self.max_capacity:
             self.current_flow += new_flow
+            new_flow_object = FlowPolygon(self, self.current_flow)
+            if self.flow_object is None:
+                self.flow_object = FlowPolygon(self, 0)
+            scene.play(ReplacementTransform(self.flow_object, new_flow_object))
+            self.flow_object = new_flow_object
+
         else:
             print("Error: New capacity exceeds maximum capacity")
 

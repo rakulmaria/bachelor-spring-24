@@ -1,20 +1,20 @@
 from manim import *
-from src.edge import Edge
 import math
 
 
 class FlowPolygon(Line):
-    def __init__(self, edge: Edge, cap):
+    def __init__(self, edge, flow):
         size = 9
         self.polygons = VGroup()
         darkBlue = AS2700.B24_HARBOUR_BLUE
         lightBlue = AS2700.B41_BLUEBELL
         borderBlue = AS2700.B21_ULTRAMARINE
         self.times = 0
-        (a, b), direction = get_flow_coords(edge, cap)
-        super().__init__(start=a, end=b, z_index=4)
+
+        (flow_start_coord, flow_end_coord), direction = self.get_flow_coords(edge, flow)
+        super().__init__(start=flow_start_coord, end=flow_end_coord, z_index=4)
         super().set_stroke(
-            width=((math.sqrt(edge.max_capacity) * 8) / edge.max_capacity * cap),
+            width=((math.sqrt(edge.max_capacity) * 8) / edge.max_capacity * flow),
             color=lightBlue,
         )
         super().set_fill(color=BLUE)
@@ -46,7 +46,7 @@ class FlowPolygon(Line):
         self.polygons.move_to(self.get_center())
         self.polygons.stretch_to_fit_width(self.get_length())
         self.polygons.stretch_to_fit_height(self.stroke_width / 100)
-        self.polygons.rotate(angle_from_vector(direction))
+        self.polygons.rotate(self.angle_from_vector(direction))
         self.add(self.polygons)
 
         def update(mobject):
@@ -68,51 +68,36 @@ class FlowPolygon(Line):
 
         self.polygons.add_updater(update)
 
+    def get_flow_coords(self, edge, flow):
+        x_start = edge.start_vertex.x_coord
+        y_start = edge.start_vertex.y_coord
+        x_end = edge.end_vertex.x_coord
+        y_end = edge.end_vertex.y_coord
+        h_top = (edge.foregroundLine.stroke_width / 100) / 2
+        h = h_top - (h_top / edge.max_capacity * flow)
 
-def get_flow_coords(edge, cap):
-    x_start = edge.start_vertex.x_coord
-    y_start = edge.start_vertex.y_coord
-    x_end = edge.end_vertex.x_coord
-    y_end = edge.end_vertex.y_coord
-    h_top = (edge.foregroundLine.stroke_width / 100) / 2
-    h = h_top - (h_top / edge.max_capacity * cap)
+        v1 = x_end - x_start
+        v2 = y_end - y_start
+        z1 = -v2
+        z2 = v1
 
-    v1 = x_end - x_start
-    v2 = y_end - y_start
-    z1 = -v2
-    z2 = v1
+        vector = np.array([z1, z2, 0])
+        original_vector = np.array([v1, v2, 0])
 
-    vector = np.array([z1, z2, 0])
-    original_vector = np.array([v1, v2, 0])
+        direction = vector / np.linalg.norm(vector)
+        direction_original = original_vector / np.linalg.norm(original_vector)
+        scaled_vector = direction * h
 
-    direction = vector / np.linalg.norm(vector)
-    direction_original = original_vector / np.linalg.norm(original_vector)
-    scaled_vector = direction * h
+        a = edge.start_vertex.to_np_array() + scaled_vector
+        b = edge.end_vertex.to_np_array() + scaled_vector
 
-    a = edge.start_vertex.to_np_array() + scaled_vector
-    b = edge.end_vertex.to_np_array() + scaled_vector
+        return (
+            a,
+            b,
+        ), direction_original
 
-    return (
-        a,
-        b,
-    ), direction_original
+    def angle_from_vector(self, vector):
+        angle_rad = np.arctan2(vector[1], vector[0])
+        angle_rad %= 2 * np.pi
 
-
-def angle_from_vector(vector):
-    angle_rad = np.arctan2(vector[1], vector[0])
-    angle_rad %= 2 * np.pi
-
-    return angle_rad
-
-
-class PolygonExample(Scene):
-    def construct(self):
-        test = FlowPolygon(6)
-        # self.play(Create(test))
-
-        d = Dot()
-        d.move_to(UP)
-
-        self.add(test)
-        self.play(Create(d), run_time=20)
-        self.wait(2)
+        return angle_rad
