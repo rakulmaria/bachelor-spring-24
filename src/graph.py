@@ -1,60 +1,102 @@
 from manim import *
 from src.edge import Edge
 from src.vertex import Vertex
-from src.auto_layout_graph import getMinVertexCapacity
+from src.utils import GrowthScale
 
 
 class FlowGraph(VMobject):
-    def __init__(self, vertices: list[Vertex], edges: list[Edge]):
+    def __init__(
+        self,
+        vertices,
+        edges,
+        capacities,
+        layout_scale=2,
+        layout="spring",
+        layers=[],
+        growth_scale: GrowthScale = GrowthScale.SQRT,
+    ):
         super().__init__()
-        self.vertices = vertices
-        self.edges = edges
+        self.growth_scale = growth_scale
 
-        for vertex in vertices:
+        self.vertices, self.edges = self.getEdgesAndVerticesAsMobjects(
+            vertices, edges, capacities, layout_scale, layout, layers
+        )
+
+        for vertex in self.vertices:
             self.add(vertex)
-            vertex.draw(getMinVertexCapacity(vertices))
+            vertex.draw(self.getMinVertexCapacity(self.vertices))
 
-        for edge in edges:
+        for edge in self.edges:
             self.add(edge)
             edge.draw()
 
+    def getEdgesAndVerticesAsMobjects(
+        self,
+        vertices,
+        edges,
+        capacities,
+        layout_scale=2,
+        layout="spring",
+        layers=[],
+    ):
+        partitions = self.getPartitions(layers)
+        graph = []
+        if partitions != []:
+            graph = Graph(
+                vertices,
+                edges,
+                layout_scale=layout_scale,
+                layout="partite",
+                partitions=partitions,
+            )
+        else:
+            graph = Graph(
+                vertices,
+                edges,
+                layout_scale=layout_scale,
+                layout=layout,
+                layout_config={"seed": 100},
+            )
 
-class Ex(Scene):
-    def construct(self):
-        self.camera.background_color = WHITE
-        self.camera.frame_width = 30
-        self.camera.resize_frame_shape(0)
-        self.edges = {}
-        self.vertices = {}
+        verticesAsObjects = {}
+        edgesAsObjects = []
 
-        self.add_vertices(
-            [
-                ["0", -5, 2, 8],
-                ["3", 0, 0, 8],
-                ["2", 5, 2, 8],
-                ["1", -2, -3, 4],
-                ["4", 3, -3, 4],
-            ]
-        )
+        for dot, i in enumerate(graph.vertices):
+            x, y, _ = graph._layout[dot]
 
-        self.add_edges(
-            [
-                ["edge0_to_1", self.vertices["0"], self.vertices["3"], 4],
-                ["edge0_to_2", self.vertices["0"], self.vertices["1"], 4],
-                ["edge1_to_2", self.vertices["1"], self.vertices["3"], 4],
-                ["edge1_to_3", self.vertices["3"], self.vertices["2"], 4],
-                ["edge2_to_3", self.vertices["3"], self.vertices["4"], 4],
-                ["edge0_to_3", self.vertices["4"], self.vertices["2"], 4],
-            ]
-        )
+            vertex = Vertex(i, x, y, growth_scale=self.growth_scale)
+            verticesAsObjects.update({i: vertex})
 
-        graph = Graph(self.vertices.values(), self.edges.values())
-        self.add(graph)
+        for _from, to, capacity in capacities:
+            edge = Edge(
+                verticesAsObjects.get(_from),
+                verticesAsObjects.get(to),
+                capacity,
+                growth_scale=self.growth_scale,
+            )
+            edgesAsObjects.append(edge)
 
-    def add_edges(self, lst):
-        for id, start_vertex, end_vertex, max_capacity in lst:
-            self.edges[id] = Edge(id, start_vertex, end_vertex, max_capacity)
+        return verticesAsObjects.values(), edgesAsObjects
 
-    def add_vertices(self, lst):
-        for id, x_coord, y_coord, cap in lst:
-            self.vertices[id] = Vertex(id, x_coord, y_coord, cap)
+    def getPartitions(self, layers):
+        partitions = []
+        c = -1
+
+        for i in layers:
+            partitions.append(list(range(c + 1, c + i + 1)))
+            c += i
+
+        return partitions
+
+    def getMinVertexCapacity(self, vertices: list[Vertex]):
+        return min(vertices, key=lambda x: x.max_capacity).max_capacity
+
+    # temporary function to test the graph
+    def add_to_current_flow_tmp(self, scene: Scene):
+        scene.wait(2, frozen_frame=False)
+        self.edges[0].add_to_current_flow(3, scene)
+        scene.wait(2, frozen_frame=False)
+        self.edges[0].add_to_current_flow(7, scene)
+        scene.wait(3, frozen_frame=False)
+        self.edges[0].add_to_current_flow(-7, scene)
+        scene.wait(1, frozen_frame=False)

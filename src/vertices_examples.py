@@ -94,3 +94,11 @@ class VerticesExamples:
             (2, 3, 2),
         ]
         return vertices, edges, capacities
+
+    def SimpleGraph():
+        vertices = [0, 1]
+        edges = [(0, 1)]
+        capacities = [
+            (0, 1, 10),
+        ]
+        return vertices, edges, capacities
