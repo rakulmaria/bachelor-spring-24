@@ -1,23 +1,35 @@
 from manim import *
-import math
+
+from src.arrow import EdgeArrow
+from src.utils import GrowthScale, get_drawn_size
 
 
 class FlowPolygon(Line):
-    def __init__(self, edge, flow):
+    def __init__(
+        self,
+        flow_start_coord,
+        flow_end_coord,
+        direction,
+        flow,
+        growth_scale=GrowthScale.SQRT,
+    ):
         size = 9
         self.polygons = VGroup()
+        self.growth_scale = growth_scale
         darkBlue = AS2700.B24_HARBOUR_BLUE
         lightBlue = AS2700.B41_BLUEBELL
         borderBlue = AS2700.B21_ULTRAMARINE
         self.times = 0
 
-        (flow_start_coord, flow_end_coord), direction = self.get_flow_coords(edge, flow)
         super().__init__(start=flow_start_coord, end=flow_end_coord, z_index=4)
         super().set_stroke(
-            width=((math.sqrt(edge.max_capacity) * 8) / edge.max_capacity * flow),
+            width=(self.get_drawn_flow_size(flow)),
             color=lightBlue,
         )
         super().set_fill(color=BLUE)
+
+        if flow > 0:
+            self.add(EdgeArrow(flow_end_coord, flow_start_coord))
 
         # scale object down to 0.1
         scale_factor = 0.1
@@ -68,33 +80,8 @@ class FlowPolygon(Line):
 
         self.polygons.add_updater(update)
 
-    def get_flow_coords(self, edge, flow):
-        x_start = edge.start_vertex.x_coord
-        y_start = edge.start_vertex.y_coord
-        x_end = edge.end_vertex.x_coord
-        y_end = edge.end_vertex.y_coord
-        h_top = (edge.foregroundLine.stroke_width / 100) / 2
-        h = h_top - (h_top / edge.max_capacity * flow)
-
-        v1 = x_end - x_start
-        v2 = y_end - y_start
-        z1 = -v2
-        z2 = v1
-
-        vector = np.array([z1, z2, 0])
-        original_vector = np.array([v1, v2, 0])
-
-        direction = vector / np.linalg.norm(vector)
-        direction_original = original_vector / np.linalg.norm(original_vector)
-        scaled_vector = direction * h
-
-        a = edge.start_vertex.to_np_array() + scaled_vector
-        b = edge.end_vertex.to_np_array() + scaled_vector
-
-        return (
-            a,
-            b,
-        ), direction_original
+    def get_drawn_flow_size(self, flow):
+        return get_drawn_size(growth_scale=self.growth_scale, size=flow) * 8
 
     def angle_from_vector(self, vector):
         angle_rad = np.arctan2(vector[1], vector[0])

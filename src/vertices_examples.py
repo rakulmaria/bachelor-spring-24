@@ -99,6 +99,6 @@ class VerticesExamples:
         vertices = [0, 1]
         edges = [(0, 1)]
         capacities = [
-            (0, 1, 100),
+            (0, 1, 10),
         ]
         return vertices, edges, capacities

@@ -1,6 +1,7 @@
 from manim import *
 from src.graph import FlowGraph
 from src.vertices_examples import VerticesExamples as V
+from src.utils import GrowthScale
 
 
 class Test(Scene):
@@ -30,25 +31,12 @@ class Test2(Scene):
             1: [2, 1, 0],
         }
 
-        graph = FlowGraph(vertices, edges, capacities, layout=lt, growth_scale="log2")
+        graph = FlowGraph(
+            vertices, edges, capacities, layout=lt, growth_scale=GrowthScale.LOG2
+        )
         self.camera.background_color = WHITE
 
         self.add(graph)
-
-        """ edges[0].add_to_current_flow(20, self)
-        self.wait(3, frozen_frame=False)
-        edges[0].add_to_current_flow(50, self)
-        self.wait(10, frozen_frame=False)
-        edges[0].add_to_current_flow(20, self)
-        self.wait(3, frozen_frame=False)
- """
-
-
-class Test4(Scene):
-    def construct(self):
-        circle = Circle()  # create a circle
-        circle.set_fill(PINK, opacity=0.5)  # set the color and transparency
-        self.play(Create(circle))  # show the circle on screen
 
 
 class Test3(Scene):
@@ -63,7 +51,6 @@ class Test3(Scene):
             capacities,
             layout="partite",
             layers=layers,
-            growth_scale="sqrt",
         )
 
         for vertex in graph.vertices:
@@ -76,6 +63,8 @@ class Test3(Scene):
                 "max_opacity:",
                 vertex.get_max_opacity(),
             )
+        self.camera.background_color = WHITE
+
         self.add(graph)
 
         graph.addToCurrentFlowTemp(10, [(0, 1), (1, 3)], scene=self)
