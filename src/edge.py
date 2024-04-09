@@ -1,6 +1,7 @@
 from manim import *
 from src.arrow import EdgeArrow
 from src.flow_object import FlowPolygon
+from src.utilities import GrowthScale
 import math
 
 
@@ -21,27 +22,27 @@ class Edge(VMobject):
         # start_vertex.add_to_opacity(max_capacity)
         # end_vertex.add_to_opacity(max_capacity)
 
-    def add_to_current_flow(self, new_flow, scene):
+    def add_to_current_flow(self, new_flow, scene: Scene):
         if new_flow <= self.max_capacity:
             self.current_flow += new_flow
             new_flow_object = FlowPolygon(self, self.current_flow)
             if self.flow_object is None:
                 self.flow_object = FlowPolygon(self, 0)
-            scene.play(ReplacementTransform(self.flow_object, new_flow_object))
+            scene.play(ReplacementTransform(Line(), Line()))
             self.flow_object = new_flow_object
 
         else:
             print("Error: New capacity exceeds maximum capacity")
 
-    def get_drawn_edge_size(self, growth_scale="sqrt"):
-        if growth_scale == "sqrt":
+    def get_drawn_edge_size(self, growth_scale=GrowthScale.SQRT):
+        if growth_scale == GrowthScale.SQRT:
             return math.sqrt(self.max_capacity) * 8
-        if growth_scale == "linear":
+        if growth_scale == GrowthScale.LINEAR:
             return self.max_capacity * 8
-        if growth_scale == "log2":
+        if growth_scale == GrowthScale.LOG2:
             return math.log2(self.max_capacity) * 8
 
-    def draw(self, growth_scale="sqrt"):
+    def draw(self, growth_scale=GrowthScale.SQRT):
         backgroundLine = Line(
             start=self.start_vertex.to_np_array(),
             end=self.end_vertex.to_np_array(),

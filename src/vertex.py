@@ -1,6 +1,8 @@
 from manim import *
 import math
 
+from src.utilities import GrowthScale
+
 
 class Vertex(VMobject):
     def __init__(self, id, x_coord, y_coord, max_capacity):
@@ -13,23 +15,23 @@ class Vertex(VMobject):
 
         super().__init__()
 
-    def get_drawn_dot_size(self, growth_scale="sqrt"):
-        if growth_scale == "sqrt":
+    def get_drawn_dot_size(self, growth_scale=GrowthScale.SQRT):
+        if growth_scale == GrowthScale.SQRT:
             return math.sqrt(self.max_capacity) / 2
-        if growth_scale == "linear":
+        if growth_scale == growth_scale.LINEAR:
             return self.max_capacity / 2
-        if growth_scale == "log2":
+        if growth_scale == growth_scale.LOG2:
             return math.log2(self.max_capacity) / 2
 
-    def get_drawn_label_size(self, scale=1, growth_scale="sqrt"):
-        if growth_scale == "sqrt":
+    def get_drawn_label_size(self, scale=1, growth_scale=GrowthScale.SQRT):
+        if growth_scale == GrowthScale.SQRT:
             return math.sqrt(scale) * 0.2
-        if growth_scale == "linear":
+        if growth_scale == GrowthScale.LINEAR:
             return scale * 0.2
-        if growth_scale == "log2":
+        if growth_scale == GrowthScale.LOG2:
             return math.log2(scale) * 0.2
 
-    def draw(self, scale=1, growth_scale="sqrt"):
+    def draw(self, scale=1, growth_scale=GrowthScale.SQRT):
         self.foregroundDot = (
             Dot(self.to_np_array())
             .scale(self.get_drawn_dot_size(growth_scale))

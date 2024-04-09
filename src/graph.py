@@ -1,6 +1,7 @@
 from manim import *
 from src.edge import Edge
 from src.vertex import Vertex
+from src.utilities import GrowthScale
 
 
 class FlowGraph(VMobject):
@@ -12,7 +13,7 @@ class FlowGraph(VMobject):
         layout_scale=2,
         layout="spring",
         layers=[],
-        growth_scale="sqrt",
+        growth_scale: GrowthScale = GrowthScale.SQRT,
     ):
         super().__init__()
 
@@ -77,8 +78,14 @@ class FlowGraph(VMobject):
 
         return partitions
 
-    def getMaxCapacity(self, capacities):
-        return max(capacities, key=lambda x: x[2])[2]
-
     def getMinVertexCapacity(self, vertices: list[Vertex]):
         return min(vertices, key=lambda x: x.max_capacity).max_capacity
+
+    # temporary function to test the graph
+    def add_to_current_flow_tmp(self, scene: Scene):
+        # self.edges[0].add_to_current_flow(20, scene)
+        scene.play(Create(Dot()))
+        # self.edges[0].add_to_current_flow(50, scene)
+        # scene.wait(10, frozen_frame=False)
+        # self.edges[0].add_to_current_flow(20, scene)
+        # scene.wait(3, frozen_frame=False)

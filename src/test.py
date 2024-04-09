@@ -1,6 +1,7 @@
 from manim import *
 from src.graph import FlowGraph
 from src.vertices_examples import VerticesExamples as V
+from src.utilities import GrowthScale
 
 
 class Test(Scene):
@@ -30,15 +31,11 @@ class Test2(Scene):
             1: [2, 1, 0],
         }
 
-        graph = FlowGraph(vertices, edges, capacities, layout=lt, growth_scale="log2")
+        graph = FlowGraph(
+            vertices, edges, capacities, layout=lt, growth_scale=GrowthScale.SQRT
+        )
         self.camera.background_color = WHITE
 
         self.add(graph)
 
-        """ edges[0].add_to_current_flow(20, self)
-        self.wait(3, frozen_frame=False)
-        edges[0].add_to_current_flow(50, self)
-        self.wait(10, frozen_frame=False)
-        edges[0].add_to_current_flow(20, self)
-        self.wait(3, frozen_frame=False)
- """
+        # graph.add_to_current_flow_tmp(self)
