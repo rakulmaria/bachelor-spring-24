@@ -1,7 +1,7 @@
 from manim import *
 from src.edge import Edge
 from src.vertex import Vertex
-from src.utilities import GrowthScale
+from src.utils import GrowthScale
 
 
 class FlowGraph(VMobject):

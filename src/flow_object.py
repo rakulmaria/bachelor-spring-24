@@ -2,7 +2,7 @@ from manim import *
 import math
 
 from src.arrow import EdgeArrow
-from src.utilities import GrowthScale
+from src.utils import GrowthScale
 
 
 class FlowPolygon(Line):

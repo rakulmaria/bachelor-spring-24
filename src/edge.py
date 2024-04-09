@@ -1,7 +1,7 @@
 from manim import *
 from src.arrow import EdgeArrow
 from src.flow_object import FlowPolygon
-from src.utilities import GrowthScale
+from src.utils import GrowthScale
 import math
 
 
@@ -33,6 +33,7 @@ class Edge(VMobject):
     def add_to_current_flow(self, new_flow, scene: Scene):
         if new_flow <= self.max_capacity:
             self.current_flow += new_flow
+
             (new_start_coord, new_end_coord), new_direction = self.get_flow_coords(
                 self.current_flow
             )
@@ -43,10 +44,12 @@ class Edge(VMobject):
                 flow=self.current_flow,
                 growth_scale=self.growth_scale,
             )
+
             if self.flow_object is None:
                 (old_start_coord, old_end_coord), old_direction = self.get_flow_coords(
                     0
                 )
+
                 self.flow_object = FlowPolygon(
                     old_start_coord,
                     old_end_coord,
@@ -54,7 +57,9 @@ class Edge(VMobject):
                     0,
                     growth_scale=self.growth_scale,
                 )
+
             arrow_animation = None
+
             if self.current_flow == self.max_capacity:
                 arrow_animation = Uncreate(self.arrow)
             else:
@@ -62,6 +67,7 @@ class Edge(VMobject):
                 new_arrow = EdgeArrow(a, b)
                 arrow_animation = ReplacementTransform(self.arrow, new_arrow)
                 self.arrow = new_arrow
+
             scene.play(
                 ReplacementTransform(self.flow_object, new_flow_object), arrow_animation
             )

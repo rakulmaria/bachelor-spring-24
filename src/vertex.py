@@ -1,7 +1,7 @@
 from manim import *
 import math
 
-from src.utilities import GrowthScale
+from src.utils import GrowthScale
 
 
 class Vertex(VMobject):
