@@ -1,8 +1,7 @@
 from manim import *
 from src.arrow import EdgeArrow
 from src.flow_object import FlowPolygon
-from src.utils import GrowthScale
-import math
+from src.utils import GrowthScale, get_drawn_size
 
 
 class Edge(VMobject):
@@ -76,12 +75,7 @@ class Edge(VMobject):
             print("Error: New capacity exceeds maximum capacity")
 
     def get_drawn_edge_size(self, cap):
-        if self.growth_scale == GrowthScale.SQRT:
-            return math.sqrt(cap) * 8
-        if self.growth_scale == GrowthScale.LINEAR:
-            return cap * 8
-        if self.growth_scale == GrowthScale.LOG2:
-            return math.log2(cap) * 8
+        return get_drawn_size(growth_scale=self.growth_scale, size=cap) * 8
 
     def draw(self):
         backgroundLine = Line(

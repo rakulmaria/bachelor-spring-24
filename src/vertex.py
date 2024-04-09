@@ -1,7 +1,6 @@
 from manim import *
-import math
 
-from src.utils import GrowthScale
+from src.utils import GrowthScale, get_drawn_size
 
 
 class Vertex(VMobject):
@@ -17,20 +16,14 @@ class Vertex(VMobject):
         super().__init__()
 
     def get_drawn_dot_size(self):
-        if self.growth_scale == GrowthScale.SQRT:
-            return math.sqrt(self.max_capacity) / 2
-        if self.growth_scale == GrowthScale.LINEAR:
-            return self.max_capacity / 2
-        if self.growth_scale == GrowthScale.LOG2:
-            return math.log2(self.max_capacity) / 2
+        return (
+            get_drawn_size(growth_scale=self.growth_scale, size=self.max_capacity) / 2
+        )
 
     def get_drawn_label_size(self, scale=1):
-        if self.growth_scale == GrowthScale.SQRT:
-            return math.sqrt(scale) * 0.2
-        if self.growth_scale == GrowthScale.LINEAR:
-            return scale * 0.2
-        if self.growth_scale == GrowthScale.LOG2:
-            return math.log2(scale) * 0.2
+        return (
+            get_drawn_size(growth_scale=self.growth_scale, size=self.max_capacity) * 0.2
+        )
 
     def draw(self, scale=1):
         self.foregroundDot = (

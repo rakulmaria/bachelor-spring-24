@@ -1,8 +1,7 @@
 from manim import *
-import math
 
 from src.arrow import EdgeArrow
-from src.utils import GrowthScale
+from src.utils import GrowthScale, get_drawn_size
 
 
 class FlowPolygon(Line):
@@ -24,7 +23,7 @@ class FlowPolygon(Line):
 
         super().__init__(start=flow_start_coord, end=flow_end_coord, z_index=4)
         super().set_stroke(
-            width=(self.get_drawn_size(flow)),
+            width=(self.get_drawn_flow_size(flow)),
             color=lightBlue,
         )
         super().set_fill(color=BLUE)
@@ -81,15 +80,8 @@ class FlowPolygon(Line):
 
         self.polygons.add_updater(update)
 
-    def get_drawn_size(self, flow):
-        if self.growth_scale == GrowthScale.SQRT:
-            return math.sqrt(flow) * 8
-        if self.growth_scale == GrowthScale.LINEAR:
-            return flow * 8
-        if self.growth_scale == GrowthScale.LOG2:
-            if flow == 0:
-                return 0
-            return math.log2(flow) * 8 + 1
+    def get_drawn_flow_size(self, flow):
+        return get_drawn_size(growth_scale=self.growth_scale, size=flow) * 8
 
     def angle_from_vector(self, vector):
         angle_rad = np.arctan2(vector[1], vector[0])
