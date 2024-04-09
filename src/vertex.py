@@ -42,7 +42,7 @@ class Vertex(VMobject):
     def draw(self, scale=1, growth_scale="sqrt"):
         self.foregroundDot = (
             Dot(self.to_np_array())
-            .scale(self.get_drawn_dot_size(growth_scale))
+            .scale(self.get_drawn_dot_size(growth_scale) - 0.05)
             .set_fill(WHITE)
             .set_z_index(10)
         )

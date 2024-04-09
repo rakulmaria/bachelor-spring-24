@@ -76,11 +76,7 @@ class Test3(Scene):
                 "max_opacity:",
                 vertex.get_max_opacity(),
             )
-
-        self.camera.background_color = WHITE
         self.add(graph)
-
-        self.wait(1)
 
         graph.addToCurrentFlowTemp(10, [(0, 1), (1, 3)], scene=self)
         # self.wait(2)
