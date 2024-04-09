@@ -83,9 +83,9 @@ class FlowGraph(VMobject):
 
     # temporary function to test the graph
     def add_to_current_flow_tmp(self, scene: Scene):
-        # self.edges[0].add_to_current_flow(20, scene)
-        scene.play(Create(Dot()))
-        # self.edges[0].add_to_current_flow(50, scene)
-        # scene.wait(10, frozen_frame=False)
-        # self.edges[0].add_to_current_flow(20, scene)
-        # scene.wait(3, frozen_frame=False)
+        self.edges[0].add_to_current_flow(20, scene)
+        scene.wait(2, frozen_frame=False)
+        self.edges[0].add_to_current_flow(50, scene)
+        scene.wait(2, frozen_frame=False)
+        self.edges[0].add_to_current_flow(20, scene)
+        scene.wait(3, frozen_frame=False)

@@ -28,7 +28,7 @@ class Edge(VMobject):
             new_flow_object = FlowPolygon(self, self.current_flow)
             if self.flow_object is None:
                 self.flow_object = FlowPolygon(self, 0)
-            scene.play(ReplacementTransform(Line(), Line()))
+            scene.play(ReplacementTransform(self.flow_object, new_flow_object))
             self.flow_object = new_flow_object
 
         else:

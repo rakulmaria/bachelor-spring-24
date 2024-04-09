@@ -38,4 +38,4 @@ class Test2(Scene):
 
         self.add(graph)
 
-        # graph.add_to_current_flow_tmp(self)
+        graph.add_to_current_flow_tmp(self)
