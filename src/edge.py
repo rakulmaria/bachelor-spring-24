@@ -53,13 +53,13 @@ class Edge(VMobject):
             .set_stroke(width=self.get_drawn_capacity(), color=WHITE)
             .set_fill(color=WHITE)
         )
-        arrow = EdgeArrow(
+        self.arrow = EdgeArrow(
             self.start_vertex.to_np_array(), self.end_vertex.to_np_array()
         )
 
         self.add(backgroundLine)
         self.add(self.foregroundLine)
-        self.add(arrow)
+        self.add(self.arrow)
 
 
 """
