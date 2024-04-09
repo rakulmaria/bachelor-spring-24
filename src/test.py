@@ -32,7 +32,7 @@ class Test2(Scene):
         }
 
         graph = FlowGraph(
-            vertices, edges, capacities, layout=lt, growth_scale=GrowthScale.SQRT
+            vertices, edges, capacities, layout=lt, growth_scale=GrowthScale.LINEAR
         )
         self.camera.background_color = WHITE
 

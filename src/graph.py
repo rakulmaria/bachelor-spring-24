@@ -18,19 +18,26 @@ class FlowGraph(VMobject):
         super().__init__()
 
         self.vertices, self.edges = self.getEdgesAndVerticesAsMobjects(
-            vertices, edges, capacities, layout_scale, layout, layers
+            vertices, edges, capacities, layout_scale, layout, layers, growth_scale
         )
 
         for vertex in self.vertices:
             self.add(vertex)
-            vertex.draw(self.getMinVertexCapacity(self.vertices), growth_scale)
+            vertex.draw(self.getMinVertexCapacity(self.vertices))
 
         for edge in self.edges:
             self.add(edge)
-            edge.draw(growth_scale)
+            edge.draw()
 
     def getEdgesAndVerticesAsMobjects(
-        self, vertices, edges, capacities, layout_scale=2, layout="spring", layers=[]
+        self,
+        vertices,
+        edges,
+        capacities,
+        layout_scale=2,
+        layout="spring",
+        layers=[],
+        growth_scale: GrowthScale = GrowthScale.SQRT,
     ):
         partitions = self.getPartitions(layers)
         graph = []
@@ -57,12 +64,15 @@ class FlowGraph(VMobject):
         for dot, i in enumerate(graph.vertices):
             x, y, _ = graph._layout[dot]
 
-            vertex = Vertex(i, x, y, 1)
+            vertex = Vertex(i, x, y, 1, growth_scale=growth_scale)
             verticesAsObjects.update({i: vertex})
 
         for _from, to, capacity in capacities:
             edge = Edge(
-                verticesAsObjects.get(_from), verticesAsObjects.get(to), capacity
+                verticesAsObjects.get(_from),
+                verticesAsObjects.get(to),
+                capacity,
+                growth_scale=growth_scale,
             )
             edgesAsObjects.append(edge)
 
@@ -83,9 +93,10 @@ class FlowGraph(VMobject):
 
     # temporary function to test the graph
     def add_to_current_flow_tmp(self, scene: Scene):
-        self.edges[0].add_to_current_flow(20, scene)
+        self.edges[0].add_to_current_flow(2, scene)
         scene.wait(2, frozen_frame=False)
-        self.edges[0].add_to_current_flow(50, scene)
+        self.edges[0].add_to_current_flow(3, scene)
         scene.wait(2, frozen_frame=False)
-        self.edges[0].add_to_current_flow(20, scene)
+        self.edges[0].add_to_current_flow(5, scene)
         scene.wait(3, frozen_frame=False)
+        self.edges[0].add_to_current_flow(-7, scene)
