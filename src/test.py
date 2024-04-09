@@ -67,7 +67,15 @@ class Test3(Scene):
         )
 
         for vertex in graph.vertices:
-            print(vertex.id, vertex.opacity)
+            print(
+                vertex.id,
+                "outgoing:",
+                vertex.outgoing_capacity,
+                "ingoing:",
+                vertex.ingoing_capacity,
+                "max_opacity:",
+                vertex.get_max_opacity(),
+            )
 
         self.camera.background_color = WHITE
         self.add(graph)
@@ -75,7 +83,7 @@ class Test3(Scene):
         self.wait(1)
 
         graph.addToCurrentFlowTemp(10, [(0, 1), (1, 3)], scene=self)
-        self.wait(2)
+        # self.wait(2)
         graph.addToCurrentFlowTemp(10, [(0, 1), (1, 2), (2, 3)], scene=self)
-        # # self.wait(2)
+        # # # self.wait(2)
         graph.addToCurrentFlowTemp(10, [(0, 2), (2, 3)], scene=self)

@@ -5,12 +5,12 @@ lightBlue = AS2700.B41_BLUEBELL
 
 
 class Vertex(VMobject):
-    def __init__(self, id, x_coord, y_coord, max_capacity):
+    def __init__(self, id, x_coord, y_coord):
         self.id = id
         self.x_coord = x_coord
         self.y_coord = y_coord
-        self.max_capacity = max_capacity
-        self.opacity = 0
+        self.outgoing_capacity = 0
+        self.ingoing_capacity = 0
         self.current_flow = 0
         self.flow_object = (
             Dot(self.to_np_array())
@@ -25,11 +25,11 @@ class Vertex(VMobject):
 
     def get_drawn_dot_size(self, growth_scale="sqrt"):
         if growth_scale == "sqrt":
-            return math.sqrt(self.max_capacity) / 2
+            return math.sqrt(self.get_max_drawn_capacity()) / 2
         if growth_scale == "linear":
-            return self.max_capacity / 2
+            return self.get_max_drawn_capacity() / 2
         if growth_scale == "log2":
-            return math.log2(self.max_capacity) / 2
+            return math.log2(self.get_max_drawn_capacity()) / 2
 
     def get_drawn_label_size(self, scale=1, growth_scale="sqrt"):
         if growth_scale == "sqrt":
@@ -66,25 +66,27 @@ class Vertex(VMobject):
     def to_np_array(self):
         return np.array([self.x_coord, self.y_coord, 0])
 
-    def add_to_max_capacity(self, capacity):
-        if self.max_capacity < capacity:
-            self.max_capacity = capacity
+    def add_to_max_ingoing_capacity(self, capacity):
+        self.ingoing_capacity += capacity
 
-    def add_to_opacity(self, amount):
-        self.opacity += amount
+    def add_to_max_outgoing_capacity(self, capacity):
+        self.outgoing_capacity += capacity
 
     def get_opacity(self, flow):
-        return flow / self.opacity
+        return flow / self.get_max_opacity()
 
-    def get_max_capacity(self):
-        return self.max_capacity
+    def get_max_drawn_capacity(self):
+        return max(self.outgoing_capacity, self.ingoing_capacity)
+
+    # helper function
+    def get_max_opacity(self):
+        # edge case for source and sink vertices
+        if self.ingoing_capacity == 0 or self.outgoing_capacity == 0:
+            return max(self.ingoing_capacity, self.outgoing_capacity)
+        return min(self.ingoing_capacity, self.outgoing_capacity)
 
     def add_to_current_flow(self, new_flow, scene):
-        # if self.current_flow is 0:
-        #     self.flow_object = (Dot(self.to_np_array())
-        #                 .set_fill(PINK)
-        #                 .set_opacity(self.get_opacity(self.current_flow)))
-        if new_flow <= self.max_capacity:
+        if new_flow <= self.get_max_opacity():
             self.current_flow += new_flow
             new_flow_object = (
                 Dot(self.to_np_array())
@@ -95,20 +97,6 @@ class Vertex(VMobject):
             )
             scene.play(ReplacementTransform(self.flow_object, new_flow_object))
             self.flow_object = new_flow_object
-        else:
-            print("Error: New capacity exceeds maximum capacity")
-
-    def add_to_current_flow2(self, new_flow, scene):
-        if self.current_flow == 0:
-            self.flow_object = self.foregroundDot
-        if new_flow <= self.max_capacity:
-            self.current_flow += new_flow
-            self.foregroundDot.set_fill(lightBlue).set_opacity(
-                self.get_opacity(new_flow)
-            )
-
-            # scene.play(ReplacementTransform(self.flow_object, new_flow_object))
-            # self.flow_object = new_flow_object
         else:
             print("Error: New capacity exceeds maximum capacity")
 

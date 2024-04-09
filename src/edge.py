@@ -14,14 +14,17 @@ class Edge(VMobject):
         self.current_flow = current_flow
         self.flow_object = None
 
-        start_vertex.add_to_max_capacity(max_capacity)
-        end_vertex.add_to_max_capacity(max_capacity)
+        start_vertex.add_to_max_outgoing_capacity(max_capacity)
+        end_vertex.add_to_max_ingoing_capacity(max_capacity)
+
+        # start_vertex.add_to_outgoing_opacity(max_capacity)
+        # end_vertex.add_to_ingoing_opacity(max_capacity)
 
         # also add to the vertex opacity
         # also add opacity to source vertex (has no ingoing edges)
-        if self.start_vertex.id == 0:
-            start_vertex.add_to_opacity(max_capacity)
-        end_vertex.add_to_opacity(max_capacity)
+        # if self.start_vertex.id == 0:
+        #     start_vertex.add_to_opacity(max_capacity)
+        # end_vertex.add_to_opacity(max_capacity)
 
     def add_to_current_flow(self, new_flow, scene):
         if new_flow <= self.max_capacity:

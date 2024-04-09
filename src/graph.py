@@ -22,7 +22,9 @@ class FlowGraph(VMobject):
 
         for vertex in self.vertices:
             self.add(vertex)
-            vertex.draw(self.getMinVertexCapacity(self.vertices), growth_scale)
+
+            hej = self.getMinVertexCapacity(self.vertices)
+            vertex.draw(hej, growth_scale)
 
         for edge in self.edges:
             self.add(edge)
@@ -56,7 +58,7 @@ class FlowGraph(VMobject):
         for dot, i in enumerate(graph.vertices):
             x, y, _ = graph._layout[dot]
 
-            vertex = Vertex(i, x, y, 1)
+            vertex = Vertex(i, x, y)
             verticesAsObjects.update({i: vertex})
 
         for _from, to, capacity in capacities:
@@ -81,7 +83,9 @@ class FlowGraph(VMobject):
         return max(capacities, key=lambda x: x[2])[2]
 
     def getMinVertexCapacity(self, vertices: list[Vertex]):
-        return min(vertices, key=lambda x: x.max_capacity).max_capacity
+        return min(
+            vertices, key=lambda x: x.get_max_drawn_capacity()
+        ).get_max_drawn_capacity()
 
     def addToCurrentFlowTemp(self, flow, path, scene):
         for _, (_from, _to) in enumerate(path):
