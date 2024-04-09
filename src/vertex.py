@@ -44,9 +44,7 @@ class Vertex(VMobject):
     def draw(self, scale=1):
         self.foregroundDot = (
             Dot(self.to_np_array())
-            .scale(
-                self.get_drawn_dot_size()
-            )  # I think this fixes the white border around the circle
+            .scale(self.get_drawn_dot_size())
             .set_fill(WHITE)
             .set_z_index(10)
         )
