@@ -13,13 +13,26 @@ class Vertex(VMobject):
 
         super().__init__()
 
-    def get_drawn_capacity(self):
-        return math.sqrt(self.max_capacity) / 2
+    def get_drawn_dot_size(self, growth_scale="sqrt"):
+        if growth_scale == "sqrt":
+            return math.sqrt(self.max_capacity) / 2
+        if growth_scale == "linear":
+            return self.max_capacity / 2
+        if growth_scale == "log2":
+            return math.log2(self.max_capacity) / 2
 
-    def draw(self, scale=1):
+    def get_drawn_label_size(self, scale=1, growth_scale="sqrt"):
+        if growth_scale == "sqrt":
+            return math.sqrt(scale) * 0.2
+        if growth_scale == "linear":
+            return scale * 0.2
+        if growth_scale == "log2":
+            return math.log2(scale) * 0.2
+
+    def draw(self, scale=1, growth_scale="sqrt"):
         self.foregroundDot = (
             Dot(self.to_np_array())
-            .scale(self.get_drawn_capacity())
+            .scale(self.get_drawn_dot_size(growth_scale))
             .set_fill(WHITE)
             .set_z_index(10)
         )
@@ -28,7 +41,7 @@ class Vertex(VMobject):
 
         backgroundDot = (
             Dot(self.to_np_array())
-            .scale(self.get_drawn_capacity() + 0.1)
+            .scale(self.get_drawn_dot_size(growth_scale) + 0.1)
             .set_fill(BLACK)
             .set_z_index(0)
         )
@@ -37,7 +50,7 @@ class Vertex(VMobject):
 
         label = Tex(self.id, color=BLACK).set_x(self.x_coord).set_y(self.y_coord)
         label.set_z_index(20)
-        label.scale(math.sqrt(scale) * 0.2)
+        label.scale(self.get_drawn_label_size(scale, growth_scale))
         self.add(label)
 
     def to_np_array(self):

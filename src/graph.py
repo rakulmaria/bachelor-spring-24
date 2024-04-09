@@ -22,11 +22,11 @@ class FlowGraph(VMobject):
 
         for vertex in self.vertices:
             self.add(vertex)
-            vertex.draw(self.getMinVertexCapacity(self.vertices))
+            vertex.draw(self.getMinVertexCapacity(self.vertices), growth_scale)
 
         for edge in self.edges:
             self.add(edge)
-            edge.draw()
+            edge.draw(growth_scale)
 
     def getEdgesAndVerticesAsMobjects(
         self, vertices, edges, capacities, layout_scale=2, layout="spring", layers=[]

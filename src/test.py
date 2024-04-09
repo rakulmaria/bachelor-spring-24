@@ -30,7 +30,7 @@ class Test2(Scene):
             1: [2, 1, 0],
         }
 
-        graph = FlowGraph(vertices, edges, capacities, layout=lt)
+        graph = FlowGraph(vertices, edges, capacities, layout=lt, growth_scale="log2")
         self.camera.background_color = WHITE
 
         self.add(graph)

@@ -33,16 +33,21 @@ class Edge(VMobject):
         else:
             print("Error: New capacity exceeds maximum capacity")
 
-    def get_drawn_capacity(self):
-        return math.sqrt(self.max_capacity) * 8
+    def get_drawn_edge_size(self, growth_scale="sqrt"):
+        if growth_scale == "sqrt":
+            return math.sqrt(self.max_capacity) * 8
+        if growth_scale == "linear":
+            return self.max_capacity * 8
+        if growth_scale == "log2":
+            return math.log2(self.max_capacity) * 8
 
-    def draw(self):
+    def draw(self, growth_scale="sqrt"):
         backgroundLine = Line(
             start=self.start_vertex.to_np_array(),
             end=self.end_vertex.to_np_array(),
             z_index=0,
             color=BLACK,
-            stroke_width=(self.get_drawn_capacity() + 1.6),
+            stroke_width=(self.get_drawn_edge_size(growth_scale) + 1.6),
         )
         self.foregroundLine = (
             Line(
@@ -50,7 +55,7 @@ class Edge(VMobject):
                 end=self.end_vertex.to_np_array(),
                 z_index=3,
             )
-            .set_stroke(width=self.get_drawn_capacity(), color=WHITE)
+            .set_stroke(width=self.get_drawn_edge_size(growth_scale), color=WHITE)
             .set_fill(color=WHITE)
         )
         self.arrow = EdgeArrow(
