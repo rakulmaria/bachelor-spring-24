@@ -42,3 +42,40 @@ class Test2(Scene):
         edges[0].add_to_current_flow(20, self)
         self.wait(3, frozen_frame=False)
  """
+
+
+class Test4(Scene):
+    def construct(self):
+        circle = Circle()  # create a circle
+        circle.set_fill(PINK, opacity=0.5)  # set the color and transparency
+        self.play(Create(circle))  # show the circle on screen
+
+
+class Test3(Scene):
+    def construct(self):
+        vertices, edges, capacities = V.KleinbergTardos()
+
+        layers = [1, 2, 1]
+
+        graph = FlowGraph(
+            vertices,
+            edges,
+            capacities,
+            layout="partite",
+            layers=layers,
+            growth_scale="sqrt",
+        )
+
+        for vertex in graph.vertices:
+            print(vertex.id, vertex.opacity)
+
+        self.camera.background_color = WHITE
+        self.add(graph)
+
+        self.wait(1)
+
+        graph.addToCurrentFlowTemp(10, [(0, 1), (1, 3)], scene=self)
+        self.wait(2)
+        graph.addToCurrentFlowTemp(10, [(0, 1), (1, 2), (2, 3)], scene=self)
+        # # self.wait(2)
+        graph.addToCurrentFlowTemp(10, [(0, 2), (2, 3)], scene=self)

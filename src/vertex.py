@@ -1,6 +1,8 @@
 from manim import *
 import math
 
+lightBlue = AS2700.B41_BLUEBELL
+
 
 class Vertex(VMobject):
     def __init__(self, id, x_coord, y_coord, max_capacity):
@@ -10,6 +12,14 @@ class Vertex(VMobject):
         self.max_capacity = max_capacity
         self.opacity = 0
         self.current_flow = 0
+        self.flow_object = (
+            Dot(self.to_np_array())
+            .scale(self.get_drawn_dot_size("sqrt"))
+            .set_fill(lightBlue)
+            .set_opacity(0)
+            .set_z_index(12)
+        )
+        self.foregroundDot = None
 
         super().__init__()
 
@@ -69,9 +79,36 @@ class Vertex(VMobject):
     def get_max_capacity(self):
         return self.max_capacity
 
-    def add_to_current_flow(self, new_flow):
+    def add_to_current_flow(self, new_flow, scene):
+        # if self.current_flow is 0:
+        #     self.flow_object = (Dot(self.to_np_array())
+        #                 .set_fill(PINK)
+        #                 .set_opacity(self.get_opacity(self.current_flow)))
         if new_flow <= self.max_capacity:
             self.current_flow += new_flow
+            new_flow_object = (
+                Dot(self.to_np_array())
+                .scale(self.get_drawn_dot_size("sqrt"))
+                .set_fill(lightBlue)
+                .set_opacity(self.get_opacity(self.current_flow))
+                .set_z_index(13)
+            )
+            scene.play(ReplacementTransform(self.flow_object, new_flow_object))
+            self.flow_object = new_flow_object
+        else:
+            print("Error: New capacity exceeds maximum capacity")
+
+    def add_to_current_flow2(self, new_flow, scene):
+        if self.current_flow == 0:
+            self.flow_object = self.foregroundDot
+        if new_flow <= self.max_capacity:
+            self.current_flow += new_flow
+            self.foregroundDot.set_fill(lightBlue).set_opacity(
+                self.get_opacity(new_flow)
+            )
+
+            # scene.play(ReplacementTransform(self.flow_object, new_flow_object))
+            # self.flow_object = new_flow_object
         else:
             print("Error: New capacity exceeds maximum capacity")
 
