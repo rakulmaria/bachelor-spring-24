@@ -16,9 +16,10 @@ class FlowGraph(VMobject):
         growth_scale: GrowthScale = GrowthScale.SQRT,
     ):
         super().__init__()
+        self.growth_scale = growth_scale
 
         self.vertices, self.edges = self.getEdgesAndVerticesAsMobjects(
-            vertices, edges, capacities, layout_scale, layout, layers, growth_scale
+            vertices, edges, capacities, layout_scale, layout, layers
         )
 
         for vertex in self.vertices:
@@ -37,7 +38,6 @@ class FlowGraph(VMobject):
         layout_scale=2,
         layout="spring",
         layers=[],
-        growth_scale: GrowthScale = GrowthScale.SQRT,
     ):
         partitions = self.getPartitions(layers)
         graph = []
@@ -64,7 +64,7 @@ class FlowGraph(VMobject):
         for dot, i in enumerate(graph.vertices):
             x, y, _ = graph._layout[dot]
 
-            vertex = Vertex(i, x, y, 1, growth_scale=growth_scale)
+            vertex = Vertex(i, x, y, growth_scale=self.growth_scale)
             verticesAsObjects.update({i: vertex})
 
         for _from, to, capacity in capacities:
@@ -72,7 +72,7 @@ class FlowGraph(VMobject):
                 verticesAsObjects.get(_from),
                 verticesAsObjects.get(to),
                 capacity,
-                growth_scale=growth_scale,
+                growth_scale=self.growth_scale,
             )
             edgesAsObjects.append(edge)
 

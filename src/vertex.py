@@ -5,13 +5,11 @@ from src.utils import GrowthScale
 
 
 class Vertex(VMobject):
-    def __init__(
-        self, id, x_coord, y_coord, max_capacity, growth_scale=GrowthScale.SQRT
-    ):
+    def __init__(self, id, x_coord, y_coord, growth_scale=GrowthScale.SQRT):
         self.id = id
         self.x_coord = x_coord
         self.y_coord = y_coord
-        self.max_capacity = max_capacity
+        self.max_capacity = 0
         self.opacity = 0
         self.current_flow = 0
         self.growth_scale = growth_scale

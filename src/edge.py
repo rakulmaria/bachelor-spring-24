@@ -113,42 +113,32 @@ class Edge(VMobject):
         y_start = self.start_vertex.y_coord
         x_end = self.end_vertex.x_coord
         y_end = self.end_vertex.y_coord
-        h_top = (self.foregroundLine.stroke_width / 100) / 2
-        h = h_top - (self.get_drawn_edge_size(new_flow) / 100 / 2)
+        half_line_width = (self.foregroundLine.stroke_width / 100) / 2
+        height_to_new_point = half_line_width - (
+            self.get_drawn_edge_size(new_flow) / 100 / 2
+        )
 
         v1 = x_end - x_start
         v2 = y_end - y_start
         z1 = -v2
         z2 = v1
 
-        if arrow_coords:
-            h = self.get_drawn_edge_size(self.current_flow) / 100 / 2
-
-            vector = np.array([-z1, -z2, 0])
-
-            direction = vector / np.linalg.norm(vector)
-            scaled_vector = direction * h
-
-            a = self.start_vertex.to_np_array() + scaled_vector
-            b = self.end_vertex.to_np_array() + scaled_vector
-
-            return (
-                a,
-                b,
-            ), 0
-
         vector = np.array([z1, z2, 0])
         original_vector = np.array([v1, v2, 0])
 
+        if arrow_coords:
+            height_to_new_point = self.get_drawn_edge_size(self.current_flow) / 100 / 2
+            vector = np.array([-z1, -z2, 0])
+
         direction = vector / np.linalg.norm(vector)
-        scaled_vector = direction * h
+        scaled_vector = direction * height_to_new_point
 
         direction_original = original_vector / np.linalg.norm(original_vector)
 
-        a = self.start_vertex.to_np_array() + scaled_vector
-        b = self.end_vertex.to_np_array() + scaled_vector
+        start_coord = self.start_vertex.to_np_array() + scaled_vector
+        end_coord = self.end_vertex.to_np_array() + scaled_vector
 
         return (
-            a,
-            b,
+            start_coord,
+            end_coord,
         ), direction_original
