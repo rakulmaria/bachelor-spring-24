@@ -19,8 +19,17 @@ class Edge(VMobject):
         self.end_vertex = end_vertex
         self.max_capacity = max_capacity
         self.current_flow = current_flow
-        self.flow_object = None
         self.growth_scale = growth_scale
+
+        (init_start_coord, init_end_coord), init_direction = self.get_flow_coords(0)
+
+        self.flow_object = FlowPolygon(
+            init_start_coord,
+            init_end_coord,
+            init_direction,
+            0,
+            growth_scale=self.growth_scale,
+        )
 
         start_vertex.add_to_max_capacity(max_capacity)
         end_vertex.add_to_max_capacity(max_capacity)
@@ -43,19 +52,6 @@ class Edge(VMobject):
                 flow=self.current_flow,
                 growth_scale=self.growth_scale,
             )
-
-            if self.flow_object is None:
-                (old_start_coord, old_end_coord), old_direction = self.get_flow_coords(
-                    0
-                )
-
-                self.flow_object = FlowPolygon(
-                    old_start_coord,
-                    old_end_coord,
-                    old_direction,
-                    0,
-                    growth_scale=self.growth_scale,
-                )
 
             arrow_animation = None
 
@@ -107,7 +103,7 @@ class Edge(VMobject):
         y_start = self.start_vertex.y_coord
         x_end = self.end_vertex.x_coord
         y_end = self.end_vertex.y_coord
-        half_line_width = (self.foregroundLine.stroke_width / 100) / 2
+        half_line_width = (self.get_drawn_edge_size(self.max_capacity) / 100) / 2
         height_to_new_point = half_line_width - (
             self.get_drawn_edge_size(new_flow) / 100 / 2
         )
