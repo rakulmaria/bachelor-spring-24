@@ -54,16 +54,18 @@ class Edge(VMobject):
                     0,
                     growth_scale=self.growth_scale,
                 )
-            scene.play(ReplacementTransform(self.flow_object, new_flow_object))
-            self.flow_object = new_flow_object
+            arrow_animation = None
             if self.current_flow == self.max_capacity:
-                scene.play(Uncreate(self.arrow))
+                arrow_animation = Uncreate(self.arrow)
             else:
                 (a, b), _ = self.get_flow_coords(new_flow, arrow_coords=True)
                 new_arrow = EdgeArrow(a, b)
-                scene.play(ReplacementTransform(self.arrow, new_arrow))
+                arrow_animation = ReplacementTransform(self.arrow, new_arrow)
                 self.arrow = new_arrow
-
+            scene.play(
+                ReplacementTransform(self.flow_object, new_flow_object), arrow_animation
+            )
+            self.flow_object = new_flow_object
         else:
             print("Error: New capacity exceeds maximum capacity")
 

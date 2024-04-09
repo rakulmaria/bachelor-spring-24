@@ -93,6 +93,7 @@ class FlowGraph(VMobject):
 
     # temporary function to test the graph
     def add_to_current_flow_tmp(self, scene: Scene):
+        scene.wait(1, frozen_frame=False)
         self.edges[0].add_to_current_flow(2, scene)
         scene.wait(2, frozen_frame=False)
         self.edges[0].add_to_current_flow(3, scene)
@@ -100,3 +101,4 @@ class FlowGraph(VMobject):
         self.edges[0].add_to_current_flow(5, scene)
         scene.wait(3, frozen_frame=False)
         self.edges[0].add_to_current_flow(-7, scene)
+        scene.wait(1, frozen_frame=False)
