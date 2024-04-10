@@ -12,7 +12,9 @@ class VerticesExamples:
             (3, 5, 2.0),
             (4, 5, 3.0),
         ]
-        return vertices, edges, capacities
+        source = 0
+        sink = 5
+        return vertices, edges, capacities, source, sink
 
     def KleinbergTardosSmall():
         vertices = [0, 1, 2, 3]
@@ -24,7 +26,9 @@ class VerticesExamples:
             (1, 3, 1),
             (2, 3, 2),
         ]
-        return vertices, edges, capacities
+        source = 0
+        sink = 3
+        return vertices, edges, capacities, source, sink
 
     def KleinbergTardos():
         vertices = [0, 1, 2, 3]
@@ -36,7 +40,9 @@ class VerticesExamples:
             (1, 3, 10.0),
             (2, 3, 20.0),
         ]
-        return vertices, edges, capacities
+        source = 0
+        sink = 3
+        return vertices, edges, capacities, source, sink
 
     def CLRS():
         vertices = [0, 1, 2, 3, 4, 5]
@@ -52,8 +58,10 @@ class VerticesExamples:
             (4, 3, 7),
             (4, 5, 4),
         ]
+        source = 0
+        sink = 5
 
-        return vertices, edges, capacities
+        return vertices, edges, capacities, source, sink
 
     def Jungnickel():
         vertices = [0, 1, 2, 3, 4, 5, 6, 7]
@@ -93,7 +101,9 @@ class VerticesExamples:
             (0, 6, 2),
             (4, 2, 2),
         ]
-        return vertices, edges, capacities
+        source = 0
+        sink = 7
+        return vertices, edges, capacities, source, sink
 
     def KleinbergTardosExtreme():
         vertices = [0, 1, 2, 3]
@@ -105,7 +115,9 @@ class VerticesExamples:
             (1, 3, 100),
             (2, 3, 2),
         ]
-        return vertices, edges, capacities
+        source = 0
+        sink = 5
+        return vertices, edges, capacities, source, sink
 
     def SimpleGraph():
         vertices = [0, 1]
@@ -113,4 +125,6 @@ class VerticesExamples:
         capacities = [
             (0, 1, 10),
         ]
-        return vertices, edges, capacities
+        source = 0
+        sink = 1
+        return vertices, edges, capacities, source, sink

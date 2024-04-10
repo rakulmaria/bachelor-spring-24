@@ -1,4 +1,5 @@
 from manim import *
+from ford_fulkerson import FordFulkerson
 from src.graph import FlowGraph
 from src.vertices_examples import VerticesExamples as V
 from src.utils import GrowthScale
@@ -6,7 +7,7 @@ from src.utils import GrowthScale
 
 class Test(Scene):
     def construct(self):
-        vertices, edges, capacities = V.SedgewickWayne()
+        vertices, edges, capacities, source, sink = V.SedgewickWayne()
         lt = {
             0: [-2, 0, 0],
             1: [-1, 1, 0],
@@ -16,7 +17,9 @@ class Test(Scene):
             5: [2, 0, 0],
         }
 
-        graph = FlowGraph(vertices, edges, capacities, layout=lt)
+        graph = FlowGraph(
+            vertices, edges, capacities, layout=lt, source=source, sink=sink
+        )
         self.camera.background_color = WHITE
 
         self.add(graph)
@@ -88,3 +91,31 @@ class Test4(Scene):
         graph.addToCurrentFlowTemp(1, [(0, 1), (1, 2), (2, 3)], scene=self)
         # # # self.wait(2)
         graph.addToCurrentFlowTemp(1, [(0, 2), (2, 3)], scene=self)
+
+
+class Test5(Scene):
+    def construct(self):
+        vertices, edges, capacities, source, sink = V.SedgewickWayne()
+
+        layers = [1, 2, 2, 1]
+
+        graph = FlowGraph(
+            vertices,
+            edges,
+            capacities,
+            layout="partite",
+            layers=layers,
+            growth_scale=GrowthScale.LINEAR,
+            source=source,
+            sink=sink,
+        )
+
+        self.camera.background_color = WHITE
+        self.add(graph)
+
+        ford_fulkerson = FordFulkerson(graph)
+        max_flow = ford_fulkerson.find_max_flow(self)
+
+        print(max_flow)
+
+        self.wait(2)

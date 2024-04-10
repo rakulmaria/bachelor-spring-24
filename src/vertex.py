@@ -14,6 +14,7 @@ class Vertex(VMobject):
         self.outgoing_capacity = 0
         self.ingoing_capacity = 0
         self.current_flow = 0
+        self.adjacent_edges = []
         self.flow_object = (
             Dot(self.to_np_array())
             .scale(self.get_drawn_dot_size())
@@ -34,12 +35,7 @@ class Vertex(VMobject):
         )
 
     def get_drawn_label_size(self, scale=1):
-        return (
-            get_drawn_size(
-                growth_scale=self.growth_scale, size=self.get_max_drawn_capacity()
-            )
-            * 0.2
-        )
+        return get_drawn_size(growth_scale=self.growth_scale, size=scale) * 0.2
 
     def draw(self, scale=1):
         self.foregroundDot = (
@@ -73,6 +69,9 @@ class Vertex(VMobject):
 
     def add_to_max_outgoing_capacity(self, capacity):
         self.outgoing_capacity += capacity
+
+    def add_adjacent_edge(self, edge):
+        self.adjacent_edges.append(edge)
 
     def get_max_drawn_capacity(self):
         return max(self.outgoing_capacity, self.ingoing_capacity)
