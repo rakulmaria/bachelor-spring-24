@@ -16,17 +16,16 @@ class FlowPolygon(Line):
         size = 9
         self.polygons = VGroup()
         self.growth_scale = growth_scale
-        darkBlue = AS2700.B24_HARBOUR_BLUE
-        lightBlue = AS2700.B41_BLUEBELL
-        borderBlue = AS2700.B21_ULTRAMARINE
+        dark_blue = AS2700.B24_HARBOUR_BLUE
+        light_blue = AS2700.B41_BLUEBELL
+        border_blue = AS2700.B21_ULTRAMARINE
         self.times = 0
 
         super().__init__(start=flow_start_coord, end=flow_end_coord, z_index=4)
         super().set_stroke(
             width=(self.get_drawn_flow_size(flow)),
-            color=lightBlue,
+            color=light_blue,
         )
-        super().set_fill(color=BLUE)
 
         if flow > 0:
             self.add(EdgeArrow(flow_end_coord, flow_start_coord))
@@ -43,16 +42,16 @@ class FlowPolygon(Line):
         ]
 
         for _ in range(size):
-            obj = Polygon(*position_list, z_index=5)
-            obj.scale(scale_factor)
-            obj.set_stroke(borderBlue, opacity=1.0, width=0.0)
+            object = Polygon(*position_list, z_index=5)
+            object.scale(scale_factor)
+            object.set_stroke(border_blue, opacity=1.0, width=0.0)
 
             # set color of every other object to differ
             if len(self.polygons) % 3 == 0:
-                obj.set_fill(darkBlue, 0.8)
+                object.set_fill(dark_blue, 0.8)
             else:
-                obj.set_fill(lightBlue, 0.8)
-            self.polygons.add(obj)
+                object.set_fill(light_blue, 0.8)
+            self.polygons.add(object)
 
         self.polygons.arrange(buff=-1, direction=LEFT)
         self.polygons.move_to(self.get_center())
@@ -69,19 +68,19 @@ class FlowPolygon(Line):
                     if i in changed:
                         continue
                     self.times = 0
-                    if dot.color == darkBlue:
-                        mobject[i].set_fill(lightBlue)
+                    if dot.color == dark_blue:
+                        mobject[i].set_fill(light_blue)
 
                         if (1 + i) < len(mobject):
-                            mobject[i + 1].set_fill(darkBlue)
+                            mobject[i + 1].set_fill(dark_blue)
                         else:
-                            mobject[0].set_fill(darkBlue)
+                            mobject[0].set_fill(dark_blue)
                         changed.append(i + 1)
 
         self.polygons.add_updater(update)
 
     def get_drawn_flow_size(self, flow):
-        return get_drawn_size(growth_scale=self.growth_scale, size=flow) * 8
+        return get_drawn_size(self.growth_scale, flow) * 8
 
     def angle_from_vector(self, vector):
         angle_rad = np.arctan2(vector[1], vector[0])
