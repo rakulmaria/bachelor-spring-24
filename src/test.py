@@ -95,9 +95,9 @@ class Test4(Scene):
 
 class Test5(Scene):
     def construct(self):
-        vertices, edges, capacities, source, sink = V.KleinbergTardosSmall()
+        vertices, edges, capacities, source, sink = V.SedgewickWayne()
 
-        layers = [1, 2, 1]
+        layers = [1, 2, 2, 1]
 
         graph = FlowGraph(
             vertices,

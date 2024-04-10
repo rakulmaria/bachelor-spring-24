@@ -40,7 +40,7 @@ class Edge(VMobject):
     def add_current_flow_towards(self, vertex, new_flow, scene: Scene):
         # if the vertex is start_vertex, we're regret a previous flow
         # we found another augmenting path
-        if vertex.id is self.start_vertex.id:
+        if vertex is self.start_vertex.id:
             new_flow = -1 * new_flow
         if new_flow + self.current_flow > self.max_capacity:
             print("Error: New capacity exceeds maximum capacity")

@@ -1,4 +1,4 @@
-from asyncio import Queue
+from queue import Queue
 from manim import *
 from src.graph import FlowGraph
 
@@ -15,16 +15,15 @@ class FordFulkerson:
         marked_vertices[source.id] = True
         queue.put(source)
 
-        while not queue.empty() and not marked_vertices[sink.id]:
+        while not queue.empty() and not marked_vertices.get(sink.id):
             current_vertex = queue.get()
 
             for edge in current_vertex.adjacent_edges:
                 other_vertex = edge.get_other_vertex(current_vertex)
 
-                if (
-                    edge.get_residual_capacity_to(other_vertex) > 0
-                    and not marked_vertices[other_vertex.id]
-                ):
+                if edge.get_residual_capacity_to(
+                    other_vertex
+                ) > 0 and not marked_vertices.get(other_vertex.id):
                     self.path[other_vertex.id] = edge
                     marked_vertices[other_vertex.id] = True
                     queue.put(other_vertex)
