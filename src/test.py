@@ -60,11 +60,11 @@ class Test3(Scene):
 
         self.add(graph)
 
-        graph.addToCurrentFlowTemp(10, [(0, 1), (1, 3)], scene=self)
+        graph.add_to_current_flow_temp(10, [(0, 1), (1, 3)], scene=self)
         # self.wait(2)
-        graph.addToCurrentFlowTemp(10, [(0, 1), (1, 2), (2, 3)], scene=self)
+        graph.add_to_current_flow_temp(10, [(0, 1), (1, 2), (2, 3)], scene=self)
         # # # self.wait(2)
-        graph.addToCurrentFlowTemp(10, [(0, 2), (2, 3)], scene=self)
+        graph.add_to_current_flow_temp(10, [(0, 2), (2, 3)], scene=self)
 
 
 class Test4(Scene):
@@ -86,11 +86,11 @@ class Test4(Scene):
 
         self.add(graph)
 
-        graph.addToCurrentFlowTemp(1, [(0, 1), (1, 3)], scene=self)
+        graph.add_to_current_flow_temp(1, [(0, 1), (1, 3)], scene=self)
         # self.wait(2)
-        graph.addToCurrentFlowTemp(1, [(0, 1), (1, 2), (2, 3)], scene=self)
+        graph.add_to_current_flow_temp(1, [(0, 1), (1, 2), (2, 3)], scene=self)
         # # # self.wait(2)
-        graph.addToCurrentFlowTemp(1, [(0, 2), (2, 3)], scene=self)
+        graph.add_to_current_flow_temp(1, [(0, 2), (2, 3)], scene=self)
 
 
 class Test5(Scene):

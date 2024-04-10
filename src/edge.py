@@ -1,6 +1,6 @@
 from manim import *
 from src.arrow import EdgeArrow
-from src.flow_object import FlowPolygon
+from src.flow_object import FlowObject
 from src.utils import GrowthScale, get_drawn_size
 
 
@@ -23,7 +23,7 @@ class Edge(VMobject):
 
         (init_start_coord, init_end_coord), init_direction = self.get_flow_coords(0)
 
-        self.flow_object = FlowPolygon(
+        self.flow_object = FlowObject(
             init_start_coord,
             init_end_coord,
             init_direction,
@@ -52,7 +52,7 @@ class Edge(VMobject):
             (new_start_coord, new_end_coord), new_direction = self.get_flow_coords(
                 self.current_flow
             )
-            new_flow_object = FlowPolygon(
+            new_flow_object = FlowObject(
                 new_start_coord,
                 new_end_coord,
                 new_direction,

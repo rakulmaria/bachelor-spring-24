@@ -4,7 +4,7 @@ from src.arrow import EdgeArrow
 from src.utils import GrowthScale, get_drawn_size
 
 
-class FlowPolygon(Line):
+class FlowObject(Line):
     def __init__(
         self,
         flow_start_coord,

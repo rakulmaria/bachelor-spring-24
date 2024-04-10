@@ -20,19 +20,19 @@ class FlowGraph(VMobject):
         super().__init__()
         self.growth_scale = growth_scale
 
-        self.vertices, self.edges = self.getEdgesAndVerticesAsMobjects(
+        self.vertices, self.edges = self.get_edges_and_vertices_as_mobjects(
             vertices, edges, source, sink, capacities, layout_scale, layout, layers
         )
 
         for vertex in self.vertices:
             self.add(vertex)
-            vertex.draw(self.getMinVertexCapacity(self.vertices))
+            vertex.draw(self.get_min_vertex_capacity(self.vertices))
 
         for edge in self.edges:
             self.add(edge)
             edge.draw()
 
-    def getEdgesAndVerticesAsMobjects(
+    def get_edges_and_vertices_as_mobjects(
         self,
         vertices,
         edges,
@@ -43,7 +43,7 @@ class FlowGraph(VMobject):
         layout="spring",
         layers=[],
     ):
-        partitions = self.getPartitions(layers)
+        partitions = self.get_partitions(layers)
         graph = []
         if partitions != []:
             graph = Graph(
@@ -62,32 +62,33 @@ class FlowGraph(VMobject):
                 layout_config={"seed": 100},
             )
 
-        verticesAsObjects = {}
-        edgesAsObjects = []
+        vertices_as_objects = {}
+        edges_as_objects = []
 
-        for dot, i in enumerate(graph.vertices):
+        for dot, id in enumerate(graph.vertices):
             x, y, _ = graph._layout[dot]
 
-            vertex = Vertex(i, x, y, growth_scale=self.growth_scale)
+            vertex = Vertex(id, x, y, self.growth_scale)
             if vertex.id == source:
                 self.source = vertex
             if vertex.id == sink:
                 self.sink = vertex
 
-            verticesAsObjects.update({i: vertex})
+            vertices_as_objects.update({id: vertex})
 
         for _from, to, capacity in capacities:
             edge = Edge(
-                verticesAsObjects.get(_from),
-                verticesAsObjects.get(to),
+                vertices_as_objects.get(_from),
+                vertices_as_objects.get(to),
                 capacity,
                 growth_scale=self.growth_scale,
             )
-            edgesAsObjects.append(edge)
+            edges_as_objects.append(edge)
 
-        return verticesAsObjects.values(), edgesAsObjects
+        return vertices_as_objects.values(), edges_as_objects
 
-    def getPartitions(self, layers):
+    # helper method, if you want to create a partite graph and use layers to display it
+    def get_partitions(self, layers):
         partitions = []
         c = -1
 
@@ -97,26 +98,7 @@ class FlowGraph(VMobject):
 
         return partitions
 
-    def getMinVertexCapacity(self, vertices: list[Vertex]):
+    def get_min_vertex_capacity(self, vertices):
         return min(
             vertices, key=lambda x: x.get_max_drawn_capacity()
         ).get_max_drawn_capacity()
-
-    def addToCurrentFlowTemp(self, flow, path, scene):
-        for _, (_from, _to) in enumerate(path):
-            for edge in self.edges:
-                if edge.start_vertex.id == _from and edge.end_vertex.id == _to:
-                    if edge.start_vertex.id == 0:
-                        edge.start_vertex.add_to_current_flow(flow, scene)
-                    edge.add_to_current_flow(flow, scene)
-                    edge.end_vertex.add_to_current_flow(flow, scene)
-
-    # temporary function to test the graph
-    def add_to_current_flow_tmp(self, scene: Scene):
-        scene.wait(2, frozen_frame=False)
-        self.edges[0].add_to_current_flow(3, scene)
-        scene.wait(2, frozen_frame=False)
-        self.edges[0].add_to_current_flow(7, scene)
-        scene.wait(3, frozen_frame=False)
-        self.edges[0].add_to_current_flow(-7, scene)
-        scene.wait(1, frozen_frame=False)
