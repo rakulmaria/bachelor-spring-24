@@ -7,7 +7,7 @@ from src.utils import GrowthScale
 
 class Test(Scene):
     def construct(self):
-        vertices, edges, capacities, source, sink = V.SedgewickWayne()
+        vertices, edges, capacities, source, sink = V.sedgewick_wayne()
         lt = {
             0: [-2, 0, 0],
             1: [-1, 1, 0],
@@ -27,7 +27,7 @@ class Test(Scene):
 
 class Test2(Scene):
     def construct(self):
-        vertices, edges, capacities = V.SimpleGraph()
+        vertices, edges, capacities = V.simple_graph()
 
         lt = {
             0: [0, -1, 0],
@@ -44,7 +44,7 @@ class Test2(Scene):
 
 class Test3(Scene):
     def construct(self):
-        vertices, edges, capacities = V.KleinbergTardos()
+        vertices, edges, capacities = V.kleinberg_tardos()
 
         layers = [1, 2, 1]
 
@@ -69,7 +69,7 @@ class Test3(Scene):
 
 class Test4(Scene):
     def construct(self):
-        vertices, edges, capacities = V.KleinbergTardosSmall()
+        vertices, edges, capacities = V.kleinberg_tardos_small()
 
         layers = [1, 2, 1]
 
@@ -95,7 +95,7 @@ class Test4(Scene):
 
 class Test5(Scene):
     def construct(self):
-        vertices, edges, capacities, source, sink = V.SedgewickWayne()
+        vertices, edges, capacities, source, sink = V.sedgewick_wayne()
 
         layers = [1, 2, 2, 1]
 

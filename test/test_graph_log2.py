@@ -6,7 +6,7 @@ from src.utils import GrowthScale
 
 class Test_Graph_Log2(Scene):
     def construct(self):
-        vertices, edges, capacities, source, sink = V.KleinbergTardosSmall()
+        vertices, edges, capacities, source, sink = V.kleinberg_tardos_small()
 
         layers = [1, 2, 1]
 

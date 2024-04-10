@@ -1,5 +1,5 @@
 class VerticesExamples:
-    def SedgewickWayne():
+    def sedgewick_wayne():
         vertices = [0, 1, 2, 3, 4, 5]
         edges = [(0, 1), (0, 2), (1, 3), (1, 4), (2, 3), (2, 4), (3, 5), (4, 5)]
         capacities = [
@@ -16,7 +16,7 @@ class VerticesExamples:
         sink = 5
         return vertices, edges, capacities, source, sink
 
-    def KleinbergTardosSmall():
+    def kleinberg_tardos_small():
         vertices = [0, 1, 2, 3]
         edges = [(0, 1), (0, 2), (1, 2), (1, 3), (2, 3)]
         capacities = [
@@ -30,7 +30,7 @@ class VerticesExamples:
         sink = 3
         return vertices, edges, capacities, source, sink
 
-    def KleinbergTardos():
+    def kleinberg_tardos():
         vertices = [0, 1, 2, 3]
         edges = [(0, 1), (0, 2), (1, 2), (1, 3), (2, 3)]
         capacities = [
@@ -44,7 +44,7 @@ class VerticesExamples:
         sink = 3
         return vertices, edges, capacities, source, sink
 
-    def CLRS():
+    def clrs():
         vertices = [0, 1, 2, 3, 4, 5]
         edges = [(0, 1), (0, 2), (1, 3), (2, 1), (2, 4), (3, 2), (3, 5), (4, 3), (4, 5)]
         capacities = [
@@ -63,7 +63,7 @@ class VerticesExamples:
 
         return vertices, edges, capacities, source, sink
 
-    def Jungnickel():
+    def jungnickel():
         vertices = [0, 1, 2, 3, 4, 5, 6, 7]
         edges = [
             (3, 5),
@@ -105,7 +105,7 @@ class VerticesExamples:
         sink = 7
         return vertices, edges, capacities, source, sink
 
-    def KleinbergTardosExtreme():
+    def kleinberg_tardos_extreme():
         vertices = [0, 1, 2, 3]
         edges = [(0, 1), (0, 2), (1, 2), (1, 3), (2, 3)]
         capacities = [
@@ -119,7 +119,7 @@ class VerticesExamples:
         sink = 5
         return vertices, edges, capacities, source, sink
 
-    def SimpleGraph():
+    def simple_graph():
         vertices = [0, 1]
         edges = [(0, 1)]
         capacities = [
