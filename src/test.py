@@ -53,16 +53,6 @@ class Test3(Scene):
             layers=layers,
         )
 
-        for vertex in graph.vertices:
-            print(
-                vertex.id,
-                "outgoing:",
-                vertex.outgoing_capacity,
-                "ingoing:",
-                vertex.ingoing_capacity,
-                "max_opacity:",
-                vertex.get_max_opacity(),
-            )
         self.camera.background_color = WHITE
 
         self.add(graph)
