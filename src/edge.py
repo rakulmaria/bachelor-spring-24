@@ -21,7 +21,8 @@ class Edge(VMobject):
         self.growth_scale = growth_scale
 
         # initial flow_object is empty
-        (init_start_coord, init_end_coord), init_direction = self.get_flow_coords(0)
+        (init_start_coord, init_end_coord) = self.get_flow_coords()
+        init_direction = self.get_direction()
         self.flow_object = FlowObject(
             init_start_coord,
             init_end_coord,
@@ -46,9 +47,9 @@ class Edge(VMobject):
         else:
             self.current_flow += new_flow
 
-            (new_start_coord, new_end_coord), new_direction = self.get_flow_coords(
-                self.current_flow
-            )
+            (new_start_coord, new_end_coord) = self.get_flow_coords()
+            new_direction = self.get_direction()
+
             new_flow_object = FlowObject(
                 new_start_coord,
                 new_end_coord,
@@ -61,8 +62,11 @@ class Edge(VMobject):
             if self.current_flow == self.max_capacity:
                 arrow_animation = Uncreate(self.arrow)
             else:
-                (a, b), _ = self.get_flow_coords(new_flow, arrow_coords=True)
-                new_arrow = EdgeArrow(a, b)
+                (
+                    new_arrow_start_coord,
+                    new_arrow_end_coord,
+                ) = self.get_new_arrow_coords()
+                new_arrow = EdgeArrow(new_arrow_start_coord, new_arrow_end_coord)
                 arrow_animation = ReplacementTransform(self.arrow, new_arrow)
                 self.arrow = new_arrow
 
@@ -101,40 +105,52 @@ class Edge(VMobject):
         self.add(foreground_line)
         self.add(self.arrow)
 
-    def get_flow_coords(self, new_flow, arrow_coords=False):
+    def get_direction(self):
         x_start = self.start_vertex.x_coord
         y_start = self.start_vertex.y_coord
         x_end = self.end_vertex.x_coord
         y_end = self.end_vertex.y_coord
-        half_line_width = (self.get_drawn_edge_size(self.max_capacity) / 100) / 2
-        height_to_new_point = half_line_width - (
-            self.get_drawn_edge_size(new_flow) / 100 / 2
-        )
-
         v1 = x_end - x_start
         v2 = y_end - y_start
-        z1 = -v2
-        z2 = v1
+        edge_vector = np.array([v1, v2, 0])
 
-        vector = np.array([z1, z2, 0])
-        original_vector = np.array([v1, v2, 0])
+        return edge_vector / np.linalg.norm(edge_vector)
 
-        if arrow_coords:
-            height_to_new_point = self.get_drawn_edge_size(self.current_flow) / 100 / 2
-            vector = np.array([-z1, -z2, 0])
+    def get_new_arrow_coords(self):
+        a, b = self.get_vector_values()
+        height_to_new_point = self.get_drawn_edge_size(self.current_flow) / 100 / 2
+        orthogonal_vector = np.array([b, -a, 0])
 
-        direction = vector / np.linalg.norm(vector)
-        scaled_vector = direction * height_to_new_point
+        return self.get_offset_points(height_to_new_point, orthogonal_vector)
 
-        direction_original = original_vector / np.linalg.norm(original_vector)
+    def get_flow_coords(self):
+        a, b = self.get_vector_values()
+        orthogonal_vector = np.array([-b, a, 0])
+        half_line_width = (self.get_drawn_edge_size(self.max_capacity) / 100) / 2
+        height_to_new_point = half_line_width - (
+            self.get_drawn_edge_size(self.current_flow) / 100 / 2
+        )
 
-        start_coord = self.start_vertex.to_np_array() + scaled_vector
-        end_coord = self.end_vertex.to_np_array() + scaled_vector
+        return self.get_offset_points(height_to_new_point, orthogonal_vector)
+
+    def get_offset_points(self, offset, orthogonal_vector):
+        orthogonal_unit_vector = orthogonal_vector / np.linalg.norm(orthogonal_vector)
+        scaled_orthogonal_vector = orthogonal_unit_vector * offset
+        start_coord = self.start_vertex.to_np_array() + scaled_orthogonal_vector
+        end_coord = self.end_vertex.to_np_array() + scaled_orthogonal_vector
 
         return (
             start_coord,
             end_coord,
-        ), direction_original
+        )
+
+    def get_vector_values(self):
+        x_start = self.start_vertex.x_coord
+        y_start = self.start_vertex.y_coord
+        x_end = self.end_vertex.x_coord
+        y_end = self.end_vertex.y_coord
+
+        return (x_end - x_start), (y_end - y_start)
 
     def get_residual_capacity_to(self, vertex):
         if vertex.id is self.end_vertex.id:
