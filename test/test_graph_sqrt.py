@@ -1,5 +1,5 @@
 from manim import *
-from flow_network import FlowNetwork
+from src.flow_network import FlowNetwork
 from src.vertices_examples import VerticesExamples as V
 from src.utils import GrowthScale
 
