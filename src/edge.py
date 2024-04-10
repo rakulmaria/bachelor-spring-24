@@ -14,15 +14,14 @@ class Edge(VMobject):
         growth_scale=GrowthScale.SQRT,
     ):
         super().__init__()
-
         self.start_vertex = start_vertex
         self.end_vertex = end_vertex
         self.max_capacity = max_capacity
         self.current_flow = current_flow
         self.growth_scale = growth_scale
 
+        # initial flow_object is empty
         (init_start_coord, init_end_coord), init_direction = self.get_flow_coords(0)
-
         self.flow_object = FlowObject(
             init_start_coord,
             init_end_coord,
@@ -33,13 +32,11 @@ class Edge(VMobject):
 
         start_vertex.add_adjacent_edge(self)
         end_vertex.add_adjacent_edge(self)
-
         start_vertex.add_to_max_outgoing_capacity(max_capacity)
         end_vertex.add_to_max_ingoing_capacity(max_capacity)
 
     def add_current_flow_towards(self, vertex, new_flow, scene: Scene, run_time=2):
-        # if the vertex is start_vertex, we're regret a previous flow
-        # we found another augmenting path
+        # if vertex is start_vertex, we found another augmenting path and want to 'undo' a previous mistake
         if vertex is self.start_vertex.id:
             new_flow = -1 * new_flow
         if new_flow + self.current_flow > self.max_capacity:
@@ -56,19 +53,17 @@ class Edge(VMobject):
                 new_start_coord,
                 new_end_coord,
                 new_direction,
-                flow=self.current_flow,
-                growth_scale=self.growth_scale,
+                self.current_flow,
+                self.growth_scale,
             )
             flow_animation = ReplacementTransform(self.flow_object, new_flow_object)
 
             if self.current_flow == self.max_capacity:
-                arrow_animation = Uncreate(self.arrow, run_time=run_time)
+                arrow_animation = Uncreate(self.arrow)
             else:
                 (a, b), _ = self.get_flow_coords(new_flow, arrow_coords=True)
                 new_arrow = EdgeArrow(a, b)
-                arrow_animation = ReplacementTransform(
-                    self.arrow, new_arrow, run_time=run_time
-                )
+                arrow_animation = ReplacementTransform(self.arrow, new_arrow)
                 self.arrow = new_arrow
 
             scene.play(
@@ -78,8 +73,8 @@ class Edge(VMobject):
             )
             self.flow_object = new_flow_object
 
-    def get_drawn_edge_size(self, cap):
-        return get_drawn_size(growth_scale=self.growth_scale, size=cap) * 8
+    def get_drawn_edge_size(self, capacity):
+        return get_drawn_size(self.growth_scale, capacity) * 8
 
     def draw(self):
         background_line = Line(
@@ -89,7 +84,7 @@ class Edge(VMobject):
             color=BLACK,
             stroke_width=(self.get_drawn_edge_size(self.max_capacity) + 1.6),
         )
-        self.foreground_line = (
+        foreground_line = (
             Line(
                 start=self.start_vertex.to_np_array(),
                 end=self.end_vertex.to_np_array(),
@@ -103,7 +98,7 @@ class Edge(VMobject):
         )
 
         self.add(background_line)
-        self.add(self.foreground_line)
+        self.add(foreground_line)
         self.add(self.arrow)
 
     def get_flow_coords(self, new_flow, arrow_coords=False):
