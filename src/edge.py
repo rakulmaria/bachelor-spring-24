@@ -59,10 +59,9 @@ class Edge(VMobject):
                 flow=self.current_flow,
                 growth_scale=self.growth_scale,
             )
+            flow_animation = ReplacementTransform(self.flow_object, new_flow_object)
 
-            arrow_animation = None
-
-            if self.current_flow is self.max_capacity:
+            if self.current_flow == self.max_capacity:
                 arrow_animation = Uncreate(self.arrow, run_time=run_time)
             else:
                 (a, b), _ = self.get_flow_coords(new_flow, arrow_coords=True)
@@ -73,7 +72,7 @@ class Edge(VMobject):
                 self.arrow = new_arrow
 
             scene.play(
-                ReplacementTransform(self.flow_object, new_flow_object),
+                flow_animation,
                 arrow_animation,
                 run_time=run_time,
             )
