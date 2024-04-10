@@ -71,8 +71,10 @@ class FlowGraph(VMobject):
             vertex = Vertex(i, x, y, growth_scale=self.growth_scale)
             if vertex.id == source:
                 self.source = vertex
+                vertex.set_source()
             if vertex.id == sink:
                 self.sink = vertex
+                vertex.set_sink()
 
             verticesAsObjects.update({i: vertex})
 

@@ -67,8 +67,3 @@ class FordFulkerson:
             path_to_draw = []
 
         return maxflow
-
-        # find a path from source to sink
-
-        # find the bottleneck capacity of the path
-        return 0

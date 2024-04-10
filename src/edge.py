@@ -47,6 +47,8 @@ class Edge(VMobject):
         if new_flow + self.current_flow < 0:  # for negative values
             print("Error: New capacity gives a negative flow")
         else:
+            vertex_animation = self.start_vertex.add_to_current_flow(new_flow)
+
             self.current_flow += new_flow
 
             (new_start_coord, new_end_coord), new_direction = self.get_flow_coords(
@@ -59,24 +61,30 @@ class Edge(VMobject):
                 flow=self.current_flow,
                 growth_scale=self.growth_scale,
             )
-
-            arrow_animation = None
+            edge_animation = ReplacementTransform(self.flow_object, new_flow_object)
 
             if self.current_flow == self.max_capacity:
-                arrow_animation = Uncreate(self.arrow, run_time=run_time)
+                arrow_animation = Uncreate(self.arrow)
             else:
                 (a, b), _ = self.get_flow_coords(new_flow, arrow_coords=True)
                 new_arrow = EdgeArrow(a, b)
-                arrow_animation = ReplacementTransform(
-                    self.arrow, new_arrow, run_time=run_time
-                )
+                arrow_animation = ReplacementTransform(self.arrow, new_arrow)
                 self.arrow = new_arrow
 
             scene.play(
-                ReplacementTransform(self.flow_object, new_flow_object),
+                edge_animation,
+                vertex_animation,
                 arrow_animation,
                 run_time=run_time,
             )
+
+            # edge case for end vertex. end by playing the animation by coloring the sink vertex blue
+            if self.end_vertex.is_sink:
+                vertex_animation_end_vertex = self.end_vertex.add_to_current_flow(
+                    new_flow
+                )
+                scene.play(vertex_animation_end_vertex)
+
             self.flow_object = new_flow_object
 
     def get_drawn_edge_size(self, cap):
