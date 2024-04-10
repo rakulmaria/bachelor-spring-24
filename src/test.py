@@ -38,4 +38,27 @@ class Test2(Scene):
 
         self.add(graph)
 
-        graph.add_to_current_flow_tmp(self)
+
+class Test3(Scene):
+    def construct(self):
+        vertices, edges, capacities = V.KleinbergTardos()
+
+        layers = [1, 2, 1]
+
+        graph = FlowGraph(
+            vertices,
+            edges,
+            capacities,
+            layout="partite",
+            layers=layers,
+        )
+
+        self.camera.background_color = WHITE
+
+        self.add(graph)
+
+        graph.addToCurrentFlowTemp(10, [(0, 1), (1, 3)], scene=self)
+        # self.wait(2)
+        graph.addToCurrentFlowTemp(10, [(0, 1), (1, 2), (2, 3)], scene=self)
+        # # # self.wait(2)
+        graph.addToCurrentFlowTemp(10, [(0, 2), (2, 3)], scene=self)

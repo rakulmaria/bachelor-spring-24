@@ -31,12 +31,8 @@ class Edge(VMobject):
             growth_scale=self.growth_scale,
         )
 
-        start_vertex.add_to_max_capacity(max_capacity)
-        end_vertex.add_to_max_capacity(max_capacity)
-
-        # also add to opacity
-        # start_vertex.add_to_opacity(max_capacity)
-        # end_vertex.add_to_opacity(max_capacity)
+        start_vertex.add_to_max_outgoing_capacity(max_capacity)
+        end_vertex.add_to_max_ingoing_capacity(max_capacity)
 
     def add_to_current_flow(self, new_flow, scene: Scene):
         if new_flow <= self.max_capacity:

@@ -89,7 +89,18 @@ class FlowGraph(VMobject):
         return partitions
 
     def getMinVertexCapacity(self, vertices: list[Vertex]):
-        return min(vertices, key=lambda x: x.max_capacity).max_capacity
+        return min(
+            vertices, key=lambda x: x.get_max_drawn_capacity()
+        ).get_max_drawn_capacity()
+
+    def addToCurrentFlowTemp(self, flow, path, scene):
+        for _, (_from, _to) in enumerate(path):
+            for edge in self.edges:
+                if edge.start_vertex.id == _from and edge.end_vertex.id == _to:
+                    if edge.start_vertex.id == 0:
+                        edge.start_vertex.add_to_current_flow(flow, scene)
+                    edge.add_to_current_flow(flow, scene)
+                    edge.end_vertex.add_to_current_flow(flow, scene)
 
     # temporary function to test the graph
     def add_to_current_flow_tmp(self, scene: Scene):
