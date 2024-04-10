@@ -37,7 +37,7 @@ class Edge(VMobject):
         start_vertex.add_to_max_outgoing_capacity(max_capacity)
         end_vertex.add_to_max_ingoing_capacity(max_capacity)
 
-    def add_current_flow_towards(self, vertex, new_flow, scene: Scene):
+    def add_current_flow_towards(self, vertex, new_flow, scene: Scene, run_time=2):
         # if the vertex is start_vertex, we're regret a previous flow
         # we found another augmenting path
         if vertex is self.start_vertex.id:
@@ -63,15 +63,19 @@ class Edge(VMobject):
             arrow_animation = None
 
             if self.current_flow == self.max_capacity:
-                arrow_animation = Uncreate(self.arrow)
+                arrow_animation = Uncreate(self.arrow, run_time=run_time)
             else:
                 (a, b), _ = self.get_flow_coords(new_flow, arrow_coords=True)
                 new_arrow = EdgeArrow(a, b)
-                arrow_animation = ReplacementTransform(self.arrow, new_arrow)
+                arrow_animation = ReplacementTransform(
+                    self.arrow, new_arrow, run_time=run_time
+                )
                 self.arrow = new_arrow
 
             scene.play(
-                ReplacementTransform(self.flow_object, new_flow_object), arrow_animation
+                ReplacementTransform(self.flow_object, new_flow_object),
+                arrow_animation,
+                run_time=run_time,
             )
             self.flow_object = new_flow_object
 
