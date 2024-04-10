@@ -114,8 +114,6 @@ class Test5(Scene):
         self.add(graph)
 
         ford_fulkerson = FordFulkerson(graph)
-        max_flow = ford_fulkerson.find_max_flow(self)
-
-        print(max_flow)
+        ford_fulkerson.find_max_flow(self)
 
         self.wait(2)

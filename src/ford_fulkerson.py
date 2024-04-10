@@ -1,6 +1,6 @@
 from queue import Queue
 from manim import *
-from network import Network
+from src.network import Network
 
 
 class FordFulkerson:

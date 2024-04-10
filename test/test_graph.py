@@ -1,5 +1,5 @@
 from manim import *
-from network import Network
+from src.network import Network
 from src.vertices_examples import VerticesExamples as V
 
 
