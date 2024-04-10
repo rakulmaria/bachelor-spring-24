@@ -1,4 +1,5 @@
 from manim import *
+
 from src.edge import Edge
 from src.vertex import Vertex
 
