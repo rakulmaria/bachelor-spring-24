@@ -62,7 +62,7 @@ class Edge(VMobject):
 
             arrow_animation = None
 
-            if self.current_flow == self.max_capacity:
+            if self.current_flow is self.max_capacity:
                 arrow_animation = Uncreate(self.arrow, run_time=run_time)
             else:
                 (a, b), _ = self.get_flow_coords(new_flow, arrow_coords=True)
@@ -83,14 +83,14 @@ class Edge(VMobject):
         return get_drawn_size(growth_scale=self.growth_scale, size=cap) * 8
 
     def draw(self):
-        backgroundLine = Line(
+        background_line = Line(
             start=self.start_vertex.to_np_array(),
             end=self.end_vertex.to_np_array(),
             z_index=0,
             color=BLACK,
             stroke_width=(self.get_drawn_edge_size(self.max_capacity) + 1.6),
         )
-        self.foregroundLine = (
+        self.foreground_line = (
             Line(
                 start=self.start_vertex.to_np_array(),
                 end=self.end_vertex.to_np_array(),
@@ -103,8 +103,8 @@ class Edge(VMobject):
             self.start_vertex.to_np_array(), self.end_vertex.to_np_array()
         )
 
-        self.add(backgroundLine)
-        self.add(self.foregroundLine)
+        self.add(background_line)
+        self.add(self.foreground_line)
         self.add(self.arrow)
 
     def get_flow_coords(self, new_flow, arrow_coords=False):
