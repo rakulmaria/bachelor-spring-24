@@ -6,7 +6,7 @@ from src.utils import GrowthScale
 
 class Test(Scene):
     def construct(self):
-        vertices, edges, capacities = V.SedgewickWayne()
+        vertices, edges, capacities, source, sink = V.SedgewickWayne()
         lt = {
             0: [-2, 0, 0],
             1: [-1, 1, 0],
@@ -16,7 +16,9 @@ class Test(Scene):
             5: [2, 0, 0],
         }
 
-        graph = FlowGraph(vertices, edges, capacities, layout=lt)
+        graph = FlowGraph(
+            vertices, edges, capacities, layout=lt, source=source, sink=sink
+        )
         self.camera.background_color = WHITE
 
         self.add(graph)

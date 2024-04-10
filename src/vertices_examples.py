@@ -12,7 +12,9 @@ class VerticesExamples:
             (3, 5, 2.0),
             (4, 5, 3.0),
         ]
-        return vertices, edges, capacities
+        source = 0
+        sink = 5
+        return vertices, edges, capacities, source, sink
 
     def KleinbergTardosSmall():
         vertices = [0, 1, 2, 3]

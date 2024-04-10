@@ -10,6 +10,8 @@ class FlowGraph(VMobject):
         vertices,
         edges,
         capacities,
+        source,
+        sink,
         layout_scale=2,
         layout="spring",
         layers=[],
