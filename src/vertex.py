@@ -35,12 +35,7 @@ class Vertex(VMobject):
         )
 
     def get_drawn_label_size(self, scale=1):
-        return (
-            get_drawn_size(
-                growth_scale=self.growth_scale, size=self.get_max_drawn_capacity()
-            )
-            * 0.2
-        )
+        return get_drawn_size(growth_scale=self.growth_scale, size=scale) * 0.2
 
     def draw(self, scale=1):
         self.foregroundDot = (
