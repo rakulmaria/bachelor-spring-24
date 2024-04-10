@@ -1,6 +1,6 @@
 from manim import *
 from ford_fulkerson import FordFulkerson
-from src.graph import FlowGraph
+from network import Network
 from src.vertices_examples import VerticesExamples as V
 from src.utils import GrowthScale
 
@@ -17,7 +17,7 @@ class Test(Scene):
             5: [2, 0, 0],
         }
 
-        graph = FlowGraph(
+        graph = Network(
             vertices, edges, capacities, layout=lt, source=source, sink=sink
         )
         self.camera.background_color = WHITE
@@ -34,7 +34,7 @@ class Test2(Scene):
             1: [2, 1, 0],
         }
 
-        graph = FlowGraph(
+        graph = Network(
             vertices, edges, capacities, layout=lt, growth_scale=GrowthScale.LOG2
         )
         self.camera.background_color = WHITE
@@ -48,7 +48,7 @@ class Test3(Scene):
 
         layers = [1, 2, 1]
 
-        graph = FlowGraph(
+        graph = Network(
             vertices,
             edges,
             capacities,
@@ -73,7 +73,7 @@ class Test4(Scene):
 
         layers = [1, 2, 1]
 
-        graph = FlowGraph(
+        graph = Network(
             vertices,
             edges,
             capacities,
@@ -99,7 +99,7 @@ class Test5(Scene):
 
         layers = [1, 2, 2, 1]
 
-        graph = FlowGraph(
+        graph = Network(
             vertices,
             edges,
             capacities,

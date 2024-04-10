@@ -1,10 +1,10 @@
 from queue import Queue
 from manim import *
-from src.graph import FlowGraph
+from network import Network
 
 
 class FordFulkerson:
-    def __init__(self, graph: FlowGraph):
+    def __init__(self, graph: Network):
         self.graph = graph
         self.path = {}
 

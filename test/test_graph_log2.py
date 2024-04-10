@@ -1,5 +1,5 @@
 from manim import *
-from src.graph import FlowGraph
+from network import Network
 from src.vertices_examples import VerticesExamples as V
 from src.utils import GrowthScale
 
@@ -10,7 +10,7 @@ class Test_Graph_Log2(Scene):
 
         layers = [1, 2, 1]
 
-        graph = FlowGraph(
+        graph = Network(
             vertices,
             edges,
             capacities,

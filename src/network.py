@@ -4,7 +4,7 @@ from src.vertex import Vertex
 from src.utils import GrowthScale
 
 
-class FlowGraph(VMobject):
+class Network(VMobject):
     def __init__(
         self,
         vertices,
