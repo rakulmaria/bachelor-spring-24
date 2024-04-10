@@ -23,7 +23,7 @@ class FlowGraph(Mobject):
             # add the flow to the vertices and the edge
             edge.start_vertex.add_to_current_flow(flow)
             edge.end_vertex.add_to_current_flow(flow)
-            edge.add_to_current_flow(flow)
+            edge.add_current_flow_towards(flow)
             self.add(graph)
 
 

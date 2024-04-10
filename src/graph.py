@@ -21,7 +21,7 @@ class FlowGraph(VMobject):
         self.growth_scale = growth_scale
 
         self.vertices, self.edges = self.getEdgesAndVerticesAsMobjects(
-            vertices, edges, capacities, layout_scale, layout, layers
+            vertices, edges, source, sink, capacities, layout_scale, layout, layers
         )
 
         for vertex in self.vertices:
@@ -36,6 +36,8 @@ class FlowGraph(VMobject):
         self,
         vertices,
         edges,
+        source,
+        sink,
         capacities,
         layout_scale=2,
         layout="spring",
@@ -67,6 +69,11 @@ class FlowGraph(VMobject):
             x, y, _ = graph._layout[dot]
 
             vertex = Vertex(i, x, y, growth_scale=self.growth_scale)
+            if vertex.id == source:
+                self.source = vertex
+            if vertex.id == sink:
+                self.sink = vertex
+
             verticesAsObjects.update({i: vertex})
 
         for _from, to, capacity in capacities:

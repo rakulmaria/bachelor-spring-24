@@ -31,11 +31,22 @@ class Edge(VMobject):
             growth_scale=self.growth_scale,
         )
 
+        start_vertex.add_adjacent_edge(self)
+        end_vertex.add_adjacent_edge(self)
+
         start_vertex.add_to_max_outgoing_capacity(max_capacity)
         end_vertex.add_to_max_ingoing_capacity(max_capacity)
 
-    def add_to_current_flow(self, new_flow, scene: Scene):
-        if new_flow <= self.max_capacity:
+    def add_current_flow_towards(self, vertex, new_flow, scene: Scene):
+        # if the vertex is start_vertex, we're regret a previous flow
+        # we found another augmenting path
+        if vertex.id is self.start_vertex.id:
+            new_flow = -1 * new_flow
+        if new_flow + self.current_flow > self.max_capacity:
+            print("Error: New capacity exceeds maximum capacity")
+        if new_flow + self.current_flow < 0:  # for negative values
+            print("Error: New capacity gives a negative flow")
+        else:
             self.current_flow += new_flow
 
             (new_start_coord, new_end_coord), new_direction = self.get_flow_coords(
@@ -63,8 +74,6 @@ class Edge(VMobject):
                 ReplacementTransform(self.flow_object, new_flow_object), arrow_animation
             )
             self.flow_object = new_flow_object
-        else:
-            print("Error: New capacity exceeds maximum capacity")
 
     def get_drawn_edge_size(self, cap):
         return get_drawn_size(growth_scale=self.growth_scale, size=cap) * 8
@@ -128,3 +137,15 @@ class Edge(VMobject):
             start_coord,
             end_coord,
         ), direction_original
+
+    def get_residual_capacity_to(self, vertex):
+        if vertex.id is self.end_vertex.id:
+            return self.max_capacity - self.current_flow
+        else:
+            return self.current_flow
+
+    def get_other_vertex(self, vertex):
+        if vertex.id is self.end_vertex.id:
+            return self.start_vertex
+        else:
+            return self.end_vertex
