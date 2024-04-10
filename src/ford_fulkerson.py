@@ -1,10 +1,9 @@
 from queue import Queue
 from manim import *
-from src.network import Network
 
 
 class FordFulkerson:
-    def __init__(self, graph: Network):
+    def __init__(self, graph):
         self.graph = graph
         self.path = {}
 

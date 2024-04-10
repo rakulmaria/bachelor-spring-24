@@ -1,5 +1,5 @@
 from manim import *
-from src.network import Network
+from src.flow_network import FlowNetwork
 from src.vertices_examples import VerticesExamples as V
 from src.utils import GrowthScale
 
@@ -10,7 +10,7 @@ class Test_Graph_Linear(Scene):
 
         layers = [1, 2, 1]
 
-        graph = Network(
+        graph = FlowNetwork(
             vertices,
             edges,
             capacities,
