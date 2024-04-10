@@ -1,6 +1,7 @@
 import os
 import subprocess
 import pytest
+import shutil
 
 # Directory paths
 test_directory = "./test/"
@@ -26,10 +27,10 @@ def run_manim(file_path):
 
     # Running image comparison command
     image_path_manim = os.path.join(
-        image_directory, filename, f"{capitalized_filename}_ManimCE_v0.18.0.png"
+        image_directory, filename, f"{capitalized_filename}_ManimCE_v0.18.0.post0.png"
     )
     image_path_test = os.path.join(
-        test_image_directory, f"{capitalized_filename}_ManimCE_v0.18.0.png"
+        test_image_directory, f"{capitalized_filename}_ManimCE_v0.18.0.post0.png"
     )
     difference_image_path = os.path.join(
         difference_image_directory, f"difference_{filename}.png"
@@ -56,7 +57,11 @@ def run_manim(file_path):
     [f for f in os.listdir(test_directory) if f.endswith(".py") and f != "__init__.py"],
 )
 def test_images(filename):
+    # Deleting the media/images directory before testing
+    path_to_pic = os.path.join(image_directory, filename[:-3])
+    if os.path.exists(path_to_pic):
+        shutil.rmtree(path_to_pic)
+
     file_path = os.path.join(test_directory, filename)
-    print(file_path)
     res = run_manim(file_path)
     assert res == "0"

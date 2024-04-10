@@ -14,6 +14,18 @@ class VerticesExamples:
         ]
         return vertices, edges, capacities
 
+    def KleinbergTardosSmall():
+        vertices = [0, 1, 2, 3]
+        edges = [(0, 1), (0, 2), (1, 2), (1, 3), (2, 3)]
+        capacities = [
+            (0, 1, 2),
+            (0, 2, 1),
+            (1, 2, 3),
+            (1, 3, 1),
+            (2, 3, 2),
+        ]
+        return vertices, edges, capacities
+
     def KleinbergTardos():
         vertices = [0, 1, 2, 3]
         edges = [(0, 1), (0, 2), (1, 2), (1, 3), (2, 3)]
