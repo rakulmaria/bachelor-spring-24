@@ -28,7 +28,8 @@ class FlowObject(Line):
         )
 
         if flow > 0:
-            self.add(EdgeArrow(flow_end_coord, flow_start_coord))
+            self.arrow = EdgeArrow(flow_end_coord, flow_start_coord)
+            self.add(self.arrow)
 
         # scale object down to 0.1
         scale_factor = 0.1

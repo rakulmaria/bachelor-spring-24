@@ -58,6 +58,14 @@ class FordFulkerson:
                     current_vertex
                 )
 
+            arrow_animations = []
+
+            for vertex, edge in path_to_draw:
+                arrow_animations.append(edge.get_arrow_animation_towards(vertex))
+                # scene.play(edge.get_arrow_animation_towards(vertex))
+
+            scene.play(LaggedStart(*arrow_animations, run_time=5, lag_ratio=0.1))
+
             for vertex, edge in path_to_draw:
                 edge.add_current_flow_towards(vertex, bottleneck, scene)
 

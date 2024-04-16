@@ -77,6 +77,12 @@ class Edge(VMobject):
             )
             self.flow_object = new_flow_object
 
+    def get_arrow_animation_towards(self, vertex):
+        if vertex is self.end_vertex.id:
+            return Indicate(self.arrow)
+        else:
+            return Indicate(self.flow_object.arrow)
+
     def get_drawn_edge_size(self, capacity):
         return get_drawn_size(self.growth_scale, capacity) * 8
 
