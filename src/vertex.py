@@ -2,7 +2,7 @@ from manim import *
 
 from src.utils import GrowthScale, get_drawn_size
 
-lightBlue = AS2700.B41_BLUEBELL
+light_blue = AS2700.B41_BLUEBELL
 
 
 class Vertex(VMobject):
@@ -28,7 +28,7 @@ class Vertex(VMobject):
         self.flow_object = (
             Dot(self.to_np_array())
             .scale(self.get_drawn_dot_size())
-            .set_fill(lightBlue)
+            .set_fill(light_blue)
             .set_opacity(0)
             .set_z_index(12)
         )
@@ -37,25 +37,18 @@ class Vertex(VMobject):
         super().__init__()
 
     def get_drawn_dot_size(self):
-        return (
-            get_drawn_size(
-                growth_scale=self.growth_scale, size=self.get_max_drawn_capacity()
-            )
-            / 2
-        )
+        return get_drawn_size(self.growth_scale, self.get_max_drawn_capacity()) / 2
 
     def get_drawn_label_size(self, scale=1):
-        return get_drawn_size(growth_scale=self.growth_scale, size=scale) * 0.2
+        return get_drawn_size(self.growth_scale, scale) * 0.2
 
     def draw(self, scale=1):
-        self.foregroundDot = (
+        foregroundDot = (
             Dot(self.to_np_array())
             .scale(self.get_drawn_dot_size())
             .set_fill(WHITE)
             .set_z_index(10)
         )
-
-        self.add(self.foregroundDot)
 
         backgroundDot = (
             Dot(self.to_np_array())
@@ -65,10 +58,15 @@ class Vertex(VMobject):
         )
 
         self.add(backgroundDot)
+        self.add(foregroundDot)
 
-        label = Tex(self.id, color=BLACK).set_x(self.x_coord).set_y(self.y_coord)
-        label.set_z_index(20)
-        label.scale(self.get_drawn_label_size(scale))
+        label = (
+            Tex(self.id, color=BLACK)
+            .set_x(self.x_coord)
+            .set_y(self.y_coord)
+            .set_z_index(20)
+            .scale(self.get_drawn_label_size(scale))
+        )
         self.add(label)
 
     def to_np_array(self):
@@ -110,7 +108,7 @@ class Vertex(VMobject):
             new_flow_object = (
                 Dot(self.to_np_array())
                 .scale(self.get_drawn_dot_size())
-                .set_fill(lightBlue)
+                .set_fill(light_blue)
                 .set_opacity(self.get_opacity(self.current_flow))
                 .set_z_index(12)
             )
