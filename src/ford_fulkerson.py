@@ -59,6 +59,9 @@ class FordFulkerson:
                 )
 
             for vertex, edge in path_to_draw:
+                edge.play_arrow_focus_animation_towards(vertex, scene)
+
+            for vertex, edge in path_to_draw:
                 edge.add_current_flow_towards(vertex, bottleneck, scene)
 
             maxflow += bottleneck

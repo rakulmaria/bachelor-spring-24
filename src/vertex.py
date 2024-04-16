@@ -25,13 +25,7 @@ class Vertex(VMobject):
         self.adjacent_edges = []
         self.is_sink = is_sink
         self.is_source = is_source
-        self.flow_object = (
-            Dot(self.to_np_array())
-            .scale(self.get_drawn_dot_size())
-            .set_fill(light_blue)
-            .set_opacity(0)
-            .set_z_index(12)
-        )
+        self.flow_object = None
         self.foregroundDot = None
 
         super().__init__()
@@ -101,6 +95,14 @@ class Vertex(VMobject):
         return min(self.ingoing_capacity, self.outgoing_capacity)
 
     def add_to_current_flow(self, new_flow):
+        if self.flow_object is None:
+            self.flow_object = (
+                Dot(self.to_np_array())
+                .scale(self.get_drawn_dot_size())
+                .set_fill(light_blue)
+                .set_opacity(0)
+                .set_z_index(12)
+            )
         if new_flow > self.get_max_opacity():
             print("Error: New capacity exceeds maximum capacity")
         else:
