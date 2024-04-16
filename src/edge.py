@@ -58,17 +58,32 @@ class Edge(VMobject):
                 self.growth_scale,
             )
             flow_animation = ReplacementTransform(self.flow_object, new_flow_object)
-
+            arrow_to_use = self.focused_arrow
+            if new_flow < 0:
+                arrow_to_use = self.arrow
             if self.current_flow == self.max_capacity:
-                arrow_animation = Uncreate(self.arrow)
+                arrow_animation = Uncreate(arrow_to_use)
             else:
                 (
                     new_arrow_start_coord,
                     new_arrow_end_coord,
                 ) = self.get_new_arrow_coords()
-                new_arrow = EdgeArrow(new_arrow_start_coord, new_arrow_end_coord)
-                arrow_animation = ReplacementTransform(self.arrow, new_arrow)
-                self.arrow = new_arrow
+
+                new_arrow = (
+                    EdgeArrow(new_arrow_start_coord, new_arrow_end_coord)
+                    .scale(1.2)
+                    .set_color(YELLOW)
+                )
+
+                self.arrow = EdgeArrow(new_arrow_start_coord, new_arrow_end_coord)
+                arrow_animation = ReplacementTransform(arrow_to_use, self.arrow)
+                self.focused_arrow = new_arrow
+
+                self.focused_arrow = (
+                    EdgeArrow(new_arrow_start_coord, new_arrow_end_coord)
+                    .scale(1.2)
+                    .set_color(YELLOW)
+                )
 
             scene.play(
                 flow_animation,
@@ -82,6 +97,16 @@ class Edge(VMobject):
             return Indicate(self.arrow)
         else:
             return Indicate(self.flow_object.arrow)
+
+    def play_arrow_focus_animation_towards(self, vertex, scene):
+        if vertex is self.end_vertex.id:
+            scene.play(ReplacementTransform(self.arrow, self.focused_arrow))
+        else:
+            scene.play(
+                ReplacementTransform(
+                    self.flow_object.arrow, self.flow_object.focused_arrow
+                )
+            )
 
     def get_drawn_edge_size(self, capacity):
         return get_drawn_size(self.growth_scale, capacity) * 8
@@ -105,6 +130,12 @@ class Edge(VMobject):
         )
         self.arrow = EdgeArrow(
             self.start_vertex.to_np_array(), self.end_vertex.to_np_array()
+        )
+
+        self.focused_arrow = (
+            EdgeArrow(self.start_vertex.to_np_array(), self.end_vertex.to_np_array())
+            .scale(1.2)
+            .set_color(YELLOW)
         )
 
         self.add(background_line)
