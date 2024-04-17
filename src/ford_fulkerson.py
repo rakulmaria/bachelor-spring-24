@@ -89,8 +89,7 @@ class FordFulkerson:
                 current_vertex
             )
 
-        for vertex, edge in path_to_draw:
-            edge.play_arrow_focus_animation_towards(vertex, scene)
+        self.show_primitive_graph(scene, path_to_draw)
 
         for vertex, edge in path_to_draw:
             edge.add_current_flow_towards(vertex, bottleneck, scene)
@@ -98,3 +97,61 @@ class FordFulkerson:
         self.path = {}
 
         return bottleneck
+
+    def show_primitive_graph(self, scene: Scene, path_to_draw):
+        blur = Rectangle(
+            width=200,
+            height=200,
+            fill_opacity=0.9,
+            fill_color=WHITE,
+            z_index=100,
+        )
+        scene.play(FadeIn(blur))
+
+        edge_config = {
+            "stroke_width": 2,
+            "tip_config": {
+                "tip_shape": StealthTip,
+                "tip_length": 0.15,
+            },
+            "color": GREY,
+        }
+
+        di_graph = (
+            DiGraph(
+                self.graph.primitive_verticies,
+                self.graph.get_active_edges(),
+                edge_config=edge_config,
+                layout=self.graph.get_layout_dict(),
+            )
+            .set_z_index(101)
+            .set_color(GREY)
+        )
+        scene.play(FadeIn(di_graph))
+        shown_path = self.highlight_path(scene, path_to_draw, di_graph)
+        scene.play(Uncreate(VGroup(di_graph, shown_path)))
+
+        scene.play(FadeOut(blur))
+
+    def highlight_path(self, scene, path, di_graph):
+        group = VGroup()
+        for vertex, edge in path:
+            line = (
+                Line(
+                    edge.get_other_vertex_from_id(vertex).to_np_array(),
+                    edge.get_vertex_from_id(vertex).to_np_array(),
+                )
+                .add_tip(tip_length=0.15, tip=StealthTip())
+                .set_color(BLACK)
+                .set_z_index(102)
+            )
+            scene.play(Create(line))
+            di_graph._remove_edge(
+                (
+                    edge.get_other_vertex_from_id(vertex).id,
+                    edge.get_vertex_from_id(vertex).id,
+                )
+            )
+            group.add(line)
+            scene.wait(0.5)
+        return group
