@@ -32,7 +32,7 @@ class FordFulkerson:
         return marked_vertices.get(sink.id)
 
     def find_max_flow(self, scene: Scene):
-        self.get_initial_tex_animation(scene)
+        self.play_initial_tex_animation(scene)
         path_to_draw = []
 
         while self.find_path_BFS(self.graph.source, self.graph.sink):
@@ -60,16 +60,14 @@ class FordFulkerson:
                     current_vertex
                 )
 
-            self.get_path_tex_animation_for_residual_graph_before(scene)
+            self.play_tex_animation_for_residual_graph_before(scene)
 
             for vertex, edge in path_to_draw:
                 edge.play_arrow_focus_animation_towards(vertex, scene)
 
-            self.get_path_tex_animation_for_residual_graph_after(scene)
+            self.play_tex_animation_for_residual_graph_after(scene)
 
-            self.get_path_tex_animation_for_primary_graph(
-                path_to_draw, bottleneck, scene
-            )
+            self.play_tex_animation_for_path(path_to_draw, bottleneck, scene)
 
             for vertex, edge in path_to_draw:
                 edge.add_current_flow_towards(vertex, bottleneck, scene)
@@ -78,9 +76,9 @@ class FordFulkerson:
             self.path = {}
             path_to_draw = []
 
-        self.get_final_tex_animation(scene)
+        self.play_final_tex_animation(scene)
 
-    def get_path_tex_animation_for_primary_graph(self, path, bottleneck, scene: Scene):
+    def play_tex_animation_for_path(self, path, bottleneck, scene: Scene):
         scene.play(FadeOut(self.tex))
         # set the source to be the first vertex in the tex path
         tex_path = str(self.graph.source.id)
@@ -106,7 +104,7 @@ class FordFulkerson:
         scene.play(FadeIn(self.tex))
         scene.wait(2, frozen_frame=False)
 
-    def get_path_tex_animation_for_residual_graph_before(self, scene: Scene):
+    def play_tex_animation_for_residual_graph_before(self, scene: Scene):
         scene.play(FadeOut(self.tex))
 
         newTex = Tex(
@@ -124,7 +122,7 @@ class FordFulkerson:
         scene.play(FadeIn(self.tex))
         scene.wait(2, frozen_frame=False)
 
-    def get_path_tex_animation_for_residual_graph_after(self, scene: Scene):
+    def play_tex_animation_for_residual_graph_after(self, scene: Scene):
         scene.play(FadeOut(self.tex))
 
         newTex = Tex(
@@ -142,7 +140,7 @@ class FordFulkerson:
         scene.play(FadeIn(self.tex))
         scene.wait(2, frozen_frame=False)
 
-    def get_initial_tex_animation(self, scene: Scene):
+    def play_initial_tex_animation(self, scene: Scene):
         tex = Tex(
             "Givet et strømningsnetværk, find en maksimal strømning i strømningsnetværket.",
             color=BLACK,
@@ -156,7 +154,7 @@ class FordFulkerson:
         scene.wait(2, frozen_frame=False)
         scene.play(FadeOut(tex))
 
-    def get_final_tex_animation(self, scene: Scene):
+    def play_final_tex_animation(self, scene: Scene):
         scene.play(FadeOut(self.tex))
 
         tex = Tex(
