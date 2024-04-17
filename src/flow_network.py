@@ -66,7 +66,7 @@ class FlowNetwork(VMobject):
         edges_as_objects = []
 
         for dot, id in enumerate(graph.vertices):
-            x, y, _ = graph._layout[dot]
+            x, y, _ = graph._layout[id]
 
             vertex = Vertex(id, x, y, self.growth_scale)
             if vertex.id == source:
