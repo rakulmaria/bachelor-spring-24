@@ -1,5 +1,4 @@
 from manim import *
-from src.ManimGraphLibrary import *
 from src.ford_fulkerson import FordFulkerson
 from src.flow_network import FlowNetwork
 from src.vertices_examples import VerticesExamples as V
