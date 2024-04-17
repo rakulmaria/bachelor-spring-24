@@ -95,6 +95,26 @@ class Edge(VMobject):
 
             self.flow_object = new_flow_object
 
+    def get_text_animation(self, path, bottleneck, scene: Scene):
+        textual_path = "0 -> "
+        print(path)
+        for vertex, edge in path:
+            # print(vertex, edge.start_vertex.id)
+            # if vertex == edge.end_vertex.id:
+            #     textual_path = textual_path + str(edge.start_vertex.id)
+            # else:
+            textual_path = textual_path + str(edge.end_vertex.id) + " -> "
+        label = Tex(
+            "Add ",
+            int(bottleneck),
+            " along the path ",
+            textual_path,
+            color=BLACK,
+            width=20,
+        )
+
+        return label
+
     def get_arrow_animation_towards(self, vertex):
         if vertex is self.end_vertex.id:
             return Indicate(self.arrow)

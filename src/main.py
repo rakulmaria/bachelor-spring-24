@@ -1,4 +1,5 @@
 from manim import *
+from src.ManimGraphLibrary import *
 from src.ford_fulkerson import FordFulkerson
 from src.flow_network import FlowNetwork
 from src.vertices_examples import VerticesExamples as V
@@ -22,9 +23,6 @@ class Main(Scene):
             sink=sink,
         )
 
-        self.camera.background_color = WHITE
-        self.camera.frame_width = 5
-        self.camera.resize_frame_shape(0)
         self.add(graph)
 
         ford_fulkerson = FordFulkerson(graph)
