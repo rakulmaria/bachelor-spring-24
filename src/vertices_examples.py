@@ -286,3 +286,17 @@ class VerticesExamples:
         source = 1
         sink = 16
         return vertices, edges, capacities, source, sink
+
+    def kleinberg_tardos_x_thore():
+        vertices = [0, 1, 2, 3]
+        edges = [(0, 1), (0, 2), (1, 2), (1, 3), (2, 3)]
+        capacities = [
+            (0, 1, 8),
+            (0, 2, 8),
+            (1, 2, 1),
+            (1, 3, 8),
+            (2, 3, 8),
+        ]
+        source = 0
+        sink = 3
+        return vertices, edges, capacities, source, sink

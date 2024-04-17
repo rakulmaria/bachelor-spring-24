@@ -143,3 +143,32 @@ class Main4(Scene):
         ford_fulkerson.find_max_flow(self)
 
         self.wait(2)
+
+
+class Main5(Scene):
+    def construct(self):
+        vertices, edges, capacities, source, sink = V.kleinberg_tardos_x_thore()
+
+        layers = [1, 2, 1]
+
+        graph = FlowNetwork(
+            vertices,
+            edges,
+            capacities,
+            layout="partite",
+            layers=layers,
+            growth_scale=GrowthScale.LINEAR,
+            source=source,
+            sink=sink,
+            layout_scale=4,
+        )
+
+        self.camera.background_color = WHITE
+        self.camera.frame_width = 10
+        self.camera.resize_frame_shape(0)
+        self.add(graph)
+
+        ford_fulkerson = FordFulkerson(graph)
+        ford_fulkerson.find_max_flow(self, BSF=False)
+
+        self.wait(2)
