@@ -136,22 +136,22 @@ class FordFulkerson:
     def highlight_path(self, scene, path, di_graph):
         group = VGroup()
         for vertex, edge in path:
+            old_edge = di_graph._remove_edge(
+                (
+                    edge.get_other_vertex_from_id(vertex).id,
+                    edge.get_vertex_from_id(vertex).id,
+                )
+            )
             line = (
                 Line(
-                    edge.get_other_vertex_from_id(vertex).to_np_array(),
-                    edge.get_vertex_from_id(vertex).to_np_array(),
+                    old_edge.get_start(),
+                    old_edge.get_end(),
                 )
                 .add_tip(tip_length=0.15, tip=StealthTip())
                 .set_color(BLACK)
                 .set_z_index(102)
             )
             scene.play(Create(line))
-            di_graph._remove_edge(
-                (
-                    edge.get_other_vertex_from_id(vertex).id,
-                    edge.get_vertex_from_id(vertex).id,
-                )
-            )
             group.add(line)
             scene.wait(0.5)
         return group
