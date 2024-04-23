@@ -14,25 +14,22 @@ def create_and_align_tex(text: str, graph):
 
 def play_tex_animation_for_path(FordFulkerson, graph, path, bottleneck, scene: Scene):
     scene.play(FadeOut(FordFulkerson.tex))
-    # set the source to be the first vertex in the tex path
-    tex_path = str(graph.source.id)
 
-    for _, edge in path:
-        tex_path = tex_path + "\N{RIGHTWARDS ARROW}" + str(edge.end_vertex.id)
+    tex_path = ""
+    for vertex, edge in path:
+        tex_path = (
+            tex_path
+            + " \N{RIGHTWARDS ARROW} "
+            + edge.get_other_vertex_from_id(vertex).id
+        )
 
-    newTex = Tex(
-        "Tilføj ",
-        int(bottleneck),
-        " enheder strømning til stien ",
-        tex_path,
-        color=BLACK,
-        font_size=20,
+    # set the sink to be the last vertex in the tex path
+    tex_path = tex_path + graph.sink.id
+    newTex = create_and_align_tex(
+        f"Tilføj {int(bottleneck)} enheder strømning til stien {tex_path}", graph
     )
 
-    newTex.align_to(graph, graph.get_critical_point(UL)).shift(0.5 * UP + 0.5 * LEFT)
-
     FordFulkerson.tex = newTex
-
     scene.play(FadeIn(FordFulkerson.tex))
     scene.wait(2, frozen_frame=False)
 
