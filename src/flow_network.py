@@ -1,6 +1,5 @@
 from manim import *
 from src.edge import Edge
-from src.tex import play_tex_animation_for_residual_graph_after
 from src.vertex import Vertex
 from src.utils import GrowthScale
 
@@ -131,7 +130,7 @@ class FlowNetwork(VMobject):
 
         return active_edges
 
-    def show_residual_graph(self, scene: Scene, path_to_draw):
+    def show_residual_graph(self, ford_fulkerson, scene: Scene, path_to_draw):
         blur = Rectangle(
             width=200,
             height=200,
@@ -165,7 +164,10 @@ class FlowNetwork(VMobject):
         shown_path = self.highlight_path_in_residual_graph(
             scene, path_to_draw, di_graph
         )
-        play_tex_animation_for_residual_graph_after(self, scene, self.graph)
+
+        ford_fulkerson.text_helper.play_tex_animation_for_residual_graph_after(
+            ford_fulkerson, scene, ford_fulkerson.graph
+        )  # hvilken graph? FF or self?
 
         scene.play(Uncreate(VGroup(di_graph, shown_path)))
         scene.play(FadeOut(blur))

@@ -11,48 +11,6 @@ class FordFulkerson:
         self.path = {}
         self.text_helper = TextHelper(scale, show_text=show_text)
 
-    # def show_primitive_graph(self, scene: Scene, path_to_draw):
-    #     blur = Rectangle(
-    #         width=200,
-    #         height=200,
-    #         fill_opacity=0.9,
-    #         fill_color=WHITE,
-    #     ).set_z_index(20)
-    #     scene.play(FadeIn(blur))
-
-    #     edge_config = {
-    #         "stroke_width": 2,
-    #         "tip_config": {
-    #             "tip_length": 0.20,
-    #             "tip_width": 0.18,
-    #         },
-    #         "color": GREY,
-    #     }
-
-    #     di_graph = (
-    #         DiGraph(
-    #             self.graph.primitive_verticies,
-    #             self.graph.get_active_edges(),
-    #             edge_config=edge_config,
-    #             layout=self.graph.get_layout_dict(),
-    #         )
-    #         .set_z_index(24)
-    #         .set_color(GREY)
-    #     )
-    #     scene.play(FadeIn(di_graph))
-
-    #     scene.wait(1.5, frozen_frame=False)
-
-    #     shown_path = self.highlight_path(scene, path_to_draw, di_graph)
-
-        # self.text_helper.play_tex_animation_for_residual_graph_after(
-        #     self, scene, self.graph
-        # )
-
-    #     scene.play(Uncreate(VGroup(di_graph, shown_path)))
-
-    #     scene.play(FadeOut(blur))
-
     def find_path_BFS(self, source, sink):
         marked_vertices = {}
         queue = Queue(maxsize=len(self.graph.vertices))
@@ -153,7 +111,7 @@ class FordFulkerson:
             self, scene, self.graph
         )
 
-        self.graph.show_residual_graph(scene, path_to_draw)
+        self.graph.show_residual_graph(self, scene, path_to_draw)
 
         self.text_helper.play_tex_animation_for_path(
             self, self.graph, path_to_draw, bottleneck, scene
