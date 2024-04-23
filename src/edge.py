@@ -97,7 +97,7 @@ class Edge(VMobject):
 
     def get_text_animation(self, path, bottleneck, scene: Scene):
         textual_path = "0 -> "
-        print(path)
+        
         for vertex, edge in path:
             # print(vertex, edge.start_vertex.id)
             # if vertex == edge.end_vertex.id:
