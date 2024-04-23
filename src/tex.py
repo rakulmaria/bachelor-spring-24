@@ -3,7 +3,7 @@ from manim import *
 
 def create_and_align_tex(text: str, graph):
     tex = Tex(text, color=BLACK)
-    tex.align_to(graph, graph.get_critical_point(UP)).shift(0.7 * UP)
+    tex.align_to(graph, graph.get_critical_point(UP)).shift(0.8 * UP)
 
     if len(text) > 57:
         tex.set(width=config.frame_width - 1)
@@ -72,7 +72,7 @@ def play_final_tex_animation(FordFulkerson, scene: Scene, graph, max_flow):
         max_flow,
         color=BLACK,
     )
-    tex.align_to(graph, graph.get_critical_point(UP)).shift(0.7 * UP)
+    tex.align_to(graph, graph.get_critical_point(UP)).shift(0.8 * UP)
     tex.set(font_size=20)
 
     scene.play(FadeIn(tex))
