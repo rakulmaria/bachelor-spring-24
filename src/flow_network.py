@@ -1,5 +1,6 @@
 from manim import *
 from src.edge import Edge
+from src.tex import play_tex_animation_for_residual_graph_after
 from src.vertex import Vertex
 from src.utils import GrowthScale
 
@@ -129,3 +130,66 @@ class FlowNetwork(VMobject):
             active_edges.extend(edge.get_active_edges())
 
         return active_edges
+
+    def show_residual_graph(self, scene: Scene, path_to_draw):
+        blur = Rectangle(
+            width=200,
+            height=200,
+            fill_opacity=0.9,
+            fill_color=WHITE,
+        ).set_z_index(20)
+        scene.play(FadeIn(blur))
+
+        edge_config = {
+            "stroke_width": 2,
+            "tip_config": {
+                "tip_length": 0.20,
+                "tip_width": 0.18,
+            },
+            "color": GREY,
+        }
+
+        di_graph = (
+            DiGraph(
+                self.primitive_verticies,
+                self.get_active_edges(),
+                edge_config=edge_config,
+                layout=self.get_layout_dict(),
+            )
+            .set_z_index(24)
+            .set_color(GREY)
+        )
+        scene.play(FadeIn(di_graph))
+        scene.wait(1.5, frozen_frame=False)
+
+        shown_path = self.highlight_path_in_residual_graph(
+            scene, path_to_draw, di_graph
+        )
+        play_tex_animation_for_residual_graph_after(self, scene, self.graph)
+
+        scene.play(Uncreate(VGroup(di_graph, shown_path)))
+        scene.play(FadeOut(blur))
+
+    def highlight_path_in_residual_graph(self, scene, path, di_graph):
+        group = VGroup()
+        for vertex, edge in path:
+            old_edge = di_graph._remove_edge(
+                (
+                    edge.get_other_vertex_from_id(vertex).id,
+                    edge.get_vertex_from_id(vertex).id,
+                )
+            )
+            line = (
+                Line(
+                    old_edge.get_start(),
+                    old_edge.get_end(),
+                )
+                .add_tip(
+                    tip_length=0.20, tip_width=0.18, tip_shape=ArrowTriangleFilledTip
+                )
+                .set_color(BLACK)
+                .set_z_index(26)
+            )
+            scene.play(Create(line))
+            group.add(line)
+        return group
