@@ -69,11 +69,6 @@ class Edge(VMobject):
                     new_arrow_end_coord,
                 ) = self.get_new_arrow_coords()
 
-                new_arrow = (
-                    EdgeArrow(new_arrow_start_coord, new_arrow_end_coord)
-                    .scale(1.2)
-                    .set_color(YELLOW)
-                )
 
                 new_arrow = EdgeArrow(new_arrow_start_coord, new_arrow_end_coord)
                 arrow_animation = ReplacementTransform(self.arrow, new_arrow)
