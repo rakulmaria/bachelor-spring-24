@@ -1,20 +1,15 @@
 from queue import Queue
 from manim import *
-from src.tex import (
-    play_tex_animation_for_residual_graph_before,
-    play_tex_animation_for_residual_graph_after,
-    play_initial_tex_animation,
-    play_final_tex_animation,
-    play_tex_animation_for_path,
-)
+from src.tex import TextHelper
 
 
 class FordFulkerson:
-    def __init__(self, graph):
+    def __init__(self, graph, scale=2, show_text=True):
         self.graph = graph
         self.tex = Tex()
         self.max_flow = 0
         self.path = {}
+        self.text_helper = TextHelper(scale, show_text=show_text)
 
     def show_primitive_graph(self, scene: Scene, path_to_draw):
         blur = Rectangle(
@@ -50,7 +45,9 @@ class FordFulkerson:
 
         shown_path = self.highlight_path(scene, path_to_draw, di_graph)
 
-        play_tex_animation_for_residual_graph_after(self, scene, self.graph)
+        self.text_helper.play_tex_animation_for_residual_graph_after(
+            self, scene, self.graph
+        )
 
         scene.play(Uncreate(VGroup(di_graph, shown_path)))
 
@@ -125,9 +122,9 @@ class FordFulkerson:
         for edge in sorted_edges:
             other_vertex = edge.get_other_vertex(current_vertex)
 
-            if edge.get_residual_capacity_to(other_vertex) > 0 and marked_vertices.get(
-                other_vertex.id
-            ):
+            if edge.get_residual_capacity_to(
+                other_vertex
+            ) > 0 and not marked_vertices.get(other_vertex.id):
                 self.path[other_vertex.id] = edge
                 if self.DFS_helper(other_vertex, sink, marked_vertices):
                     return True
@@ -137,7 +134,7 @@ class FordFulkerson:
     def find_max_flow(self, scene: Scene, BSF=True):
         self.max_flow = 0
 
-        play_initial_tex_animation(scene, self.graph)
+        self.text_helper.play_initial_tex_animation(scene, self.graph)
 
         if BSF:
             while self.find_path_BFS(self.graph.source, self.graph.sink):
@@ -146,7 +143,9 @@ class FordFulkerson:
             while self.find_path_DFS(self.graph.source, self.graph.sink):
                 self.max_flow += self.find_max_helper(scene)
 
-        play_final_tex_animation(self, scene, self.graph, int(self.max_flow))
+        self.text_helper.play_final_tex_animation(
+            self, scene, self.graph, int(self.max_flow)
+        )
 
     def find_max_helper(self, scene):
         bottleneck = 9223372036854775807
@@ -174,11 +173,15 @@ class FordFulkerson:
                 current_vertex
             )
 
-        play_tex_animation_for_residual_graph_before(self, scene, self.graph)
+        self.text_helper.play_tex_animation_for_residual_graph_before(
+            self, scene, self.graph
+        )
 
         self.show_primitive_graph(scene, path_to_draw)
 
-        play_tex_animation_for_path(self, self.graph, path_to_draw, bottleneck, scene)
+        self.text_helper.play_tex_animation_for_path(
+            self, self.graph, path_to_draw, bottleneck, scene
+        )
 
         for vertex, edge in path_to_draw:
             edge.add_current_flow_towards(vertex, bottleneck, scene)

@@ -8,7 +8,6 @@ from src.utils import GrowthScale
 class SedgewickWayne(Scene):
     def construct(self):
         vertices, edges, capacities, source, sink = V.sedgewick_wayne()
-
         layers = [1, 2, 2, 1]
 
         graph = FlowNetwork(
@@ -31,8 +30,8 @@ class SedgewickWayne(Scene):
 class WikiExample(Scene):
     def construct(self):
         vertices, edges, capacities, source, sink = V.wiki_example()
-
         layers = [1, 5, 5, 3, 1]
+        scale = 3
 
         graph = FlowNetwork(
             vertices,
@@ -43,21 +42,20 @@ class WikiExample(Scene):
             growth_scale=GrowthScale.LINEAR,
             source=source,
             sink=sink,
-            layout_scale=3,
+            layout_scale=scale,
         )
 
-        self.camera.frame_width = 14
+        self.camera.frame_width = 3.5 * scale
         self.camera.resize_frame_shape(0)
         self.add(graph)
 
-        ford_fulkerson = FordFulkerson(graph)
+        ford_fulkerson = FordFulkerson(graph, scale)
         ford_fulkerson.find_max_flow(self)
 
 
 class BigGraph(Scene):
     def construct(self):
         vertices, edges, capacities, source, sink = V.silkes_big_graph()
-
         lt = {
             1: [-5, 0, 0],
             2: [-3, 3, 0],
@@ -76,6 +74,7 @@ class BigGraph(Scene):
             15: [3, -3, 0],
             16: [5, 0, 0],
         }
+        scale = 3
 
         graph = FlowNetwork(
             vertices,
@@ -85,22 +84,22 @@ class BigGraph(Scene):
             growth_scale=GrowthScale.LINEAR,
             source=source,
             sink=sink,
-            layout_scale=3,
+            layout_scale=scale,
         )
 
-        self.camera.frame_width = 15
+        self.camera.frame_width = scale * 3.5
         self.camera.resize_frame_shape(0)
         self.add(graph)
 
-        ford_fulkerson = FordFulkerson(graph)
+        ford_fulkerson = FordFulkerson(graph, scale, show_text=False)
         ford_fulkerson.find_max_flow(self)
 
 
 class ThoresExampleDFS(Scene):
     def construct(self):
         vertices, edges, capacities, source, sink = V.kleinberg_tardos_x_thore()
-
         layers = [1, 2, 1]
+        scale = 4
 
         graph = FlowNetwork(
             vertices,
@@ -111,22 +110,22 @@ class ThoresExampleDFS(Scene):
             growth_scale=GrowthScale.LINEAR,
             source=source,
             sink=sink,
-            layout_scale=4,
+            layout_scale=scale,
         )
 
-        self.camera.frame_width = 14
+        self.camera.frame_width = 3.5 * scale
         self.camera.resize_frame_shape(0)
         self.add(graph)
 
-        ford_fulkerson = FordFulkerson(graph)
+        ford_fulkerson = FordFulkerson(graph, scale)
         ford_fulkerson.find_max_flow(self, BSF=False)
 
 
 class ThoresExampleBFS(Scene):
     def construct(self):
         vertices, edges, capacities, source, sink = V.kleinberg_tardos_x_thore()
-
         layers = [1, 2, 1]
+        scale = 4
 
         graph = FlowNetwork(
             vertices,
@@ -137,14 +136,12 @@ class ThoresExampleBFS(Scene):
             growth_scale=GrowthScale.LINEAR,
             source=source,
             sink=sink,
-            layout_scale=4,
+            layout_scale=scale,
         )
 
-        plane = NumberPlane()
-
-        self.camera.frame_width = 14
+        self.camera.frame_width = 3.5 * scale
         self.camera.resize_frame_shape(0)
-        self.add(graph, plane)
+        self.add(graph)
 
-        ford_fulkerson = FordFulkerson(graph)
+        ford_fulkerson = FordFulkerson(graph, scale)
         ford_fulkerson.find_max_flow(self)
