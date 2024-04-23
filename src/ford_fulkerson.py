@@ -39,7 +39,13 @@ class FordFulkerson:
             .set_color(GREY)
         )
         scene.play(FadeIn(di_graph))
+
+        scene.wait(1.5, frozen_frame=False)
+
         shown_path = self.highlight_path(scene, path_to_draw, di_graph)
+
+        scene.wait(1.5, frozen_frame=False)
+
         scene.play(Uncreate(VGroup(di_graph, shown_path)))
 
         scene.play(FadeOut(blur))
