@@ -27,8 +27,6 @@ class SedgewickWayne(Scene):
         ford_fulkerson = FordFulkerson(graph)
         ford_fulkerson.find_max_flow(self)
 
-        self.wait(2)
-
 
 class WikiExample(Scene):
     def construct(self):
@@ -54,8 +52,6 @@ class WikiExample(Scene):
 
         ford_fulkerson = FordFulkerson(graph)
         ford_fulkerson.find_max_flow(self)
-
-        self.wait(2)
 
 
 class BigGraph(Scene):
@@ -99,8 +95,6 @@ class BigGraph(Scene):
         ford_fulkerson = FordFulkerson(graph)
         ford_fulkerson.find_max_flow(self)
 
-        self.wait(2)
-
 
 class ThoresExampleDFS(Scene):
     def construct(self):
@@ -127,8 +121,6 @@ class ThoresExampleDFS(Scene):
         ford_fulkerson = FordFulkerson(graph)
         ford_fulkerson.find_max_flow(self, BSF=False)
 
-        self.wait(2)
-
 
 class ThoresExampleBFS(Scene):
     def construct(self):
@@ -154,5 +146,3 @@ class ThoresExampleBFS(Scene):
 
         ford_fulkerson = FordFulkerson(graph)
         ford_fulkerson.find_max_flow(self)
-
-        self.wait(2)
