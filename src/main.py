@@ -22,16 +22,10 @@ class Main(Scene):
             sink=sink,
         )
 
-        plane = NumberPlane()
+        self.add(graph)
 
-        self.add(graph, plane)
+        # plane = NumberPlane() keeping this one if we need to add it sometimes later for debugging purposes
 
-        # test = Tex(f"Dette er en meeeeeeget lang tekststreng. Den skal gerne vises i hele framen og ikke ende udenfor framen.", color=BLACK, font_size=20)
-
-        # test.align_to(graph, graph.get_critical_point(UP)).shift(0.5 * UP)
-        # test.set(width=config.frame_width - 1)
-
-        # self.add(test)
         ford_fulkerson = FordFulkerson(graph)
         ford_fulkerson.find_max_flow(self)
 
