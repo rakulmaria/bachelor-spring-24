@@ -29,9 +29,6 @@ class FlowObject(Line):
 
         if flow > 0:
             self.arrow = EdgeArrow(flow_end_coord, flow_start_coord)
-            self.focused_arrow = (
-                EdgeArrow(flow_end_coord, flow_start_coord).scale(1.2).set_color(YELLOW)
-            )
             self.add(self.arrow)
 
         # scale object down to 0.1
