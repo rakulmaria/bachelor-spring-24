@@ -2,7 +2,7 @@ from manim import *
 
 from src.arrow import EdgeArrow
 from src.utils import GrowthScale, get_drawn_size
-import src.constants as constants
+import src.colors as colors
 from src.updaters import update
 
 
@@ -21,7 +21,7 @@ class FlowObject(Line):
         super().__init__(start=flow_start_coord, end=flow_end_coord, z_index=4)
         super().set_stroke(
             width=(self.get_drawn_flow_size(flow)),
-            color=constants.light_blue,
+            color=colors.light_blue,
         )
 
         if flow > 0:
@@ -52,12 +52,12 @@ class FlowObject(Line):
         for _ in range(size):
             object = Polygon(*position_list, z_index=5)
             object.scale(0.1)
-            object.set_stroke(constants.border_blue, opacity=1.0, width=0.0)
+            object.set_stroke(colors.border_blue, opacity=1.0, width=0.0)
 
             if len(self.polygons) % 3 == 0:
-                object.set_fill(constants.dark_blue, 0.8)
+                object.set_fill(colors.dark_blue, 0.8)
             else:
-                object.set_fill(constants.light_blue, 0.8)
+                object.set_fill(colors.light_blue, 0.8)
             self.polygons.add(object)
 
         self.polygons.arrange(buff=-1, direction=LEFT)

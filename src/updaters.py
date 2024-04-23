@@ -1,4 +1,4 @@
-import src.constants as constants
+import src.colors as colors
 
 times = 0
 
@@ -12,11 +12,11 @@ def update(mobject):
             if i in changed:
                 continue
             times = 0
-            if dot.color == constants.dark_blue:
-                mobject[i].set_fill(constants.light_blue)
+            if dot.color == colors.dark_blue:
+                mobject[i].set_fill(colors.light_blue)
 
                 if (1 + i) < len(mobject):
-                    mobject[i + 1].set_fill(constants.dark_blue)
+                    mobject[i + 1].set_fill(colors.dark_blue)
                 else:
-                    mobject[0].set_fill(constants.dark_blue)
+                    mobject[0].set_fill(colors.dark_blue)
                 changed.append(i + 1)

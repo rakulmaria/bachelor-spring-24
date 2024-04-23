@@ -15,7 +15,6 @@ class FordFulkerson:
         self.tex = Tex()
         self.max_flow = 0
         self.path = {}
-        self.reverse = True
 
     def show_primitive_graph(self, scene: Scene, path_to_draw):
         blur = Rectangle(
@@ -104,15 +103,15 @@ class FordFulkerson:
         return marked_vertices.get(sink.id)
 
     def find_path_DFS(self, source, sink):
-        visited = set()
+        marked_vertices = {}
         self.reverse = True
-        return self.DFS_helper(source, sink, visited)
+        return self.DFS_helper(source, sink, marked_vertices)
 
-    def DFS_helper(self, current_vertex, sink, visited):
+    def DFS_helper(self, current_vertex, sink, marked_vertices):
         if current_vertex == sink:
             return True
 
-        visited.add(current_vertex.id)
+        marked_vertices[current_vertex.id] = True
 
         sorted_edges = sorted(
             current_vertex.adjacent_edges,
@@ -126,12 +125,11 @@ class FordFulkerson:
         for edge in sorted_edges:
             other_vertex = edge.get_other_vertex(current_vertex)
 
-            if (
-                edge.get_residual_capacity_to(other_vertex) > 0
-                and other_vertex.id not in visited
+            if edge.get_residual_capacity_to(other_vertex) > 0 and marked_vertices.get(
+                other_vertex.id
             ):
                 self.path[other_vertex.id] = edge
-                if self.DFS_helper(other_vertex, sink, visited):
+                if self.DFS_helper(other_vertex, sink, marked_vertices):
                     return True
 
         return False

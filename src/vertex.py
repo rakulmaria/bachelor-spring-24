@@ -1,6 +1,6 @@
 from manim import *
 from src.utils import GrowthScale, get_drawn_size
-import src.constants as constants
+import src.colors as colors
 
 
 class Vertex(VMobject):
@@ -98,7 +98,7 @@ class Vertex(VMobject):
             self.flow_object = (
                 Dot(self.to_np_array())
                 .scale(self.get_drawn_dot_size())
-                .set_fill(constants.light_blue)
+                .set_fill(colors.light_blue)
                 .set_opacity(0)
                 .set_z_index(12)
             )
@@ -107,7 +107,7 @@ class Vertex(VMobject):
         new_flow_object = (
             Dot(self.to_np_array())
             .scale(self.get_drawn_dot_size())
-            .set_fill(constants.light_blue)
+            .set_fill(colors.light_blue)
             .set_opacity(self.get_opacity(self.current_flow))
             .set_z_index(12)
         )

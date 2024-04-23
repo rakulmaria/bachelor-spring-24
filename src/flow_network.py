@@ -28,6 +28,9 @@ class FlowNetwork(VMobject):
             vertices, edges, source, sink, capacities, graph
         )
 
+        self.draw_vertices_and_edges()
+
+    def draw_vertices_and_edges(self):
         for vertex in self.vertices:
             self.add(vertex)
             vertex.draw(self.get_min_vertex_capacity(self.vertices))

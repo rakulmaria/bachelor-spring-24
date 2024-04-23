@@ -114,7 +114,7 @@ class ThoresExampleDFS(Scene):
             layout_scale=4,
         )
 
-        self.camera.frame_width = 10
+        self.camera.frame_width = 14
         self.camera.resize_frame_shape(0)
         self.add(graph)
 
@@ -140,9 +140,11 @@ class ThoresExampleBFS(Scene):
             layout_scale=4,
         )
 
-        self.camera.frame_width = 10
+        plane = NumberPlane()
+
+        self.camera.frame_width = 14
         self.camera.resize_frame_shape(0)
-        self.add(graph)
+        self.add(graph, plane)
 
         ford_fulkerson = FordFulkerson(graph)
         ford_fulkerson.find_max_flow(self)
