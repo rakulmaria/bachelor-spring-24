@@ -43,8 +43,6 @@ class FordFulkerson:
 
         shown_path = self.highlight_path(scene, path_to_draw, di_graph)
 
-        # scene.wait(1.5, frozen_frame=False)
-
         self.play_tex_animation_for_residual_graph_after(scene)
 
         scene.play(Uncreate(VGroup(di_graph, shown_path)))
@@ -163,8 +161,6 @@ class FordFulkerson:
 
         self.show_primitive_graph(scene, path_to_draw)
 
-        self.play_tex_animation_for_residual_graph_after(scene)
-
         self.play_tex_animation_for_path(path_to_draw, bottleneck, scene)
 
         for vertex, edge in path_to_draw:
@@ -176,80 +172,64 @@ class FordFulkerson:
 
     def play_tex_animation_for_path(self, path, bottleneck, scene: Scene):
         scene.play(FadeOut(self.tex))
-        # set the source to be the first vertex in the tex path
-        tex_path = str(self.graph.source.id)
 
+        text_path = ""
         for vertex, edge in path:
-            tex_path = (
-                tex_path
-                + "\N{RIGHTWARDS ARROW}"
-                + str(edge.get_other_vertex_from_id(vertex).id)
+            text_path = (
+                text_path
+                + f"{edge.get_other_vertex_from_id(vertex).id} \N{RIGHTWARDS ARROW} "
             )
+        # set the sink to be the last vertex in the tex path
+        text_path = text_path + f"{self.graph.sink.id}"
 
-        newTex = Tex(
-            "Tilføj ",
-            int(bottleneck),
-            " enheder strømning til stien ",
-            tex_path,
-            color=BLACK,
-            font_size=20,
+        flaskeHalsTex = self.create_and_align_tex(
+            f"Flaskehalsen i stien {text_path} er {int(bottleneck)}"
         )
+        scene.play(FadeIn(flaskeHalsTex))
+        scene.wait(3, frozen_frame=False)
+        scene.play(FadeOut(flaskeHalsTex))
 
-        newTex.align_to(self.graph, self.graph.get_critical_point(UL)).shift(
-            0.5 * UP + 0.5 * LEFT
+        newTex = self.create_and_align_tex(
+            f"Tilføj {int(bottleneck)} enheder strømning til stien {text_path}"
         )
-
         self.tex = newTex
-
         scene.play(FadeIn(self.tex))
         scene.wait(2, frozen_frame=False)
+
+    def create_and_align_tex(self, text: str):
+        tex = Tex(text, color=BLACK)
+        tex.align_to(self.graph, self.graph.get_critical_point(UP)).shift(0.8 * UP)
+
+        if len(text) > 57:
+            tex.set(width=config.frame_width - 1)
+        else:
+            tex.set(font_size=20)
+        return tex
 
     def play_tex_animation_for_residual_graph_before(self, scene: Scene):
         scene.play(FadeOut(self.tex))
 
-        newTex = Tex(
-            "Find en forbedrende sti i restgrafen",
-            color=BLACK,
-            font_size=20,
+        newTex = self.create_and_align_tex(
+            "Find en forbedrende sti i restgrafen"
         ).set_z_index(28)
-
-        newTex.align_to(self.graph, self.graph.get_critical_point(UL)).shift(
-            0.5 * UP + 0.5 * LEFT
-        )
-
         self.tex = newTex
-
         scene.play(FadeIn(self.tex))
         scene.wait(2, frozen_frame=False)
 
     def play_tex_animation_for_residual_graph_after(self, scene: Scene):
         scene.play(FadeOut(self.tex))
 
-        newTex = Tex(
-            "En forbedrende sti er fundet",
-            color=BLACK,
-            font_size=20,
-        ).set_z_index(28)
-
-        newTex.align_to(self.graph, self.graph.get_critical_point(UL)).shift(
-            0.5 * UP + 0.5 * LEFT
+        newTex = self.create_and_align_tex("En forbedrende sti er fundet").set_z_index(
+            28
         )
-
         self.tex = newTex
-
         scene.play(FadeIn(self.tex))
         scene.wait(2, frozen_frame=False)
 
     def play_initial_tex_animation(self, scene: Scene):
-        tex = Tex(
-            "Givet et strømningsnetværk, find en maksimal strømning i strømningsnetværket.",
-            color=BLACK,
-            font_size=20,
+        tex = self.create_and_align_tex(
+            "Givet et strømningsnetværk, find en maksimal strømning i strømningsnetværket."
         )
-        tex.align_to(self.graph, self.graph.get_critical_point(UL)).shift(
-            0.5 * UP + 0.5 * LEFT
-        )
-
         scene.play(FadeIn(tex))
         scene.wait(2, frozen_frame=False)
         scene.play(FadeOut(tex))
@@ -258,14 +238,13 @@ class FordFulkerson:
         scene.play(FadeOut(self.tex))
 
         tex = Tex(
-            r"En maksimal strømning i strømningsnetværket er fundet. \\ Maksimal strømning = ",
-            str(self.max_flow),
+            r"En maksimal strømning i strømningsnetværket er fundet. \\Maksimal strømning = ",
+            self.max_flow,
             color=BLACK,
-            font_size=20,
         )
-        tex.align_to(self.graph, self.graph.get_critical_point(UL)).shift(
-            0.5 * UP + 0.5 * LEFT
-        )
+        tex.align_to(self.graph, self.graph.get_critical_point(UP)).shift(0.8 * UP)
+        tex.set(font_size=20)
+
         scene.play(FadeIn(tex))
         scene.wait(2, frozen_frame=False)
         scene.play(FadeOut(tex))

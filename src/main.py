@@ -22,12 +22,18 @@ class Main(Scene):
             sink=sink,
         )
 
-        self.add(graph)
+        plane = NumberPlane()
 
+        self.add(graph, plane)
+
+        # test = Tex(f"Dette er en meeeeeeget lang tekststreng. Den skal gerne vises i hele framen og ikke ende udenfor framen.", color=BLACK, font_size=20)
+
+        # test.align_to(graph, graph.get_critical_point(UP)).shift(0.5 * UP)
+        # test.set(width=config.frame_width - 1)
+
+        # self.add(test)
         ford_fulkerson = FordFulkerson(graph)
         ford_fulkerson.find_max_flow(self)
-
-        self.wait(2)
 
 
 class Main2(Scene):
@@ -65,7 +71,6 @@ class Main2(Scene):
 
         ford_fulkerson = FordFulkerson(graph)
         ford_fulkerson.find_max_flow(self)
-        self.wait(2)
 
 
 class Main3(Scene):
@@ -93,8 +98,6 @@ class Main3(Scene):
 
         ford_fulkerson = FordFulkerson(graph)
         ford_fulkerson.find_max_flow(self)
-
-        self.wait(2)
 
 
 class Main4(Scene):
@@ -139,8 +142,6 @@ class Main4(Scene):
         ford_fulkerson = FordFulkerson(graph)
         ford_fulkerson.find_max_flow(self)
 
-        self.wait(2)
-
 
 class Main5(Scene):
     def construct(self):
@@ -167,8 +168,6 @@ class Main5(Scene):
 
         ford_fulkerson = FordFulkerson(graph)
         ford_fulkerson.find_max_flow(self, BSF=False)
-
-        self.wait(2)
 
 
 class Main6(Scene):
