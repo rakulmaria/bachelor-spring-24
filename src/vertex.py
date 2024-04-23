@@ -6,7 +6,15 @@ light_blue = AS2700.B41_BLUEBELL
 
 
 class Vertex(VMobject):
-    def __init__(self, id, x_coord, y_coord, growth_scale=GrowthScale.SQRT):
+    def __init__(
+        self,
+        id,
+        x_coord,
+        y_coord,
+        growth_scale=GrowthScale.SQRT,
+        is_sink=False,
+        is_source=False,
+    ):
         self.id = id
         self.x_coord = x_coord
         self.y_coord = y_coord
@@ -15,7 +23,10 @@ class Vertex(VMobject):
         self.ingoing_capacity = 0
         self.current_flow = 0
         self.adjacent_edges = []
+        self.is_sink = is_sink
+        self.is_source = is_source
         self.flow_object = None
+        self.foregroundDot = None
 
         super().__init__()
 
@@ -55,6 +66,12 @@ class Vertex(VMobject):
     def to_np_array(self):
         return np.array([self.x_coord, self.y_coord, 0])
 
+    def set_sink(self):
+        self.is_sink = True
+
+    def set_source(self):
+        self.is_source = True
+
     def add_to_max_ingoing_capacity(self, capacity):
         self.ingoing_capacity += capacity
 
@@ -77,7 +94,7 @@ class Vertex(VMobject):
             return max(self.ingoing_capacity, self.outgoing_capacity)
         return min(self.ingoing_capacity, self.outgoing_capacity)
 
-    def add_to_current_flow(self, new_flow, scene):
+    def add_to_current_flow(self, new_flow):
         if self.flow_object is None:
             self.flow_object = (
                 Dot(self.to_np_array())
@@ -86,7 +103,9 @@ class Vertex(VMobject):
                 .set_opacity(0)
                 .set_z_index(12)
             )
-        if new_flow <= self.get_max_opacity():
+        if new_flow > self.get_max_opacity():
+            print("Error: New capacity exceeds maximum capacity")
+        else:
             self.current_flow += new_flow
             new_flow_object = (
                 Dot(self.to_np_array())
@@ -95,7 +114,7 @@ class Vertex(VMobject):
                 .set_opacity(self.get_opacity(self.current_flow))
                 .set_z_index(12)
             )
-            scene.play(ReplacementTransform(self.flow_object, new_flow_object))
+
+            vertex_animation = ReplacementTransform(self.flow_object, new_flow_object)
             self.flow_object = new_flow_object
-        else:
-            print("Error: New capacity exceeds maximum capacity")
+            return vertex_animation

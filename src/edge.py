@@ -45,6 +45,8 @@ class Edge(VMobject):
         if new_flow + self.current_flow < 0:  # for negative values
             print("Error: New capacity gives a negative flow")
         else:
+            vertex_animation = self.start_vertex.add_to_current_flow(new_flow)
+
             self.current_flow += new_flow
 
             (new_start_coord, new_end_coord) = self.get_flow_coords()
@@ -57,7 +59,7 @@ class Edge(VMobject):
                 self.current_flow,
                 self.growth_scale,
             )
-            flow_animation = ReplacementTransform(self.flow_object, new_flow_object)
+            edge_animation = ReplacementTransform(self.flow_object, new_flow_object)
 
             if self.current_flow == self.max_capacity:
                 arrow_animation = Uncreate(self.arrow)
@@ -66,16 +68,44 @@ class Edge(VMobject):
                     new_arrow_start_coord,
                     new_arrow_end_coord,
                 ) = self.get_new_arrow_coords()
+
+
                 new_arrow = EdgeArrow(new_arrow_start_coord, new_arrow_end_coord)
                 arrow_animation = ReplacementTransform(self.arrow, new_arrow)
                 self.arrow = new_arrow
 
             scene.play(
-                flow_animation,
+                edge_animation,
+                vertex_animation,
                 arrow_animation,
                 run_time=run_time,
             )
+
+            # edge case for end vertex. end by playing the animation by coloring the sink vertex blue
+            if self.end_vertex.is_sink:
+                vertex_animation_end_vertex = self.end_vertex.add_to_current_flow(
+                    new_flow
+                )
+                scene.play(vertex_animation_end_vertex)
+
             self.flow_object = new_flow_object
+
+    def get_text_animation(self, path, bottleneck, scene: Scene):
+        textual_path = "0 -> "
+        
+        for vertex, edge in path:
+            textual_path = textual_path + str(edge.end_vertex.id) + " -> "
+        label = Tex(
+            "Add ",
+            int(bottleneck),
+            " along the path ",
+            textual_path,
+            color=BLACK,
+            width=20,
+        )
+
+        return label
+
 
     def get_drawn_edge_size(self, capacity):
         return get_drawn_size(self.growth_scale, capacity) * 8
@@ -163,3 +193,23 @@ class Edge(VMobject):
             return self.start_vertex
         else:
             return self.end_vertex
+
+    def get_other_vertex_from_id(self, vertex_id):
+        if vertex_id is self.end_vertex.id:
+            return self.start_vertex
+        else:
+            return self.end_vertex
+
+    def get_vertex_from_id(self, vertex_id):
+        if vertex_id is self.end_vertex.id:
+            return self.end_vertex
+        else:
+            return self.start_vertex
+
+    def get_active_edges(self):
+        active_edges = []
+        if self.current_flow > 0:
+            active_edges.append((self.end_vertex.id, self.start_vertex.id))
+        if self.current_flow < self.max_capacity:
+            active_edges.append((self.start_vertex.id, self.end_vertex.id))
+        return active_edges
