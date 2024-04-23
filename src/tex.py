@@ -12,8 +12,8 @@ def create_and_align_tex(text: str, graph):
     return tex
 
 
-def play_tex_animation_for_path(FordFulkerson, graph, path, bottleneck, scene: Scene):
-    scene.play(FadeOut(FordFulkerson.tex))
+def play_tex_animation_for_path(ford_fulkerson, graph, path, bottleneck, scene: Scene):
+    scene.play(FadeOut(ford_fulkerson.tex))
 
     tex_path = ""
     for vertex, edge in path:
@@ -29,28 +29,28 @@ def play_tex_animation_for_path(FordFulkerson, graph, path, bottleneck, scene: S
         f"Tilføj {int(bottleneck)} enheder strømning til stien {tex_path}", graph
     )
 
-    FordFulkerson.tex = newTex
-    scene.play(FadeIn(FordFulkerson.tex))
+    ford_fulkerson.tex = newTex
+    scene.play(FadeIn(ford_fulkerson.tex))
     scene.wait(2, frozen_frame=False)
 
 
-def play_tex_animation_for_residual_graph_before(FordFulkerson, scene: Scene, graph):
-    scene.play(FadeOut(FordFulkerson.tex))
+def play_tex_animation_for_residual_graph_before(ford_fulkerson, scene: Scene, graph):
+    scene.play(FadeOut(ford_fulkerson.tex))
 
     newTex = create_and_align_tex(
         "Find en forbedrende sti i restgrafen", graph
     ).set_z_index(28)
-    FordFulkerson.tex = newTex
-    scene.play(FadeIn(FordFulkerson.tex))
+    ford_fulkerson.tex = newTex
+    scene.play(FadeIn(ford_fulkerson.tex))
     scene.wait(2, frozen_frame=False)
 
 
-def play_tex_animation_for_residual_graph_after(FordFulkerson, scene: Scene, graph):
-    scene.play(FadeOut(FordFulkerson.tex))
+def play_tex_animation_for_residual_graph_after(ford_fulkerson, scene: Scene, graph):
+    scene.play(FadeOut(ford_fulkerson.tex))
 
     newTex = create_and_align_tex("En forbedrende sti er fundet", graph).set_z_index(28)
-    FordFulkerson.tex = newTex
-    scene.play(FadeIn(FordFulkerson.tex))
+    ford_fulkerson.tex = newTex
+    scene.play(FadeIn(ford_fulkerson.tex))
     scene.wait(2, frozen_frame=False)
 
 
@@ -64,8 +64,8 @@ def play_initial_tex_animation(scene: Scene, graph):
     scene.play(FadeOut(tex))
 
 
-def play_final_tex_animation(FordFulkerson, scene: Scene, graph, max_flow):
-    scene.play(FadeOut(FordFulkerson.tex))
+def play_final_tex_animation(ford_fulkerson, scene: Scene, graph, max_flow):
+    scene.play(FadeOut(ford_fulkerson.tex))
 
     tex = Tex(
         r"En maksimal strømning i strømningsnetværket er fundet. \\Maksimal strømning = ",
