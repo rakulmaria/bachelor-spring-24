@@ -40,6 +40,8 @@ class Edge(VMobject):
         # if vertex is start_vertex, we found another augmenting path and want to 'undo' a previous mistake
         if vertex is self.start_vertex.id:
             new_flow = -1 * new_flow
+        if new_flow + self.current_flow < 0:  # for negative values
+            print("Error: New capacity gives a negative flow")
         else:
             vertex_animation = self.start_vertex.add_to_current_flow(new_flow)
 
