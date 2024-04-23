@@ -19,12 +19,12 @@ def play_tex_animation_for_path(FordFulkerson, graph, path, bottleneck, scene: S
     for vertex, edge in path:
         tex_path = (
             tex_path
+            + str(edge.get_other_vertex_from_id(vertex).id)
             + " \N{RIGHTWARDS ARROW} "
-            + edge.get_other_vertex_from_id(vertex).id
         )
 
     # set the sink to be the last vertex in the tex path
-    tex_path = tex_path + graph.sink.id
+    tex_path = f"{tex_path}{graph.sink.id}"
     newTex = create_and_align_tex(
         f"Tilføj {int(bottleneck)} enheder strømning til stien {tex_path}", graph
     )
