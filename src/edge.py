@@ -99,10 +99,6 @@ class Edge(VMobject):
         textual_path = "0 -> "
         
         for vertex, edge in path:
-            # print(vertex, edge.start_vertex.id)
-            # if vertex == edge.end_vertex.id:
-            #     textual_path = textual_path + str(edge.start_vertex.id)
-            # else:
             textual_path = textual_path + str(edge.end_vertex.id) + " -> "
         label = Tex(
             "Add ",
