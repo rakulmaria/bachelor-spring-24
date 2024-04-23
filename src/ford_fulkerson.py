@@ -28,8 +28,8 @@ class FordFulkerson:
         edge_config = {
             "stroke_width": 2,
             "tip_config": {
-                "tip_shape": StealthTip,
-                "tip_length": 0.15,
+                "tip_length": 0.20,
+                "tip_width": 0.18,
             },
             "color": GREY,
         }
@@ -70,7 +70,9 @@ class FordFulkerson:
                     old_edge.get_start(),
                     old_edge.get_end(),
                 )
-                .add_tip(tip_length=0.15, tip=StealthTip())
+                .add_tip(
+                    tip_length=0.20, tip_width=0.18, tip_shape=ArrowTriangleFilledTip
+                )
                 .set_color(BLACK)
                 .set_z_index(26)
             )
