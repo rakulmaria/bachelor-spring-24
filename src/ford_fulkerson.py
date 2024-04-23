@@ -15,8 +15,7 @@ class FordFulkerson:
             height=200,
             fill_opacity=0.9,
             fill_color=WHITE,
-            z_index=100,
-        )
+        ).set_z_index(20)
         scene.play(FadeIn(blur))
 
         edge_config = {
@@ -35,7 +34,7 @@ class FordFulkerson:
                 edge_config=edge_config,
                 layout=self.graph.get_layout_dict(),
             )
-            .set_z_index(101)
+            .set_z_index(24)
             .set_color(GREY)
         )
         scene.play(FadeIn(di_graph))
@@ -44,7 +43,9 @@ class FordFulkerson:
 
         shown_path = self.highlight_path(scene, path_to_draw, di_graph)
 
-        scene.wait(1.5, frozen_frame=False)
+        # scene.wait(1.5, frozen_frame=False)
+
+        self.play_tex_animation_for_residual_graph_after(scene)
 
         scene.play(Uncreate(VGroup(di_graph, shown_path)))
 
@@ -66,7 +67,7 @@ class FordFulkerson:
                 )
                 .add_tip(tip_length=0.15, tip=StealthTip())
                 .set_color(BLACK)
-                .set_z_index(102)
+                .set_z_index(26)
             )
             scene.play(Create(line))
             group.add(line)
@@ -178,8 +179,12 @@ class FordFulkerson:
         # set the source to be the first vertex in the tex path
         tex_path = str(self.graph.source.id)
 
-        for _, edge in path:
-            tex_path = tex_path + "\N{RIGHTWARDS ARROW}" + str(edge.end_vertex.id)
+        for vertex, edge in path:
+            tex_path = (
+                tex_path
+                + "\N{RIGHTWARDS ARROW}"
+                + str(edge.get_other_vertex_from_id(vertex).id)
+            )
 
         newTex = Tex(
             "Tilføj ",
@@ -206,7 +211,7 @@ class FordFulkerson:
             "Find en forbedrende sti i restgrafen",
             color=BLACK,
             font_size=20,
-        )
+        ).set_z_index(28)
 
         newTex.align_to(self.graph, self.graph.get_critical_point(UL)).shift(
             0.5 * UP + 0.5 * LEFT
@@ -224,7 +229,7 @@ class FordFulkerson:
             "En forbedrende sti er fundet",
             color=BLACK,
             font_size=20,
-        )
+        ).set_z_index(28)
 
         newTex.align_to(self.graph, self.graph.get_critical_point(UL)).shift(
             0.5 * UP + 0.5 * LEFT
