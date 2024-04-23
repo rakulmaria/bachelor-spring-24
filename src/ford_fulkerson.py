@@ -8,6 +8,7 @@ class FordFulkerson:
         self.tex = Tex()
         self.max_flow = 0
         self.path = {}
+        self.reverse = True
 
     def show_primitive_graph(self, scene: Scene, path_to_draw):
         blur = Rectangle(
@@ -97,26 +98,37 @@ class FordFulkerson:
         return marked_vertices.get(sink.id)
 
     def find_path_DFS(self, source, sink):
-        marked_vertices = {}
-        stack = []
+        visited = set()
+        self.reverse = True
+        return self.DFS_helper(source, sink, visited)
 
-        marked_vertices[source.id] = True
-        stack.append(source)
+    def DFS_helper(self, current_vertex, sink, visited):
+        if current_vertex == sink:
+            return True
 
-        while len(stack) > 0 and not marked_vertices.get(sink.id):
-            current_vertex = stack.pop()
+        visited.add(current_vertex.id)
 
-            for edge in current_vertex.adjacent_edges:
-                other_vertex = edge.get_other_vertex(current_vertex)
+        sorted_edges = sorted(
+            current_vertex.adjacent_edges,
+            key=lambda x: x.get_residual_capacity_to(
+                x.get_other_vertex(current_vertex)
+            ),
+            reverse=self.reverse,
+        )
+        self.reverse = not self.reverse
 
-                if edge.get_residual_capacity_to(
-                    other_vertex
-                ) > 0 and not marked_vertices.get(other_vertex.id):
-                    self.path[other_vertex.id] = edge
-                    marked_vertices[other_vertex.id] = True
-                    stack.append(other_vertex)
+        for edge in sorted_edges:
+            other_vertex = edge.get_other_vertex(current_vertex)
 
-        return marked_vertices.get(sink.id)
+            if (
+                edge.get_residual_capacity_to(other_vertex) > 0
+                and other_vertex.id not in visited
+            ):
+                self.path[other_vertex.id] = edge
+                if self.DFS_helper(other_vertex, sink, visited):
+                    return True
+
+        return False
 
     def find_max_flow(self, scene: Scene, BSF=True):
         self.max_flow = 0

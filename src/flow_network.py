@@ -23,8 +23,9 @@ class FlowNetwork(VMobject):
         self.primitive_verticies = vertices
         self.primitive_edges = edges
 
-        self.vertices, self.edges = self.get_edges_and_vertices_as_mobjects(
-            vertices, edges, source, sink, capacities, layout_scale, layout, layers
+        graph = self.get_graph_for_layout(vertices, edges, layout_scale, layout, layers)
+        self.vertices, self.edges = self.initialize_edges_and_verticies(
+            vertices, edges, source, sink, capacities, graph
         )
 
         for vertex in self.vertices:
@@ -35,40 +36,32 @@ class FlowNetwork(VMobject):
             self.add(edge)
             edge.draw()
 
-    def get_edges_and_vertices_as_mobjects(
-        self,
-        vertices,
-        edges,
-        source,
-        sink,
-        capacities,
-        layout_scale=2,
-        layout="spring",
-        layers=[],
+    def initialize_edges_and_verticies(
+        self, vertices, edges, source, sink, capacities, graph
     ):
-        partitions = self.get_partitions(layers)
-        graph = []
-        if partitions != []:
-            graph = Graph(
-                vertices,
-                edges,
-                layout_scale=layout_scale,
-                layout="partite",
-                partitions=partitions,
-            )
-        else:
-            graph = Graph(
-                vertices,
-                edges,
-                layout_scale=layout_scale,
-                layout=layout,
-                layout_config={"seed": 100},
-            )
+        vertices = self.initialize_vertecies(graph, source, sink)
+        edges = self.initialize_edges(vertices, capacities)
 
-        vertices_as_objects = {}
+        return vertices.values(), edges
+
+    def initialize_edges(self, vertices_as_objects, capacities):
         edges_as_objects = []
 
-        for dot, id in enumerate(graph.vertices):
+        for _from, to, capacity in capacities:
+            edge = Edge(
+                vertices_as_objects.get(_from),
+                vertices_as_objects.get(to),
+                capacity,
+                growth_scale=self.growth_scale,
+            )
+            edges_as_objects.append(edge)
+
+        return edges_as_objects
+
+    def initialize_vertecies(self, graph, source, sink):
+        vertices_as_objects = {}
+
+        for _, id in enumerate(graph.vertices):
             x, y, _ = graph._layout[id]
 
             vertex = Vertex(id, x, y, self.growth_scale)
@@ -81,16 +74,26 @@ class FlowNetwork(VMobject):
 
             vertices_as_objects.update({id: vertex})
 
-        for _from, to, capacity in capacities:
-            edge = Edge(
-                vertices_as_objects.get(_from),
-                vertices_as_objects.get(to),
-                capacity,
-                growth_scale=self.growth_scale,
-            )
-            edges_as_objects.append(edge)
+        return vertices_as_objects
 
-        return vertices_as_objects.values(), edges_as_objects
+    def get_graph_for_layout(self, vertices, edges, layout_scale, layout, layers):
+        partitions = self.get_partitions(layers)
+        if partitions != []:
+            return Graph(
+                vertices,
+                edges,
+                layout_scale=layout_scale,
+                layout="partite",
+                partitions=partitions,
+            )
+        else:
+            return Graph(
+                vertices,
+                edges,
+                layout_scale=layout_scale,
+                layout=layout,
+                layout_config={"seed": 100},
+            )
 
     # helper method, if you want to create a partite graph and use layers to display it
     def get_partitions(self, layers):

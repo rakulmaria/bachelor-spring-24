@@ -1,8 +1,6 @@
 from manim import *
-
 from src.utils import GrowthScale, get_drawn_size
-
-light_blue = AS2700.B41_BLUEBELL
+import src.constants as constants
 
 
 class Vertex(VMobject):
@@ -31,10 +29,12 @@ class Vertex(VMobject):
         super().__init__()
 
     def get_drawn_dot_size(self):
-        return get_drawn_size(self.growth_scale, self.get_max_drawn_capacity()) / 2
+        return (
+            get_drawn_size(self.growth_scale, self.get_max_drawn_capacity()) / 2 + 0.5
+        )
 
     def get_drawn_label_size(self, scale=1):
-        return get_drawn_size(self.growth_scale, scale) * 0.2
+        return (get_drawn_size(self.growth_scale, scale) + 0.5) * 0.2
 
     def draw(self, scale=1):
         foregroundDot = (
@@ -51,9 +51,6 @@ class Vertex(VMobject):
             .set_z_index(0)
         )
 
-        self.add(backgroundDot)
-        self.add(foregroundDot)
-
         label = (
             Tex(self.id, color=BLACK)
             .set_x(self.x_coord)
@@ -61,6 +58,9 @@ class Vertex(VMobject):
             .set_z_index(20)
             .scale(self.get_drawn_label_size(scale))
         )
+
+        self.add(backgroundDot)
+        self.add(foregroundDot)
         self.add(label)
 
     def to_np_array(self):
@@ -87,34 +87,31 @@ class Vertex(VMobject):
     def get_opacity(self, flow):
         return flow / self.get_max_opacity()
 
-    # helper function
     def get_max_opacity(self):
         # edge case for source and sink vertices
         if self.ingoing_capacity == 0 or self.outgoing_capacity == 0:
             return max(self.ingoing_capacity, self.outgoing_capacity)
         return min(self.ingoing_capacity, self.outgoing_capacity)
 
-    def add_to_current_flow(self, new_flow):
+    def add_to_current_flow(self, new_flow) -> Animation:
         if self.flow_object is None:
             self.flow_object = (
                 Dot(self.to_np_array())
                 .scale(self.get_drawn_dot_size())
-                .set_fill(light_blue)
+                .set_fill(constants.light_blue)
                 .set_opacity(0)
                 .set_z_index(12)
             )
-        if new_flow > self.get_max_opacity():
-            print("Error: New capacity exceeds maximum capacity")
-        else:
-            self.current_flow += new_flow
-            new_flow_object = (
-                Dot(self.to_np_array())
-                .scale(self.get_drawn_dot_size())
-                .set_fill(light_blue)
-                .set_opacity(self.get_opacity(self.current_flow))
-                .set_z_index(12)
-            )
 
-            vertex_animation = ReplacementTransform(self.flow_object, new_flow_object)
-            self.flow_object = new_flow_object
-            return vertex_animation
+        self.current_flow += new_flow
+        new_flow_object = (
+            Dot(self.to_np_array())
+            .scale(self.get_drawn_dot_size())
+            .set_fill(constants.light_blue)
+            .set_opacity(self.get_opacity(self.current_flow))
+            .set_z_index(12)
+        )
+
+        vertex_animation = ReplacementTransform(self.flow_object, new_flow_object)
+        self.flow_object = new_flow_object
+        return vertex_animation
