@@ -163,10 +163,3 @@ class Main5(Scene):
         ford_fulkerson = FordFulkerson(graph)
         ford_fulkerson.find_max_flow(self, BSF=False)
 
-
-class Main6(Scene):
-    def construct(self):
-        self.add(Dot([0, 0, 0]))
-        self.add(Dot([2, 0, 0]))
-
-        self.add(Line([0, 0, 0], [2, 0, 0]).add_tip(tip_length=0.15, tip=StealthTip()))
