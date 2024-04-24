@@ -40,52 +40,47 @@ class Edge(VMobject):
         # if vertex is start_vertex, we found another augmenting path and want to 'undo' a previous mistake
         if vertex is self.start_vertex.id:
             new_flow = -1 * new_flow
-        if new_flow + self.current_flow < 0:  # for negative values
-            print("Error: New capacity gives a negative flow")
+
+        vertex_animation = self.start_vertex.add_to_current_flow(new_flow)
+        self.current_flow += new_flow
+
+        (new_start_coord, new_end_coord) = self.get_flow_coords()
+        new_direction = self.get_direction()
+
+        new_flow_object = FlowObject(
+            new_start_coord,
+            new_end_coord,
+            new_direction,
+            self.current_flow,
+            self.growth_scale,
+        )
+        edge_animation = ReplacementTransform(self.flow_object, new_flow_object)
+
+        if self.current_flow == self.max_capacity:
+            arrow_animation = Uncreate(self.arrow)
         else:
-            vertex_animation = self.start_vertex.add_to_current_flow(new_flow)
+            (
+                new_arrow_start_coord,
+                new_arrow_end_coord,
+            ) = self.get_new_arrow_coords()
 
-            self.current_flow += new_flow
+            new_arrow = EdgeArrow(new_arrow_start_coord, new_arrow_end_coord)
+            arrow_animation = ReplacementTransform(self.arrow, new_arrow)
+            self.arrow = new_arrow
 
-            (new_start_coord, new_end_coord) = self.get_flow_coords()
-            new_direction = self.get_direction()
+        scene.play(
+            edge_animation,
+            vertex_animation,
+            arrow_animation,
+            run_time=run_time,
+        )
 
-            new_flow_object = FlowObject(
-                new_start_coord,
-                new_end_coord,
-                new_direction,
-                self.current_flow,
-                self.growth_scale,
-            )
-            edge_animation = ReplacementTransform(self.flow_object, new_flow_object)
+        # edge case for end vertex. end by playing the animation by coloring the sink vertex blue
+        if self.end_vertex.is_sink:
+            vertex_animation_end_vertex = self.end_vertex.add_to_current_flow(new_flow)
+            scene.play(vertex_animation_end_vertex)
 
-            if self.current_flow == self.max_capacity:
-                arrow_animation = Uncreate(self.arrow)
-            else:
-                (
-                    new_arrow_start_coord,
-                    new_arrow_end_coord,
-                ) = self.get_new_arrow_coords()
-
-                new_arrow = EdgeArrow(new_arrow_start_coord, new_arrow_end_coord)
-                arrow_animation = ReplacementTransform(self.arrow, new_arrow)
-                self.arrow = new_arrow
-
-            scene.play(
-                edge_animation,
-                vertex_animation,
-                arrow_animation,
-                run_time=run_time,
-            )
-
-            # edge case for end vertex. end by playing the animation by coloring the sink vertex blue
-            if self.end_vertex.is_sink:
-                vertex_animation_end_vertex = self.end_vertex.add_to_current_flow(
-                    new_flow
-                )
-                scene.play(vertex_animation_end_vertex)
-
-            self.flow_object = new_flow_object
+        self.flow_object = new_flow_object
 
     def get_drawn_edge_size(self, capacity):
         return get_drawn_size(self.growth_scale, capacity) * 8
