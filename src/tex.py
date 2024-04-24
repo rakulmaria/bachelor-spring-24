@@ -2,10 +2,11 @@ from manim import *
 
 
 class TextHelper:
-    def __init__(self, graph, scale=2, show_text=True):
+    def __init__(self, graph, scene: Scene, scale=2, show_text=True):
         self.scale = scale
         self.show_text = show_text
         self.graph = graph
+        self.scene = scene
         self.tex = Tex()
 
     def create_and_align_tex(self, text: str):
@@ -15,10 +16,10 @@ class TextHelper:
 
         return tex
 
-    def play_tex_animation_for_path(self, path, bottleneck, scene: Scene):
+    def play_tex_animation_for_path(self, path, bottleneck):
         if not self.show_text:
             return
-        scene.play(FadeOut(self.tex))
+        self.scene.play(FadeOut(self.tex))
 
         tex_path = ""
         for vertex, edge in path:
@@ -35,48 +36,48 @@ class TextHelper:
         )
 
         self.tex = newTex
-        scene.play(FadeIn(self.tex))
-        scene.wait(2, frozen_frame=False)
+        self.scene.play(FadeIn(self.tex))
+        self.scene.wait(2, frozen_frame=False)
 
-    def play_tex_animation_for_residual_graph_before(self, scene: Scene):
+    def play_tex_animation_for_residual_graph_before(self):
         if not self.show_text:
             return
-        scene.play(FadeOut(self.tex))
+        self.scene.play(FadeOut(self.tex))
 
         newTex = self.create_and_align_tex(
             "Find en forbedrende sti i restgrafen"
         ).set_z_index(28)
         self.tex = newTex
-        scene.play(FadeIn(self.tex))
-        scene.wait(2, frozen_frame=False)
+        self.scene.play(FadeIn(self.tex))
+        self.scene.wait(2, frozen_frame=False)
 
-    def play_tex_animation_for_residual_graph_after(self, scene: Scene):
+    def play_tex_animation_for_residual_graph_after(self):
         if not self.show_text:
             return
-        scene.play(FadeOut(self.tex))
+        self.scene.play(FadeOut(self.tex))
 
         newTex = self.create_and_align_tex("En forbedrende sti er fundet").set_z_index(
             28
         )
         self.tex = newTex
-        scene.play(FadeIn(self.tex))
-        scene.wait(2, frozen_frame=False)
+        self.scene.play(FadeIn(self.tex))
+        self.scene.wait(2, frozen_frame=False)
 
-    def play_initial_tex_animation(self, scene: Scene):
+    def play_initial_tex_animation(self):
         tex = self.create_and_align_tex(
             "Givet et strømningsnetværk, find en maksimal strømning i strømningsnetværket."
         )
-        scene.play(FadeIn(tex))
-        scene.wait(2, frozen_frame=False)
-        scene.play(FadeOut(tex))
+        self.scene.play(FadeIn(tex))
+        self.scene.wait(2, frozen_frame=False)
+        self.scene.play(FadeOut(tex))
 
-    def play_final_tex_animation(self, scene: Scene, max_flow):
-        scene.play(FadeOut(self.tex))
+    def play_final_tex_animation(self, max_flow):
+        self.scene.play(FadeOut(self.tex))
 
         tex = self.create_and_align_tex(
             f"Strømningsnetværkets maksimal strømningværdi = {int(max_flow)}"
         )
 
-        scene.play(FadeIn(tex))
-        scene.wait(2, frozen_frame=False)
-        scene.play(FadeOut(tex))
+        self.scene.play(FadeIn(tex))
+        self.scene.wait(2, frozen_frame=False)
+        self.scene.play(FadeOut(tex))

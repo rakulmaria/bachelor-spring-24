@@ -4,11 +4,12 @@ from src.tex import TextHelper
 
 
 class FordFulkerson:
-    def __init__(self, graph, scale=2, show_text=True):
+    def __init__(self, graph, scene: Scene, scale=2, show_text=True):
         self.graph = graph
+        self.scene = scene
         self.max_flow = 0
         self.path = {}
-        self.text_helper = TextHelper(graph, scale, show_text=show_text)
+        self.text_helper = TextHelper(graph, scene, scale, show_text=show_text)
 
     def find_path_BFS(self, source, sink):
         marked_vertices = {}
@@ -64,21 +65,21 @@ class FordFulkerson:
 
         return False
 
-    def find_max_flow(self, scene: Scene, BSF=True):
+    def find_max_flow(self, BSF=True):
         self.max_flow = 0
 
-        self.text_helper.play_initial_tex_animation(scene)
+        self.text_helper.play_initial_tex_animation()
 
         if BSF:
             while self.find_path_BFS(self.graph.source, self.graph.sink):
-                self.max_flow += self.find_max_helper(scene)
+                self.max_flow += self.find_max_helper()
         else:
             while self.find_path_DFS(self.graph.source, self.graph.sink):
-                self.max_flow += self.find_max_helper(scene)
+                self.max_flow += self.find_max_helper()
 
-        self.text_helper.play_final_tex_animation(scene, int(self.max_flow))
+        self.text_helper.play_final_tex_animation(int(self.max_flow))
 
-    def find_max_helper(self, scene):
+    def find_max_helper(self):
         bottleneck = 9223372036854775807
         current_vertex = self.graph.sink
         path_to_draw = []
@@ -104,14 +105,14 @@ class FordFulkerson:
                 current_vertex
             )
 
-        self.text_helper.play_tex_animation_for_residual_graph_before(scene)
+        self.text_helper.play_tex_animation_for_residual_graph_before()
 
-        self.graph.show_residual_graph(scene, path_to_draw, self.text_helper)
+        self.graph.show_residual_graph(self.scene, path_to_draw, self.text_helper)
 
-        self.text_helper.play_tex_animation_for_path(path_to_draw, bottleneck, scene)
+        self.text_helper.play_tex_animation_for_path(path_to_draw, bottleneck)
 
         for vertex, edge in path_to_draw:
-            edge.add_current_flow_towards(vertex, bottleneck, scene)
+            edge.add_current_flow_towards(vertex, bottleneck, self.scene)
 
         self.path = {}
 

@@ -165,7 +165,7 @@ class FlowNetwork(VMobject):
             scene, path_to_draw, di_graph
         )
 
-        text_helper.play_tex_animation_for_residual_graph_after(scene)
+        text_helper.play_tex_animation_for_residual_graph_after()
 
         scene.play(Uncreate(VGroup(di_graph, shown_path)))
         scene.play(FadeOut(blur))

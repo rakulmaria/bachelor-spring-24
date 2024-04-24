@@ -22,8 +22,8 @@ class SedgewickWayne(Scene):
         )
 
         self.add(graph)
-        ford_fulkerson = FordFulkerson(graph)
-        ford_fulkerson.find_max_flow(self)
+        ford_fulkerson = FordFulkerson(graph, self)
+        ford_fulkerson.find_max_flow()
 
 
 class WikiExample(Scene):
@@ -48,8 +48,8 @@ class WikiExample(Scene):
         self.camera.resize_frame_shape(0)
         self.add(graph)
 
-        ford_fulkerson = FordFulkerson(graph, scale)
-        ford_fulkerson.find_max_flow(self)
+        ford_fulkerson = FordFulkerson(graph, self, scale)
+        ford_fulkerson.find_max_flow()
 
 
 class BigGraph(Scene):
@@ -90,8 +90,8 @@ class BigGraph(Scene):
         self.camera.resize_frame_shape(0)
         self.add(graph)
 
-        ford_fulkerson = FordFulkerson(graph, scale, show_text=False)
-        ford_fulkerson.find_max_flow(self)
+        ford_fulkerson = FordFulkerson(graph, self, scale, show_text=False)
+        ford_fulkerson.find_max_flow()
 
 
 class ThoresExampleDFS(Scene):
@@ -116,8 +116,8 @@ class ThoresExampleDFS(Scene):
         self.camera.resize_frame_shape(0)
         self.add(graph)
 
-        ford_fulkerson = FordFulkerson(graph, scale)
-        ford_fulkerson.find_max_flow(self, BSF=False)
+        ford_fulkerson = FordFulkerson(graph, self, scale)
+        ford_fulkerson.find_max_flow(BSF=False)
 
 
 class ThoresExampleBFS(Scene):
@@ -142,5 +142,5 @@ class ThoresExampleBFS(Scene):
         self.camera.resize_frame_shape(0)
         self.add(graph)
 
-        ford_fulkerson = FordFulkerson(graph, scale)
-        ford_fulkerson.find_max_flow(self)
+        ford_fulkerson = FordFulkerson(graph, self, scale)
+        ford_fulkerson.find_max_flow()
