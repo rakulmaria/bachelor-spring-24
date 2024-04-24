@@ -166,8 +166,8 @@ class FlowNetwork(VMobject):
         )
 
         ford_fulkerson.text_helper.play_tex_animation_for_residual_graph_after(
-            ford_fulkerson, scene, ford_fulkerson.graph
-        )  # hvilken graph? FF or self?
+            ford_fulkerson, scene
+        )
 
         scene.play(Uncreate(VGroup(di_graph, shown_path)))
         scene.play(FadeOut(blur))

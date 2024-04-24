@@ -9,7 +9,7 @@ class FordFulkerson:
         self.tex = Tex()
         self.max_flow = 0
         self.path = {}
-        self.text_helper = TextHelper(scale, show_text=show_text)
+        self.text_helper = TextHelper(graph, scale, show_text=show_text)
 
     def find_path_BFS(self, source, sink):
         marked_vertices = {}
@@ -68,7 +68,7 @@ class FordFulkerson:
     def find_max_flow(self, scene: Scene, BSF=True):
         self.max_flow = 0
 
-        self.text_helper.play_initial_tex_animation(scene, self.graph)
+        self.text_helper.play_initial_tex_animation(scene)
 
         if BSF:
             while self.find_path_BFS(self.graph.source, self.graph.sink):
@@ -77,9 +77,7 @@ class FordFulkerson:
             while self.find_path_DFS(self.graph.source, self.graph.sink):
                 self.max_flow += self.find_max_helper(scene)
 
-        self.text_helper.play_final_tex_animation(
-            self, scene, self.graph, int(self.max_flow)
-        )
+        self.text_helper.play_final_tex_animation(self, scene, int(self.max_flow))
 
     def find_max_helper(self, scene):
         bottleneck = 9223372036854775807
@@ -107,14 +105,12 @@ class FordFulkerson:
                 current_vertex
             )
 
-        self.text_helper.play_tex_animation_for_residual_graph_before(
-            self, scene, self.graph
-        )
+        self.text_helper.play_tex_animation_for_residual_graph_before(self, scene)
 
         self.graph.show_residual_graph(self, scene, path_to_draw)
 
         self.text_helper.play_tex_animation_for_path(
-            self, self.graph, path_to_draw, bottleneck, scene
+            self, path_to_draw, bottleneck, scene
         )
 
         for vertex, edge in path_to_draw:
