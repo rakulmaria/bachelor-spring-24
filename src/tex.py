@@ -11,7 +11,7 @@ class TextHelper:
             return
         tex = Tex(text, color=BLACK)
         tex.set(font_size=(10 * self.scale))
-        tex.align_to(graph, UP).shift(0.95 * UP)
+        tex.align_to(graph, UP).shift((0.45 + self.scale * 0.125) * UP)
 
         return tex
 
