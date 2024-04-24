@@ -48,7 +48,6 @@ class Vertex(VMobject):
             Dot(self.to_np_array())
             .scale(self.get_drawn_dot_size() + 0.1)
             .set_fill(BLACK)
-            .set_z_index(0)
         )
 
         label = (
@@ -59,9 +58,7 @@ class Vertex(VMobject):
             .scale(self.get_drawn_label_size(scale))
         )
 
-        self.add(backgroundDot)
-        self.add(foregroundDot)
-        self.add(label)
+        self.add(backgroundDot, foregroundDot, label)
 
     def to_np_array(self):
         return np.array([self.x_coord, self.y_coord, 0])
@@ -93,7 +90,7 @@ class Vertex(VMobject):
             return max(self.ingoing_capacity, self.outgoing_capacity)
         return min(self.ingoing_capacity, self.outgoing_capacity)
 
-    def add_to_current_flow(self, new_flow) -> Animation:
+    def add_to_current_flow(self, new_flow):
         if self.flow_object is None:
             self.flow_object = (
                 Dot(self.to_np_array())
