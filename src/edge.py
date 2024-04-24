@@ -97,7 +97,6 @@ class Edge(VMobject):
             Line(
                 start=self.start_vertex.to_np_array(),
                 end=self.end_vertex.to_np_array(),
-                z_index=3,
             )
             .set_stroke(width=self.get_drawn_edge_size(self.max_capacity), color=WHITE)
             .set_fill(color=WHITE)
