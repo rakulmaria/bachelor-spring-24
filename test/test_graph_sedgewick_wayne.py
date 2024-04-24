@@ -26,5 +26,5 @@ class Test_Graph_Sedgewick_Wayne(Scene):
         self.camera.background_color = WHITE
         self.add(graph)
 
-        ford_fulkerson = FordFulkerson(graph)
-        ford_fulkerson.find_max_flow(self)
+        ford_fulkerson = FordFulkerson(graph, self)
+        ford_fulkerson.find_max_flow()
