@@ -1,80 +1,83 @@
 from manim import *
 
 
-def create_and_align_tex(text: str, graph):
-    tex = Tex(text, color=BLACK)
-    if len(text) > 57:
-        tex.set(width=config.frame_width - 1)
-    else:
-        tex.set(font_size=20)
-    tex.align_to(graph, graph.get_critical_point(UP)).shift(0.7 * UP)
+class TextHelper:
+    def __init__(self, graph, scene: Scene, scale=2, show_text=True):
+        self.scale = scale
+        self.show_text = show_text
+        self.graph = graph
+        self.scene = scene
+        self.tex = Tex()
 
-    return tex
+    def create_and_align_tex(self, text: str):
+        tex = Tex(text, color=BLACK)
+        tex.set(font_size=(10 * self.scale))
+        tex.align_to(self.graph, UP).shift((0.45 + self.scale * 0.125) * UP)
 
+        return tex
 
-def play_tex_animation_for_path(ford_fulkerson, graph, path, bottleneck, scene: Scene):
-    scene.play(FadeOut(ford_fulkerson.tex))
+    def play_tex_animation_for_path(self, path, bottleneck):
+        if not self.show_text:
+            return
+        self.scene.play(FadeOut(self.tex))
 
-    tex_path = ""
-    for vertex, edge in path:
-        tex_path = (
-            tex_path
-            + str(edge.get_other_vertex_from_id(vertex).id)
-            + " \N{RIGHTWARDS ARROW} "
+        tex_path = ""
+        for vertex, edge in path:
+            tex_path = (
+                tex_path
+                + str(edge.get_other_vertex_from_id(vertex).id)
+                + " \N{RIGHTWARDS ARROW} "
+            )
+
+        # set the sink to be the last vertex in the tex path
+        tex_path = f"{tex_path}{self.graph.sink.id}"
+        newTex = self.create_and_align_tex(
+            f"Tilføj {int(bottleneck)} enheder strømning til stien {tex_path}"
         )
 
-    # set the sink to be the last vertex in the tex path
-    tex_path = f"{tex_path}{graph.sink.id}"
-    newTex = create_and_align_tex(
-        f"Tilføj {int(bottleneck)} enheder strømning til stien {tex_path}", graph
-    )
+        self.tex = newTex
+        self.scene.play(FadeIn(self.tex))
+        self.scene.wait(2, frozen_frame=False)
 
-    ford_fulkerson.tex = newTex
-    scene.play(FadeIn(ford_fulkerson.tex))
-    scene.wait(2, frozen_frame=False)
+    def play_tex_animation_for_residual_graph_before(self):
+        if not self.show_text:
+            return
+        self.scene.play(FadeOut(self.tex))
 
+        newTex = self.create_and_align_tex(
+            "Find en forbedrende sti i restgrafen"
+        ).set_z_index(28)
+        self.tex = newTex
+        self.scene.play(FadeIn(self.tex))
+        self.scene.wait(2, frozen_frame=False)
 
-def play_tex_animation_for_residual_graph_before(ford_fulkerson, scene: Scene, graph):
-    scene.play(FadeOut(ford_fulkerson.tex))
+    def play_tex_animation_for_residual_graph_after(self):
+        if not self.show_text:
+            return
+        self.scene.play(FadeOut(self.tex))
 
-    newTex = create_and_align_tex(
-        "Find en forbedrende sti i restgrafen", graph
-    ).set_z_index(28)
-    ford_fulkerson.tex = newTex
-    scene.play(FadeIn(ford_fulkerson.tex))
-    scene.wait(2, frozen_frame=False)
+        newTex = self.create_and_align_tex("En forbedrende sti er fundet").set_z_index(
+            28
+        )
+        self.tex = newTex
+        self.scene.play(FadeIn(self.tex))
+        self.scene.wait(2, frozen_frame=False)
 
+    def play_initial_tex_animation(self):
+        tex = self.create_and_align_tex(
+            "Givet et strømningsnetværk, find en maksimal strømning i strømningsnetværket."
+        )
+        self.scene.play(FadeIn(tex))
+        self.scene.wait(2, frozen_frame=False)
+        self.scene.play(FadeOut(tex))
 
-def play_tex_animation_for_residual_graph_after(ford_fulkerson, scene: Scene, graph):
-    scene.play(FadeOut(ford_fulkerson.tex))
+    def play_final_tex_animation(self, max_flow):
+        self.scene.play(FadeOut(self.tex))
 
-    newTex = create_and_align_tex("En forbedrende sti er fundet", graph).set_z_index(28)
-    ford_fulkerson.tex = newTex
-    scene.play(FadeIn(ford_fulkerson.tex))
-    scene.wait(2, frozen_frame=False)
+        tex = self.create_and_align_tex(
+            f"Strømningsnetværkets maksimal strømningværdi = {int(max_flow)}"
+        )
 
-
-def play_initial_tex_animation(scene: Scene, graph):
-    tex = create_and_align_tex(
-        "Givet et strømningsnetværk, find en maksimal strømning i strømningsnetværket.",
-        graph,
-    )
-    scene.play(FadeIn(tex))
-    scene.wait(2, frozen_frame=False)
-    scene.play(FadeOut(tex))
-
-
-def play_final_tex_animation(ford_fulkerson, scene: Scene, graph, max_flow):
-    scene.play(FadeOut(ford_fulkerson.tex))
-
-    tex = Tex(
-        r"En maksimal strømning i strømningsnetværket er fundet. \\Maksimal strømning = ",
-        max_flow,
-        color=BLACK,
-    )
-    tex.set(font_size=20)
-    tex.align_to(graph, graph.get_critical_point(UP)).shift(0.7 * UP)
-
-    scene.play(FadeIn(tex))
-    scene.wait(2, frozen_frame=False)
-    scene.play(FadeOut(tex))
+        self.scene.play(FadeIn(tex))
+        self.scene.wait(2, frozen_frame=False)
+        self.scene.play(FadeOut(tex))

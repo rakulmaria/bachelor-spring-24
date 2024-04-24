@@ -40,72 +40,47 @@ class Edge(VMobject):
         # if vertex is start_vertex, we found another augmenting path and want to 'undo' a previous mistake
         if vertex is self.start_vertex.id:
             new_flow = -1 * new_flow
-        if new_flow + self.current_flow > self.max_capacity:
-            print("Error: New capacity exceeds maximum capacity")
-        if new_flow + self.current_flow < 0:  # for negative values
-            print("Error: New capacity gives a negative flow")
+
+        vertex_animation = self.start_vertex.add_to_current_flow(new_flow)
+        self.current_flow += new_flow
+
+        (new_start_coord, new_end_coord) = self.get_flow_coords()
+        new_direction = self.get_direction()
+
+        new_flow_object = FlowObject(
+            new_start_coord,
+            new_end_coord,
+            new_direction,
+            self.current_flow,
+            self.growth_scale,
+        )
+        edge_animation = ReplacementTransform(self.flow_object, new_flow_object)
+
+        if self.current_flow == self.max_capacity:
+            arrow_animation = Uncreate(self.arrow)
         else:
-            vertex_animation = self.start_vertex.add_to_current_flow(new_flow)
+            (
+                new_arrow_start_coord,
+                new_arrow_end_coord,
+            ) = self.get_new_arrow_coords()
 
-            self.current_flow += new_flow
+            new_arrow = EdgeArrow(new_arrow_start_coord, new_arrow_end_coord)
+            arrow_animation = ReplacementTransform(self.arrow, new_arrow)
+            self.arrow = new_arrow
 
-            (new_start_coord, new_end_coord) = self.get_flow_coords()
-            new_direction = self.get_direction()
-
-            new_flow_object = FlowObject(
-                new_start_coord,
-                new_end_coord,
-                new_direction,
-                self.current_flow,
-                self.growth_scale,
-            )
-            edge_animation = ReplacementTransform(self.flow_object, new_flow_object)
-
-            if self.current_flow == self.max_capacity:
-                arrow_animation = Uncreate(self.arrow)
-            else:
-                (
-                    new_arrow_start_coord,
-                    new_arrow_end_coord,
-                ) = self.get_new_arrow_coords()
-
-
-                new_arrow = EdgeArrow(new_arrow_start_coord, new_arrow_end_coord)
-                arrow_animation = ReplacementTransform(self.arrow, new_arrow)
-                self.arrow = new_arrow
-
-            scene.play(
-                edge_animation,
-                vertex_animation,
-                arrow_animation,
-                run_time=run_time,
-            )
-
-            # edge case for end vertex. end by playing the animation by coloring the sink vertex blue
-            if self.end_vertex.is_sink:
-                vertex_animation_end_vertex = self.end_vertex.add_to_current_flow(
-                    new_flow
-                )
-                scene.play(vertex_animation_end_vertex)
-
-            self.flow_object = new_flow_object
-
-    def get_text_animation(self, path, bottleneck, scene: Scene):
-        textual_path = "0 -> "
-        
-        for vertex, edge in path:
-            textual_path = textual_path + str(edge.end_vertex.id) + " -> "
-        label = Tex(
-            "Add ",
-            int(bottleneck),
-            " along the path ",
-            textual_path,
-            color=BLACK,
-            width=20,
+        scene.play(
+            edge_animation,
+            vertex_animation,
+            arrow_animation,
+            run_time=run_time,
         )
 
-        return label
+        # edge case for end vertex. end by playing the animation by coloring the sink vertex blue
+        if self.end_vertex.is_sink:
+            vertex_animation_end_vertex = self.end_vertex.add_to_current_flow(new_flow)
+            scene.play(vertex_animation_end_vertex)
 
+        self.flow_object = new_flow_object
 
     def get_drawn_edge_size(self, capacity):
         return get_drawn_size(self.growth_scale, capacity) * 8
@@ -114,26 +89,25 @@ class Edge(VMobject):
         background_line = Line(
             start=self.start_vertex.to_np_array(),
             end=self.end_vertex.to_np_array(),
-            z_index=0,
             color=BLACK,
             stroke_width=(self.get_drawn_edge_size(self.max_capacity) + 1.6),
         )
+
         foreground_line = (
             Line(
                 start=self.start_vertex.to_np_array(),
                 end=self.end_vertex.to_np_array(),
-                z_index=3,
             )
             .set_stroke(width=self.get_drawn_edge_size(self.max_capacity), color=WHITE)
             .set_fill(color=WHITE)
+            .set_z_index(3)
         )
+
         self.arrow = EdgeArrow(
             self.start_vertex.to_np_array(), self.end_vertex.to_np_array()
         )
 
-        self.add(background_line)
-        self.add(foreground_line)
-        self.add(self.arrow)
+        self.add(background_line, foreground_line, self.arrow)
 
     def get_direction(self):
         x_start = self.start_vertex.x_coord

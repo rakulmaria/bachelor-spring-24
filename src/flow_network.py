@@ -23,10 +23,14 @@ class FlowNetwork(VMobject):
         self.primitive_verticies = vertices
         self.primitive_edges = edges
 
-        self.vertices, self.edges = self.get_edges_and_vertices_as_mobjects(
-            vertices, edges, source, sink, capacities, layout_scale, layout, layers
+        graph = self.get_graph_for_layout(vertices, edges, layout_scale, layout, layers)
+        self.vertices, self.edges = self.initialize_edges_and_verticies(
+            vertices, edges, source, sink, capacities, graph
         )
 
+        self.draw_vertices_and_edges()
+
+    def draw_vertices_and_edges(self):
         for vertex in self.vertices:
             self.add(vertex)
             vertex.draw(self.get_min_vertex_capacity(self.vertices))
@@ -35,38 +39,30 @@ class FlowNetwork(VMobject):
             self.add(edge)
             edge.draw()
 
-    def get_edges_and_vertices_as_mobjects(
-        self,
-        vertices,
-        edges,
-        source,
-        sink,
-        capacities,
-        layout_scale=2,
-        layout="spring",
-        layers=[],
+    def initialize_edges_and_verticies(
+        self, vertices, edges, source, sink, capacities, graph
     ):
-        partitions = self.get_partitions(layers)
-        graph = []
-        if partitions != []:
-            graph = Graph(
-                vertices,
-                edges,
-                layout_scale=layout_scale,
-                layout="partite",
-                partitions=partitions,
-            )
-        else:
-            graph = Graph(
-                vertices,
-                edges,
-                layout_scale=layout_scale,
-                layout=layout,
-                layout_config={"seed": 100},
-            )
+        vertices = self.initialize_vertecies(graph, source, sink)
+        edges = self.initialize_edges(vertices, capacities)
 
-        vertices_as_objects = {}
+        return vertices.values(), edges
+
+    def initialize_edges(self, vertices_as_objects, capacities):
         edges_as_objects = []
+
+        for _from, to, capacity in capacities:
+            edge = Edge(
+                vertices_as_objects.get(_from),
+                vertices_as_objects.get(to),
+                capacity,
+                growth_scale=self.growth_scale,
+            )
+            edges_as_objects.append(edge)
+
+        return edges_as_objects
+
+    def initialize_vertecies(self, graph, source, sink):
+        vertices_as_objects = {}
 
         for dot, id in enumerate(graph.vertices):
             x, y, _ = graph._layout[id]
@@ -81,16 +77,26 @@ class FlowNetwork(VMobject):
 
             vertices_as_objects.update({id: vertex})
 
-        for _from, to, capacity in capacities:
-            edge = Edge(
-                vertices_as_objects.get(_from),
-                vertices_as_objects.get(to),
-                capacity,
-                growth_scale=self.growth_scale,
-            )
-            edges_as_objects.append(edge)
+        return vertices_as_objects
 
-        return vertices_as_objects.values(), edges_as_objects
+    def get_graph_for_layout(self, vertices, edges, layout_scale, layout, layers):
+        partitions = self.get_partitions(layers)
+        if partitions != []:
+            return Graph(
+                vertices,
+                edges,
+                layout_scale=layout_scale,
+                layout="partite",
+                partitions=partitions,
+            )
+        else:
+            return Graph(
+                vertices,
+                edges,
+                layout_scale=layout_scale,
+                layout=layout,
+                layout_config={"seed": 100},
+            )
 
     # helper method, if you want to create a partite graph and use layers to display it
     def get_partitions(self, layers):
@@ -123,3 +129,67 @@ class FlowNetwork(VMobject):
             active_edges.extend(edge.get_active_edges())
 
         return active_edges
+
+    def show_residual_graph(self, scene: Scene, path_to_draw, text_helper):
+        blur = Rectangle(
+            width=200,
+            height=200,
+            fill_opacity=0.9,
+            fill_color=WHITE,
+        ).set_z_index(20)
+        scene.play(FadeIn(blur))
+
+        edge_config = {
+            "stroke_width": 2,
+            "tip_config": {
+                "tip_length": 0.20,
+                "tip_width": 0.18,
+            },
+            "color": GREY,
+        }
+
+        di_graph = (
+            DiGraph(
+                self.primitive_verticies,
+                self.get_active_edges(),
+                edge_config=edge_config,
+                layout=self.get_layout_dict(),
+            )
+            .set_z_index(24)
+            .set_color(GREY)
+        )
+        scene.play(FadeIn(di_graph))
+        scene.wait(1.5, frozen_frame=False)
+
+        shown_path = self.highlight_path_in_residual_graph(
+            scene, path_to_draw, di_graph
+        )
+
+        text_helper.play_tex_animation_for_residual_graph_after()
+
+        scene.play(Uncreate(VGroup(di_graph, shown_path)))
+        scene.play(FadeOut(blur))
+
+    def highlight_path_in_residual_graph(self, scene, path, di_graph):
+        group = VGroup()
+        for vertex, edge in path:
+            old_edge = di_graph._remove_edge(
+                (
+                    edge.get_other_vertex_from_id(vertex).id,
+                    edge.get_vertex_from_id(vertex).id,
+                )
+            )
+            line = (
+                Line(
+                    old_edge.get_start(),
+                    old_edge.get_end(),
+                )
+                .add_tip(
+                    tip_length=0.20, tip_width=0.18, tip_shape=ArrowTriangleFilledTip
+                )
+                .set_color(BLACK)
+                .set_z_index(26)
+            )
+            scene.play(Create(line))
+            group.add(line)
+        return group

@@ -194,7 +194,6 @@ pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode
 
-*.mp4
 *.svg
 media
 .DS_Store
