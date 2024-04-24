@@ -6,6 +6,7 @@ class TextHelper:
         self.scale = scale
         self.show_text = show_text
         self.graph = graph
+        self.tex = Tex()
 
     def create_and_align_tex(self, text: str):
         tex = Tex(text, color=BLACK)
@@ -14,12 +15,10 @@ class TextHelper:
 
         return tex
 
-    def play_tex_animation_for_path(
-        self, ford_fulkerson, path, bottleneck, scene: Scene
-    ):
+    def play_tex_animation_for_path(self, path, bottleneck, scene: Scene):
         if not self.show_text:
             return
-        scene.play(FadeOut(ford_fulkerson.tex))
+        scene.play(FadeOut(self.tex))
 
         tex_path = ""
         for vertex, edge in path:
@@ -35,34 +34,32 @@ class TextHelper:
             f"Tilføj {int(bottleneck)} enheder strømning til stien {tex_path}"
         )
 
-        ford_fulkerson.tex = newTex
-        scene.play(FadeIn(ford_fulkerson.tex))
+        self.tex = newTex
+        scene.play(FadeIn(self.tex))
         scene.wait(2, frozen_frame=False)
 
-    def play_tex_animation_for_residual_graph_before(
-        self, ford_fulkerson, scene: Scene
-    ):
+    def play_tex_animation_for_residual_graph_before(self, scene: Scene):
         if not self.show_text:
             return
-        scene.play(FadeOut(ford_fulkerson.tex))
+        scene.play(FadeOut(self.tex))
 
         newTex = self.create_and_align_tex(
             "Find en forbedrende sti i restgrafen"
         ).set_z_index(28)
-        ford_fulkerson.tex = newTex
-        scene.play(FadeIn(ford_fulkerson.tex))
+        self.tex = newTex
+        scene.play(FadeIn(self.tex))
         scene.wait(2, frozen_frame=False)
 
-    def play_tex_animation_for_residual_graph_after(self, ford_fulkerson, scene: Scene):
+    def play_tex_animation_for_residual_graph_after(self, scene: Scene):
         if not self.show_text:
             return
-        scene.play(FadeOut(ford_fulkerson.tex))
+        scene.play(FadeOut(self.tex))
 
         newTex = self.create_and_align_tex("En forbedrende sti er fundet").set_z_index(
             28
         )
-        ford_fulkerson.tex = newTex
-        scene.play(FadeIn(ford_fulkerson.tex))
+        self.tex = newTex
+        scene.play(FadeIn(self.tex))
         scene.wait(2, frozen_frame=False)
 
     def play_initial_tex_animation(self, scene: Scene):
@@ -73,8 +70,8 @@ class TextHelper:
         scene.wait(2, frozen_frame=False)
         scene.play(FadeOut(tex))
 
-    def play_final_tex_animation(self, ford_fulkerson, scene: Scene, max_flow):
-        scene.play(FadeOut(ford_fulkerson.tex))
+    def play_final_tex_animation(self, scene: Scene, max_flow):
+        scene.play(FadeOut(self.tex))
 
         tex = self.create_and_align_tex(
             f"Strømningsnetværkets maksimal strømningværdi = {int(max_flow)}"

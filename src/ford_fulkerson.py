@@ -6,7 +6,6 @@ from src.tex import TextHelper
 class FordFulkerson:
     def __init__(self, graph, scale=2, show_text=True):
         self.graph = graph
-        self.tex = Tex()
         self.max_flow = 0
         self.path = {}
         self.text_helper = TextHelper(graph, scale, show_text=show_text)
@@ -77,7 +76,7 @@ class FordFulkerson:
             while self.find_path_DFS(self.graph.source, self.graph.sink):
                 self.max_flow += self.find_max_helper(scene)
 
-        self.text_helper.play_final_tex_animation(self, scene, int(self.max_flow))
+        self.text_helper.play_final_tex_animation(scene, int(self.max_flow))
 
     def find_max_helper(self, scene):
         bottleneck = 9223372036854775807
@@ -105,13 +104,11 @@ class FordFulkerson:
                 current_vertex
             )
 
-        self.text_helper.play_tex_animation_for_residual_graph_before(self, scene)
+        self.text_helper.play_tex_animation_for_residual_graph_before(scene)
 
-        self.graph.show_residual_graph(self, scene, path_to_draw)
+        self.graph.show_residual_graph(scene, path_to_draw, self.text_helper)
 
-        self.text_helper.play_tex_animation_for_path(
-            self, path_to_draw, bottleneck, scene
-        )
+        self.text_helper.play_tex_animation_for_path(path_to_draw, bottleneck, scene)
 
         for vertex, edge in path_to_draw:
             edge.add_current_flow_towards(vertex, bottleneck, scene)

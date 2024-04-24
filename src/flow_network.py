@@ -64,7 +64,7 @@ class FlowNetwork(VMobject):
     def initialize_vertecies(self, graph, source, sink):
         vertices_as_objects = {}
 
-        for _, id in enumerate(graph.vertices):
+        for dot, id in enumerate(graph.vertices):
             x, y, _ = graph._layout[id]
 
             vertex = Vertex(id, x, y, self.growth_scale)
@@ -130,7 +130,7 @@ class FlowNetwork(VMobject):
 
         return active_edges
 
-    def show_residual_graph(self, ford_fulkerson, scene: Scene, path_to_draw):
+    def show_residual_graph(self, scene: Scene, path_to_draw, text_helper):
         blur = Rectangle(
             width=200,
             height=200,
@@ -165,9 +165,7 @@ class FlowNetwork(VMobject):
             scene, path_to_draw, di_graph
         )
 
-        ford_fulkerson.text_helper.play_tex_animation_for_residual_graph_after(
-            ford_fulkerson, scene
-        )
+        text_helper.play_tex_animation_for_residual_graph_after(scene)
 
         scene.play(Uncreate(VGroup(di_graph, shown_path)))
         scene.play(FadeOut(blur))
