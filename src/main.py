@@ -9,7 +9,6 @@ class SedgewickWayne(Scene):
     def construct(self):
         vertices, edges, capacities, source, sink = V.sedgewick_wayne()
         layers = [1, 2, 2, 1]
-        # scale = 4
 
         graph = FlowNetwork(
             vertices,
@@ -23,8 +22,6 @@ class SedgewickWayne(Scene):
         )
 
         self.add(graph)
-        # self.camera.frame_width = 3.5 * scale
-        # self.camera.resize_frame_shape(0)
         ford_fulkerson = FordFulkerson(graph)
         ford_fulkerson.find_max_flow(self)
 
