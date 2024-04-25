@@ -1,0 +1,47 @@
+@startuml packages
+set namespaceSeparator none
+package "src" as src {
+}
+package "src.arrow" as src.arrow {
+}
+package "src.colors" as src.colors {
+}
+package "src.edge" as src.edge {
+}
+package "src.flow_network" as src.flow_network {
+}
+package "src.flow_object" as src.flow_object {
+}
+package "src.ford_fulkerson" as src.ford_fulkerson {
+}
+package "src.main" as src.main {
+}
+package "src.tex" as src.tex {
+}
+package "src.updaters" as src.updaters {
+}
+package "src.utils" as src.utils {
+}
+package "src.vertex" as src.vertex {
+}
+package "src.vertices_examples" as src.vertices_examples {
+}
+src.edge --> src.arrow
+src.edge --> src.flow_object
+src.edge --> src.utils
+src.flow_network --> src.edge
+src.flow_network --> src.utils
+src.flow_network --> src.vertex
+src.flow_object --> src.arrow
+src.flow_object --> src.colors
+src.flow_object --> src.updaters
+src.flow_object --> src.utils
+src.ford_fulkerson --> src.tex
+src.main --> src.flow_network
+src.main --> src.ford_fulkerson
+src.main --> src.utils
+src.main --> src.vertices_examples
+src.updaters --> src.colors
+src.vertex --> src.colors
+src.vertex --> src.utils
+@enduml

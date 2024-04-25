@@ -1,0 +1,185 @@
+@startuml classes
+skinparam classFontColor automatic
+skinparam classHeaderBackgroundColor #444
+set namespaceSeparator none
+
+class "VerticesExamples" as src.vertices_examples.VerticesExamples {
+  bigger_partite_graph()
+  clrs()
+  jungnickel()
+  kleinberg_tardos()
+  kleinberg_tardos_extreme()
+  kleinberg_tardos_small()
+  kleinberg_tardos_x_thore()
+  sedgewick_wayne()
+  silkes_big_graph()
+  simple_graph()
+  wiki_example()
+}
+
+class "WikiExample" as src.main.WikiExample #header:CornFlowerBlue {
+  construct()
+}
+class "ThoresExampleBFS" as src.main.ThoresExampleBFS #header:CornFlowerBlue {
+  construct()
+}
+class "ThoresExampleDFS" as src.main.ThoresExampleDFS #header:CornFlowerBlue {
+  construct()
+}
+class "SedgewickWayne" as src.main.SedgewickWayne #header:CornFlowerBlue {
+  construct()
+}
+class "BigGraph" as src.main.BigGraph #header:CornFlowerBlue {
+  construct()
+}
+
+class "Dot" as manim.mobject.geometry.arc.Dot #header:DarkGreen {}
+class "Edge" as Edge {
+  arrow : EdgeArrow
+  current_flow : int
+  end_vertex : Vertex
+  start_vertex : Vertex
+  flow_object : FlowObject
+  growth_scale : GrowthScale
+  max_capacity : int
+  add_current_flow_towards(vertex, new_flow, scene, run_time)
+  draw()
+  get_active_edges()
+  get_direction()
+  get_drawn_edge_size(capacity)
+  get_flow_coords()
+  get_new_arrow_coords()
+  get_offset_points(offset, orthogonal_vector)
+  get_other_vertex(vertex)
+  get_other_vertex_from_id(vertex_id)
+  get_residual_capacity_to(vertex)
+  get_vector_values()
+  get_vertex_from_id(vertex_id)
+}
+class "EdgeArrow" as src.arrow.EdgeArrow {
+}
+class "FlowNetwork" as src.flow_network.FlowNetwork {
+  edges : list
+  growth_scale
+  primitive_edges
+  primitive_verticies
+  sink
+  source
+  vertices
+  draw_vertices_and_edges()
+  get_active_edges()
+  get_graph_for_layout(vertices, edges, layout_scale, layout, layers)
+  get_layout_dict()
+  get_min_vertex_capacity(vertices)
+  get_partitions(layers)
+  highlight_path_in_residual_graph(scene, path, di_graph)
+  initialize_edges(vertices_as_objects, capacities)
+  initialize_edges_and_verticies(vertices, edges, source, sink, capacities, graph)
+  initialize_vertecies(graph, source, sink)
+  show_residual_graph(scene: Scene, path_to_draw, text_helper)
+}
+class "FlowObject" as src.flow_object.FlowObject {
+  arrow
+  growth_scale
+  polygons : VGroup
+  add_polygons(direction, size)
+  angle_from_vector(vector)
+  get_drawn_flow_size(flow)
+}
+class "FordFulkerson" as src.ford_fulkerson.FordFulkerson {
+  graph : FlowNetwork
+  max_flow : int
+  path : dict
+  reverse : bool
+  scene : Scene
+  text_helper : TextHelper
+  DFS_helper(current_vertex, sink, marked_vertices)
+  find_max_flow(BSF)
+  find_max_helper()
+  find_path_BFS(source, sink)
+  find_path_DFS(source, sink)
+}
+enum "GrowthScale" as src.utils.GrowthScale {
+  LINEAR
+  SQRT
+  LOG2
+}
+class "Scene" as manim.scene.scene.Scene #header:DarkGreen {
+
+}
+class "Tex" as manim.mobject.text.tex_mobject.Tex #header:DarkGreen {
+}
+class "TextHelper" as src.tex.TextHelper {
+  graph : FlowNetwork
+  scale : int
+  scene : Scene
+  show_text : bool
+  tex : Tex
+  create_and_align_tex(text)
+  play_final_tex_animation(max_flow)
+  play_initial_tex_animation()
+  play_tex_animation_for_path(path, bottleneck)
+  play_tex_animation_for_residual_graph_after()
+  play_tex_animation_for_residual_graph_before()
+}
+
+class "Vertex" as src.vertex.Vertex {
+  adjacent_edges : list
+  current_flow : int
+  flow_object : NoneType
+  foregroundDot : NoneType
+  growth_scale
+  id
+  ingoing_capacity : int
+  is_sink : bool
+  is_source : bool
+  outgoing_capacity : int
+  x_coord
+  y_coord
+  add_adjacent_edge(edge)
+  add_to_current_flow(new_flow)
+  add_to_max_ingoing_capacity(capacity)
+  add_to_max_outgoing_capacity(capacity)
+  draw(scale)
+  get_drawn_dot_size()
+  get_drawn_label_size(scale)
+  get_max_drawn_capacity()
+  get_max_opacity()
+  get_opacity(flow)
+  set_sink()
+  set_source()
+  to_np_array()
+}
+
+class "VMobject" as VMobject #header:DarkGreen {}
+class "Arrow" as Arrow #header:DarkGreen {}
+
+Edge "1..*" -- "2  " src.vertex.Vertex
+Edge --|> VMobject
+src.vertex.Vertex --|> VMobject
+src.arrow.EdgeArrow --|> Arrow
+src.main.BigGraph --|> manim.scene.scene.Scene
+src.main.SedgewickWayne --|> manim.scene.scene.Scene
+src.main.ThoresExampleBFS --|> manim.scene.scene.Scene
+src.main.ThoresExampleDFS --|> manim.scene.scene.Scene
+src.main.WikiExample --|> manim.scene.scene.Scene
+manim.mobject.geometry.arc.Dot --* src.vertex.Vertex : flow_object
+manim.mobject.text.tex_mobject.Tex --* src.tex.TextHelper : tex
+src.arrow.EdgeArrow --* Edge : arrow
+src.arrow.EdgeArrow --* src.flow_object.FlowObject : arrow
+src.flow_object.FlowObject --* Edge : flow_object
+src.tex.TextHelper --* src.ford_fulkerson.FordFulkerson : text_helper
+manim.scene.scene.Scene --o src.ford_fulkerson.FordFulkerson : scene
+manim.scene.scene.Scene --o src.tex.TextHelper : scene
+src.utils.GrowthScale --o src.flow_network.FlowNetwork : growth_scale
+src.utils.GrowthScale --o Edge : growth_scale
+src.utils.GrowthScale --o src.flow_object.FlowObject : growth_scale
+src.utils.GrowthScale --o src.vertex.Vertex : growth_scale
+src.vertex.Vertex --o src.flow_network.FlowNetwork : source
+src.vertex.Vertex --o src.flow_network.FlowNetwork : sink
+src.main.BigGraph -- src.vertices_examples.VerticesExamples
+src.main.SedgewickWayne -- src.vertices_examples.VerticesExamples
+src.main.ThoresExampleBFS -- src.vertices_examples.VerticesExamples
+src.main.ThoresExampleDFS -- src.vertices_examples.VerticesExamples
+src.main.WikiExample -- src.vertices_examples.VerticesExamples
+@enduml
