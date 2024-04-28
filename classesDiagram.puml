@@ -17,23 +17,25 @@ class "VerticesExamples" as VerticesExamples {
   {static} wiki_example()
 }
 
-class "WikiExample" as WikiExample #header:CornFlowerBlue {
+namespace main.py {
+class "WikiExample" as WikiExample {
   construct()
 }
-class "ThoresExampleBFS" as ThoresExampleBFS #header:CornFlowerBlue {
+class "ThoresExampleBFS" as ThoresExampleBFS {
   construct()
 }
-class "ThoresExampleDFS" as ThoresExampleDFS #header:CornFlowerBlue {
+class "ThoresExampleDFS" as ThoresExampleDFS {
   construct()
 }
-class "SedgewickWayne" as SedgewickWayne #header:CornFlowerBlue {
+class "SedgewickWayne" as SedgewickWayne {
   construct()
 }
-class "BigGraph" as BigGraph #header:CornFlowerBlue {
+class "BigGraph" as BigGraph {
   construct()
+}
 }
 
-class "Dot" as Dot #header:DarkGreen {}
+class "Dot" as Dot #header:CornFlowerBlue {}
 class "Edge" as Edge {
   arrow : EdgeArrow
   current_flow : int
@@ -105,10 +107,10 @@ enum "GrowthScale" as GrowthScale {
   SQRT
   LOG2
 }
-class "Scene" as Scene #header:DarkGreen {
+class "Scene" as Scene #header:CornFlowerBlue {
 
 }
-class "Tex" as Tex #header:DarkGreen {
+class "Tex" as Tex #header:CornFlowerBlue {
 }
 class "TextHelper" as TextHelper {
   graph : FlowNetwork
@@ -152,10 +154,10 @@ class "Vertex" as Vertex {
   to_np_array()
 }
 
-class "VMobject" as VMobject #header:DarkGreen {}
-class "Arrow" as Arrow #header:DarkGreen {}
-class "Line" as Line #header:DarkGreen {}
-class "VGroup" as VGroup #header:DarkGreen {}
+class "VMobject" as VMobject #header:CornFlowerBlue {}
+class "Arrow" as Arrow #header:CornFlowerBlue {}
+class "Line" as Line #header:CornFlowerBlue {}
+class "VGroup" as VGroup #header:CornFlowerBlue {}
 
 BigGraph -- VerticesExamples : uses silkes_big_graph >
 SedgewickWayne -- VerticesExamples : uses sedgewick_wayne >
@@ -181,9 +183,9 @@ Line --o Edge : foregroundLine
 Tex --o TextHelper : tex
 Edge "1..*" -- FlowNetwork : edges
 Vertex "1..*" -- FlowNetwork : vertices
-EdgeArrow --* Edge : arrow
-EdgeArrow --* FlowObject : arrow
-FlowObject --* Edge : flow_object
+EdgeArrow --o Edge : arrow
+EdgeArrow --o FlowObject : arrow
+FlowObject --o Edge : flow_object
 TextHelper --o FordFulkerson : text_helper
 FlowNetwork -r-o TextHelper : graph
 Scene --o FordFulkerson : scene
@@ -195,5 +197,9 @@ GrowthScale --o FlowObject : growth_scale
 GrowthScale --o Vertex : growth_scale
 Vertex --o FlowNetwork : source
 Vertex --o FlowNetwork : sink
+
+note as N1
+<size:22> Blue headers = Manim classes </size>
+end note
 
 @enduml

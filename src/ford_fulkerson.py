@@ -1,6 +1,6 @@
 from queue import Queue
 from manim import *
-from src.tex import TextHelper
+from src.text_helper import TextHelper
 
 
 class FordFulkerson:
