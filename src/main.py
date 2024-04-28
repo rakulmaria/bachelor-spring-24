@@ -1,4 +1,5 @@
 from manim import *
+from src.DSF import DSF
 from src.ford_fulkerson import FordFulkerson
 from src.flow_network import FlowNetwork
 from src.vertices_examples import VerticesExamples as V
@@ -115,9 +116,8 @@ class ThoresExampleDFS(Scene):
         self.camera.frame_width = 3.5 * scale
         self.camera.resize_frame_shape(0)
         self.add(graph)
-
-        ford_fulkerson = FordFulkerson(graph, self, scale)
-        ford_fulkerson.find_max_flow(BSF=False)
+        ford_fulkerson = FordFulkerson(graph, self, scale, path_finder=DSF())
+        ford_fulkerson.find_max_flow()
 
 
 class ThoresExampleBFS(Scene):
@@ -141,6 +141,5 @@ class ThoresExampleBFS(Scene):
         self.camera.frame_width = 3.5 * scale
         self.camera.resize_frame_shape(0)
         self.add(graph)
-
-        ford_fulkerson = FordFulkerson(graph, self, scale)
+        ford_fulkerson = FordFulkerson(graph, self, scale=scale)
         ford_fulkerson.find_max_flow()

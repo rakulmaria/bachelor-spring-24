@@ -3,6 +3,8 @@ skinparam classFontColor automatic
 skinparam classHeaderBackgroundColor #444
 set namespaceSeparator none
 
+interface PathFinder
+
 class "VerticesExamples" as VerticesExamples {
   {static} bigger_partite_graph()
   {static} clrs()
@@ -96,12 +98,19 @@ class "FordFulkerson" as FordFulkerson {
   reverse : bool
   scene : Scene
   text_helper : TextHelper
-  DFS_helper(current_vertex, sink, marked_vertices)
-  find_max_flow(BSF)
-  find_max_helper()
-  find_path_BFS(source, sink)
-  find_path_DFS(source, sink)
+  path_finder : PathFinder
+  find_max_flow()
+  augment_path(path)
 }
+
+class "BFS" as BFS {
+  find_path(source, sink, graph_length)
+}
+
+class "DFS" as DFS {
+  find_path(source, sink, graph_length)
+}
+
 enum "GrowthScale" as GrowthScale {
   LINEAR
   SQRT
@@ -176,11 +185,14 @@ Scene <|--  ThoresExampleBFS
 Scene <|--  ThoresExampleDFS
 Scene <|--  WikiExample
 Line <|-- FlowObject
+FordFulkerson o-r- PathFinder : path_finder
+PathFinder <|-- BFS
+PathFinder <|-- DFS
 VGroup --o FlowObject : polygons
-Dot --o Vertex : foregroundDot
-Dot --o Vertex : flow_object
+Dot -o Vertex : foregroundDot
+Dot -o Vertex : flow_object
 Line --o Edge : foregroundLine
-Tex --o TextHelper : tex
+Tex -o TextHelper : tex
 Edge "1..*" -- FlowNetwork : edges
 Vertex "1..*" -- FlowNetwork : vertices
 EdgeArrow --o Edge : arrow
@@ -197,9 +209,5 @@ GrowthScale --o FlowObject : growth_scale
 GrowthScale --o Vertex : growth_scale
 Vertex --o FlowNetwork : source
 Vertex --o FlowNetwork : sink
-
-note as N1
-<size:22> Blue headers = Manim classes </size>
-end note
 
 @enduml
