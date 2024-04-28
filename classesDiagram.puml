@@ -185,7 +185,7 @@ Scene <|--  ThoresExampleBFS
 Scene <|--  ThoresExampleDFS
 Scene <|--  WikiExample
 Line <|-- FlowObject
-FordFulkerson o-r- PathFinder : path_finder
+FordFulkerson o-up- PathFinder : path_finder
 PathFinder <|-- BFS
 PathFinder <|-- DFS
 VGroup --o FlowObject : polygons
@@ -200,7 +200,7 @@ EdgeArrow --o FlowObject : arrow
 FlowObject --o Edge : flow_object
 TextHelper --o FordFulkerson : text_helper
 FlowNetwork --o TextHelper : graph
-Scene --o FordFulkerson : scene
+Scene -l-o FordFulkerson : scene
 FlowNetwork --o FordFulkerson : graph
 Scene --o TextHelper : scene
 GrowthScale --o FlowNetwork : growth_scale
