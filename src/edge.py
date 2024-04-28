@@ -93,7 +93,7 @@ class Edge(VMobject):
             stroke_width=(self.get_drawn_edge_size(self.max_capacity) + 1.6),
         )
 
-        foreground_line = (
+        self.foreground_line = (
             Line(
                 start=self.start_vertex.to_np_array(),
                 end=self.end_vertex.to_np_array(),
@@ -107,7 +107,7 @@ class Edge(VMobject):
             self.start_vertex.to_np_array(), self.end_vertex.to_np_array()
         )
 
-        self.add(background_line, foreground_line, self.arrow)
+        self.add(background_line, self.foreground_line, self.arrow)
 
     def get_direction(self):
         x_start = self.start_vertex.x_coord
