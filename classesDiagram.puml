@@ -189,17 +189,17 @@ FordFulkerson o-r- PathFinder : path_finder
 PathFinder <|-- BFS
 PathFinder <|-- DFS
 VGroup --o FlowObject : polygons
-Dot -o Vertex : foregroundDot
-Dot -o Vertex : flow_object
+Dot --o Vertex : foregroundDot
+Dot --o Vertex : flow_object
 Line --o Edge : foregroundLine
-Tex -o TextHelper : tex
+Tex --o TextHelper : tex
 Edge "1..*" -- FlowNetwork : edges
 Vertex "1..*" -- FlowNetwork : vertices
 EdgeArrow --o Edge : arrow
 EdgeArrow --o FlowObject : arrow
 FlowObject --o Edge : flow_object
 TextHelper --o FordFulkerson : text_helper
-FlowNetwork -r-o TextHelper : graph
+FlowNetwork --o TextHelper : graph
 Scene --o FordFulkerson : scene
 FlowNetwork --o FordFulkerson : graph
 Scene --o TextHelper : scene
