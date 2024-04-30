@@ -36,9 +36,9 @@ class Edge(VMobject):
         start_vertex.add_to_max_outgoing_capacity(max_capacity)
         end_vertex.add_to_max_ingoing_capacity(max_capacity)
 
-    def add_current_flow_towards(self, vertex, new_flow, scene: Scene, run_time=2):
-        # if vertex is start_vertex, we found another augmenting path and want to 'undo' a previous mistake
-        if vertex is self.start_vertex.id:
+    def add_current_flow_towards(self, vertex_id, new_flow, scene: Scene, run_time=2):
+        # if vertex is start_vertex, that means we want to 'undo' a previous choice
+        if vertex_id is self.start_vertex.id:
             new_flow = -1 * new_flow
 
         vertex_animation = self.start_vertex.add_to_current_flow(new_flow)
