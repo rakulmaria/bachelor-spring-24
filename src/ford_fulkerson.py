@@ -1,10 +1,18 @@
 from src.BSF import BSF
 from manim import *
+from src.flow_network import FlowNetwork
 from src.text_helper import TextHelper
 
 
 class FordFulkerson:
-    def __init__(self, graph, scene: Scene, scale=2, show_text=True, path_finder=BSF()):
+    def __init__(
+        self,
+        graph: FlowNetwork,
+        scene: Scene,
+        scale=2,
+        show_text=True,
+        path_finder=BSF(),
+    ):
         self.graph = graph
         self.scene = scene
         self.max_flow = 0

@@ -45,7 +45,7 @@ class WikiExample(Scene):
             layout_scale=scale,
         )
 
-        self.camera.frame_width = 3.5 * scale
+        self.camera.frame_width = 4.5 * scale
         self.camera.resize_frame_shape(0)
         self.add(graph)
 
