@@ -36,7 +36,7 @@ class Edge(VMobject):
         start_vertex.add_to_max_outgoing_capacity(max_capacity)
         end_vertex.add_to_max_ingoing_capacity(max_capacity)
 
-    def add_current_flow_towards(self, vertex_id, new_flow, scene: Scene, run_time=2):
+    def add_current_flow_towards(self, vertex_id, new_flow, scene: Scene):
         # if vertex is start_vertex, that means we want to 'undo' a previous choice
         if vertex_id is self.start_vertex.id:
             new_flow = -1 * new_flow
@@ -72,7 +72,6 @@ class Edge(VMobject):
             edge_animation,
             vertex_animation,
             arrow_animation,
-            run_time=run_time,
         )
 
         # edge case for end vertex. end by playing the animation by coloring the sink vertex blue
