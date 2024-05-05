@@ -79,8 +79,8 @@ class "FlowNetwork" as FlowNetwork {
   get_partitions(layers)
   highlight_path_in_residual_graph(scene, path, di_graph)
   initialize_edges(vertices_as_objects, capacities)
-  initialize_edges_and_verticies(vertices, edges, source, sink, capacities, graph)
-  initialize_vertecies(graph, source, sink)
+  initialize_vertices_and_edges(vertices, edges, source, sink, capacities, graph)
+  initialize_vertices(graph, source, sink)
   show_residual_graph(scene, path_to_draw, text_helper)
 }
 class "FlowObject" as FlowObject {
