@@ -2,7 +2,7 @@ from queue import Queue
 from src.path_finder import PathFinder
 
 
-class BSF(PathFinder):
+class BFS(PathFinder):
     def find_path(self, source, sink, graph_length):
         marked_vertices = {}
         queue = Queue(maxsize=graph_length)

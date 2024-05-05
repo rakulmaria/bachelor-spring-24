@@ -1,4 +1,4 @@
-from src.BSF import BSF
+from src.BFS import BFS
 from manim import *
 from src.flow_network import FlowNetwork
 from src.text_helper import TextHelper
@@ -11,7 +11,7 @@ class FordFulkerson:
         scene: Scene,
         scale=2,
         show_text=True,
-        path_finder=BSF(),
+        path_finder=BFS(),
     ):
         self.graph = graph
         self.scene = scene

@@ -1,7 +1,7 @@
 from src.path_finder import PathFinder
 
 
-class DSF(PathFinder):
+class DFS(PathFinder):
     def find_path(self, source, sink, graph_length=0):
         marked_vertices = {}
         self.reverse = True
