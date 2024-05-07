@@ -24,7 +24,7 @@ class Vertex(VMobject):
         self.is_sink = is_sink
         self.is_source = is_source
         self.flow_object = None
-        self.foregroundDot = None
+        self.foreground_dot = None
 
         super().__init__()
 
@@ -37,14 +37,14 @@ class Vertex(VMobject):
         return (get_drawn_size(self.growth_scale, scale) + 0.5) * 0.2
 
     def draw(self, scale=1):
-        foregroundDot = (
+        self.foreground_dot = (
             Dot(self.to_np_array())
             .scale(self.get_drawn_dot_size())
             .set_fill(WHITE)
             .set_z_index(10)
         )
 
-        backgroundDot = (
+        background_dot = (
             Dot(self.to_np_array())
             .scale(self.get_drawn_dot_size() + 0.1)
             .set_fill(BLACK)
@@ -58,7 +58,7 @@ class Vertex(VMobject):
             .scale(self.get_drawn_label_size(scale))
         )
 
-        self.add(backgroundDot, foregroundDot, label)
+        self.add(background_dot, self.foreground_dot, label)
 
     def to_np_array(self):
         return np.array([self.x_coord, self.y_coord, 0])

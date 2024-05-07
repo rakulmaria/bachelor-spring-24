@@ -24,7 +24,7 @@ class FlowNetwork(VMobject):
         self.primitive_edges = edges
 
         graph = self.get_graph_for_layout(vertices, edges, layout_scale, layout, layers)
-        self.vertices, self.edges = self.initialize_edges_and_verticies(
+        self.vertices, self.edges = self.initialize_vertices_and_edges(
             vertices, edges, source, sink, capacities, graph
         )
 
@@ -39,10 +39,10 @@ class FlowNetwork(VMobject):
             self.add(edge)
             edge.draw()
 
-    def initialize_edges_and_verticies(
+    def initialize_vertices_and_edges(
         self, vertices, edges, source, sink, capacities, graph
     ):
-        vertices = self.initialize_vertecies(graph, source, sink)
+        vertices = self.initialize_vertices(graph, source, sink)
         edges = self.initialize_edges(vertices, capacities)
 
         return vertices.values(), edges
@@ -61,10 +61,10 @@ class FlowNetwork(VMobject):
 
         return edges_as_objects
 
-    def initialize_vertecies(self, graph, source, sink):
+    def initialize_vertices(self, graph, source, sink):
         vertices_as_objects = {}
 
-        for dot, id in enumerate(graph.vertices):
+        for _, id in enumerate(graph.vertices):
             x, y, _ = graph._layout[id]
 
             vertex = Vertex(id, x, y, self.growth_scale)

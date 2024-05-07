@@ -1,0 +1,118 @@
+@startuml classes
+skinparam classFontColor automatic
+skinparam classHeaderBackgroundColor #444
+set namespaceSeparator none
+
+interface PathFinder
+
+class "VerticesExamples" as VerticesExamples {
+  {static} sedgewick_wayne()
+}
+
+namespace main.py {
+class "SedgewickWayne" as SedgewickWayne {
+  construct()
+}
+}
+
+class "Dot" as Dot #header:CornFlowerBlue {}
+class "Edge" as Edge {
+  current_flow : int
+  max_capacity : int
+  start_vertex : Vertex
+  end_vertex : Vertex
+  add_current_flow_towards()
+  draw()
+  get_residual_capacity_to()
+}
+class "EdgeArrow" as EdgeArrow {
+}
+class "FlowNetwork" as FlowNetwork {
+  sink : Vertex
+  source : Vertex
+  edges : Edge list
+  vertices : Vertex list
+  draw_vertices_and_edges()
+  get_graph_for_layout()
+  highlight_path_in_residual_graph()
+  show_residual_graph()
+}
+class "FlowObject" as FlowObject {
+  arrow : EdgeArrow
+  add_polygons(direction, size)
+}
+class "FordFulkerson" as FordFulkerson {
+  graph : FlowNetwork
+  max_flow : int
+  path : dict
+  scene : Scene
+  text_helper : TextHelper
+  path_finder : PathFinder
+  find_max_flow()
+  augment_path()
+}
+
+class "BFS" as BFS {
+  find_path()
+}
+
+class "DFS" as DFS {
+  find_path()
+}
+
+class "Scene" as Scene #header:CornFlowerBlue {
+
+}
+class "Tex" as Tex #header:CornFlowerBlue {
+}
+class "TextHelper" as TextHelper {
+  graph : FlowNetwork
+  scene : Scene
+  tex : Tex
+  play_final_tex_animation()
+  play_initial_tex_animation()
+  play_tex_animation_for_path()
+}
+
+class "Vertex" as Vertex {
+  adjacent_edges : Edge list
+  current_flow : int
+  id : int
+  is_sink : bool
+  is_source : bool
+  add_to_current_flow()
+  draw()
+  get_max_drawn_capacity()
+}
+
+class "VMobject" as VMobject #header:CornFlowerBlue {}
+class "Arrow" as Arrow #header:CornFlowerBlue {}
+class "Line" as Line #header:CornFlowerBlue {}
+class "VGroup" as VGroup #header:CornFlowerBlue {}
+
+SedgewickWayne -- VerticesExamples 
+Edge "  1..*" --l- "2    " Vertex
+VMobject <|-- Edge
+VMobject <|-- Vertex
+Arrow <|-- EdgeArrow
+Scene <|--  SedgewickWayne
+Line <|-- FlowObject
+FordFulkerson o-- PathFinder
+PathFinder <|-- BFS
+PathFinder <|-- DFS
+VGroup --o FlowObject
+Dot --o Vertex 
+Line --o Edge
+Tex --o TextHelper
+Edge "1..*" -- FlowNetwork
+Vertex "2..*" -- FlowNetwork
+EdgeArrow --o Edge 
+EdgeArrow -l-o FlowObject 
+FlowObject -l-o Edge 
+TextHelper --o FordFulkerson
+FlowNetwork --o TextHelper 
+Scene -l-o FordFulkerson
+FlowNetwork -l-o FordFulkerson 
+Scene --o TextHelper
+
+@enduml

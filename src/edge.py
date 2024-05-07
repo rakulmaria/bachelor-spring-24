@@ -36,9 +36,9 @@ class Edge(VMobject):
         start_vertex.add_to_max_outgoing_capacity(max_capacity)
         end_vertex.add_to_max_ingoing_capacity(max_capacity)
 
-    def add_current_flow_towards(self, vertex, new_flow, scene: Scene, run_time=2):
-        # if vertex is start_vertex, we found another augmenting path and want to 'undo' a previous mistake
-        if vertex is self.start_vertex.id:
+    def add_current_flow_towards(self, vertex_id, new_flow, scene: Scene):
+        # if vertex is start_vertex, that means we want to 'undo' a previous choice
+        if vertex_id is self.start_vertex.id:
             new_flow = -1 * new_flow
 
         vertex_animation = self.start_vertex.add_to_current_flow(new_flow)
@@ -72,7 +72,6 @@ class Edge(VMobject):
             edge_animation,
             vertex_animation,
             arrow_animation,
-            run_time=run_time,
         )
 
         # edge case for end vertex. end by playing the animation by coloring the sink vertex blue
@@ -93,7 +92,7 @@ class Edge(VMobject):
             stroke_width=(self.get_drawn_edge_size(self.max_capacity) + 1.6),
         )
 
-        foreground_line = (
+        self.foreground_line = (
             Line(
                 start=self.start_vertex.to_np_array(),
                 end=self.end_vertex.to_np_array(),
@@ -107,7 +106,7 @@ class Edge(VMobject):
             self.start_vertex.to_np_array(), self.end_vertex.to_np_array()
         )
 
-        self.add(background_line, foreground_line, self.arrow)
+        self.add(background_line, self.foreground_line, self.arrow)
 
     def get_direction(self):
         x_start = self.start_vertex.x_coord
