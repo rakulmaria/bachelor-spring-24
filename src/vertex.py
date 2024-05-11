@@ -81,8 +81,8 @@ class Vertex(VMobject):
     def get_max_drawn_capacity(self):
         return max(self.outgoing_capacity, self.ingoing_capacity)
 
-    def get_opacity(self, flow):
-        return flow / self.get_max_opacity()
+    def get_opacity(self):
+        return self.current_flow / self.get_max_opacity()
 
     def get_max_opacity(self):
         # edge case for source and sink vertices
@@ -105,7 +105,7 @@ class Vertex(VMobject):
             Dot(self.to_np_array())
             .scale(self.get_drawn_dot_size())
             .set_fill(colors.light_blue)
-            .set_opacity(self.get_opacity(self.current_flow))
+            .set_opacity(self.get_opacity())
             .set_z_index(12)
         )
 

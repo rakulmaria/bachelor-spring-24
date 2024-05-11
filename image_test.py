@@ -3,29 +3,21 @@ import subprocess
 import pytest
 import shutil
 
-# Directory paths
 test_directory = "./test/"
 image_directory = "./media/images/"
 test_image_directory = "./test/test_images/"
 difference_image_directory = "test/image_difference/"
-
-# Manim command template
 manim_command_template = "manim -s {} {}"
-
-# Image comparison command template
 compare_command_template = "compare -metric AE {} {} {}"
 
 
 def run_manim(file_path):
-    # Extracting filename without extension
     filename = os.path.splitext(os.path.basename(file_path))[0]
     capitalized_filename = filename[0].upper() + filename[1:]
 
-    # Running manim command
     manim_command = manim_command_template.format(file_path, filename)
     subprocess.run(manim_command, shell=True)
 
-    # Running image comparison command
     image_path_manim = os.path.join(
         image_directory, filename, f"{capitalized_filename}_ManimCE_v0.18.0.post0.png"
     )
@@ -46,9 +38,6 @@ def run_manim(file_path):
         stderr=subprocess.PIPE,
         text=True,
     )
-    print("------------------")
-    print(result.stderr)
-    print("------------------")
     return result.stderr
 
 
@@ -57,7 +46,6 @@ def run_manim(file_path):
     [f for f in os.listdir(test_directory) if f.endswith(".py") and f != "__init__.py"],
 )
 def test_images(filename):
-    # Deleting the media/images directory before testing
     path_to_pic = os.path.join(image_directory, filename[:-3])
     if os.path.exists(path_to_pic):
         shutil.rmtree(path_to_pic)
