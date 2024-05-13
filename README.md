@@ -2,11 +2,7 @@
 
 ## Visualisering af en algoritme
 
-Dette bachelorprojekt er udarbejdet i foråret 2024 ved IT Universitetet i København af Silke Sofie Holme Bonnén og Rakul Maria Hjalmarsdóttir Tórgarð. Vejleder igennem projektet var Thore Husfeldt.
-
-Kodebasen ligger til grund for at kunne generere Manim animationer af Ford–Fulkerson på forskellige grafer. Kodebasen knytter algoritmen sammen med Manim objekter og animationer, således at algoritmens virkemåde vises skridt for skridt.
-
-Vi takker for samarbejdet.
+Dette bachelorprojekt er udarbejdet i foråret 2024 ved IT Universitetet i København af Silke Sofie Holme Bonnén og Rakul Maria Hjalmarsdóttir Tórgarð. Vejleder igennem projektet var Thore Husfeldt. Kodebasen ligger til grund for at kunne generere Manim animationer af Ford–Fulkerson på forskellige grafer. Kodebasen knytter algoritmen sammen med Manim objekter og animationer, således at algoritmens virkemåde vises skridt for skridt.
 
 ### Opsætning
 
