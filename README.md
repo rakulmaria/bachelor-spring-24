@@ -1,4 +1,4 @@
-# bachelor-spring-24
+# Bachelorprojekt Forår 2024 - ssbo & rakt
 
 ## Visualisering af en algoritme
 
