@@ -159,7 +159,9 @@ class Ex(Scene):
         x_end = 4
         y_end = -1
         width = 100
-        line = Line([x_start, y_start, 0], [x_end, y_end, 0], stroke_width=width)
+        line = Line(
+            [x_start, y_start, 0], [x_end, y_end, 0], stroke_width=width, color=BLUE
+        )
         orthogonal_vector = np.array([-(y_end - y_start), (x_end - x_start), 0])
         (st, en) = get_offset_points(
             width / 100 / 2, orthogonal_vector, x_start, x_end, y_start, y_end
@@ -169,33 +171,43 @@ class Ex(Scene):
             -(width / 100 / 2), orthogonal_vector, x_start, x_end, y_start, y_end
         )
 
-        dot = Dot(st, color=RED)
-        dot2 = Dot(en, color=BLUE)
-        self.add(dot2)
-        self.add(dot)
-        dot3 = Dot(st_1, color=GREEN)
-        dot4 = Dot(en_1, color=PINK)
-        self.add(dot3)
-        self.add(dot4)
         self.add(line)
 
-        # ---- find point between -----
-        t = random.uniform(0, 1)
-        x = st_1 + t * (st - st_1)
-        t2 = random.uniform(0, 1)
-        x2 = en_1 + t2 * (en - en_1)
-        path_line = Line(x, x2, color=PINK)
-        self.add(path_line)
-
-        d1 = Dot().set_color(ORANGE)
-        self.add(d1, path_line)
-        ani = MoveAlongPath(
-            d1,
-            path_line,
-            rate_func=rate_functions.ease_in_out_bounce,
-            run_time=6,
+        d_start = (
+            Dot([x_start, y_start, 0], color=BLUE).scale(width / 14).set_z_index(10)
         )
-        self.play(ani)
+        self.add(d_start)
+        d_end = Dot([x_end, y_end, 0], color=BLUE).scale(width / 14).set_z_index(10)
+        self.add(d_end)
+
+        # ---- find point between -----
+        ratefunctions = [
+            rate_functions.double_smooth,
+            rate_functions.linear,
+            rate_functions.ease_in_sine,
+            rate_functions.ease_out_quad,
+            rate_functions.ease_in_quint,
+            rate_functions.ease_in_cubic,
+            rate_functions.ease_in_out_circ,
+        ]
+        for i in range(50):
+            t = random.uniform(0.05, 0.95)
+            x = st_1 + t * (st - st_1)
+            t2 = random.uniform(0, 1)
+            x2 = en_1 + t2 * (en - en_1)
+            path_line = Line(x, x2)
+
+            d1 = Dot().set_color(WHITE).scale(0.5)
+            self.add(d1)
+            rumtime = random.randint(3, 12)
+            ani = MoveAlongPath(
+                d1,
+                path_line,
+                rate_func=ratefunctions[i % len(ratefunctions)],
+                run_time=rumtime,
+            )
+            turn_animation_into_updater(ani, cycle=True)
+        self.wait(15)
 
 
 def get_offset_points(offset, orthogonal_vector, x_start, x_end, y_start, y_end):
