@@ -155,9 +155,9 @@ class Bacteria(Dot):
 class Ex(Scene):
     def construct(self):
         x_start = -4
-        y_start = 1
+        y_start = 0
         x_end = 4
-        y_end = -1
+        y_end = 0
         width = 100
         line = Line(
             [x_start, y_start, 0],
@@ -177,17 +177,46 @@ class Ex(Scene):
         self.add(line)
 
         d_start = (
-            Dot([x_start, y_start, 0], color=AS2700.B21_ULTRAMARINE)
-            .scale(width / 14)
+            Dot([x_start, y_start + 0.5, 0], color=AS2700.B41_BLUEBELL)
+            .scale(width / 7)
             .set_z_index(10)
         )
         self.add(d_start)
         d_end = (
-            Dot([x_end, y_end, 0], color=AS2700.B21_ULTRAMARINE)
-            .scale(width / 14)
+            Dot([x_end, y_end + 0.5, 0], color=AS2700.B41_BLUEBELL)
+            .scale(width / 7)
             .set_z_index(10)
         )
         self.add(d_end)
+
+        d_back = (
+            Dot([x_start, y_start + 0.5, 0], color=BLACK)
+            .scale(width / 6.9)
+            .set_z_index(-4)
+        )
+        self.add(d_back)
+        d_end_back = (
+            Dot([x_end, y_end + 0.5, 0], color=BLACK).scale(width / 6.9).set_z_index(-4)
+        )
+        self.add(d_end_back)
+
+        baseline = Line(
+            [x_start, y_start + 0.5, 0],
+            [x_end, y_end + 0.5, 0],
+            stroke_width=width * 2,
+            color=WHITE,
+        ).set_z_index(-1)
+
+        self.add(baseline)
+
+        stroke = Line(
+            [x_start, y_start + 0.5, 0],
+            [x_end, y_end + 0.5, 0],
+            stroke_width=width * 2.05,
+            color=BLACK,
+        ).set_z_index(-2)
+
+        self.add(stroke)
 
         # ---- find point between -----
         ratefunctions = [
@@ -210,9 +239,6 @@ class Ex(Scene):
             t2 = random.uniform(0, 1)
             x2 = en_1 + t2 * (en - en_1)
             path_line = Line(x, x2)
-
-            for color in color_list:
-                print(color)
 
             d1 = (
                 Dot()
