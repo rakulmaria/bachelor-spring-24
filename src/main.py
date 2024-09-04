@@ -160,7 +160,10 @@ class Ex(Scene):
         y_end = -1
         width = 100
         line = Line(
-            [x_start, y_start, 0], [x_end, y_end, 0], stroke_width=width, color=BLUE
+            [x_start, y_start, 0],
+            [x_end, y_end, 0],
+            stroke_width=width,
+            color=AS2700.B21_ULTRAMARINE,
         )
         orthogonal_vector = np.array([-(y_end - y_start), (x_end - x_start), 0])
         (st, en) = get_offset_points(
@@ -174,10 +177,16 @@ class Ex(Scene):
         self.add(line)
 
         d_start = (
-            Dot([x_start, y_start, 0], color=BLUE).scale(width / 14).set_z_index(10)
+            Dot([x_start, y_start, 0], color=AS2700.B21_ULTRAMARINE)
+            .scale(width / 14)
+            .set_z_index(10)
         )
         self.add(d_start)
-        d_end = Dot([x_end, y_end, 0], color=BLUE).scale(width / 14).set_z_index(10)
+        d_end = (
+            Dot([x_end, y_end, 0], color=AS2700.B21_ULTRAMARINE)
+            .scale(width / 14)
+            .set_z_index(10)
+        )
         self.add(d_end)
 
         # ---- find point between -----
@@ -190,14 +199,26 @@ class Ex(Scene):
             rate_functions.ease_in_cubic,
             rate_functions.ease_in_out_circ,
         ]
-        for i in range(50):
+
+        color_list = color_gradient(
+            [AS2700.B32_POWDER_BLUE, AS2700.B22_HOMEBUSH_BLUE], 6
+        )
+
+        for i in range(100):
             t = random.uniform(0.05, 0.95)
             x = st_1 + t * (st - st_1)
             t2 = random.uniform(0, 1)
             x2 = en_1 + t2 * (en - en_1)
             path_line = Line(x, x2)
 
-            d1 = Dot().set_color(WHITE).scale(0.5)
+            for color in color_list:
+                print(color)
+
+            d1 = (
+                Dot()
+                .set_color(ManimColor.from_hex(random.choice(color_list)))
+                .scale(0.5)
+            )
             self.add(d1)
             rumtime = random.randint(3, 12)
             ani = MoveAlongPath(
