@@ -159,7 +159,13 @@ class Ex(Scene):
         x_end = 4
         y_end = -1
         width = 100
-        line = Line([x_start, y_start, 0], [x_end, y_end, 0], stroke_width=width)
+        line = Line(
+            [x_start, y_start, 0],
+            [x_end, y_end, 0],
+            stroke_width=width,
+            color=BLUE,
+            stroke_opacity=0.6,
+        )
         orthogonal_vector = np.array([-(y_end - y_start), (x_end - x_start), 0])
         (st, en) = get_offset_points(
             width / 100 / 2, orthogonal_vector, x_start, x_end, y_start, y_end
@@ -184,8 +190,8 @@ class Ex(Scene):
         x = st_1 + t * (st - st_1)
         t2 = random.uniform(0, 1)
         x2 = en_1 + t2 * (en - en_1)
+
         path_line = Line(x, x2, color=PINK)
-        self.add(path_line)
 
         d1 = Dot().set_color(ORANGE)
         self.add(d1, path_line)
