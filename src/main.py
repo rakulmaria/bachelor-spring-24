@@ -4,6 +4,7 @@ from src.ford_fulkerson import FordFulkerson
 from src.flow_network import FlowNetwork
 from src.vertices_examples import VerticesExamples as V
 from src.utils import GrowthScale
+import random
 
 
 class SedgewickWayne(Scene):
@@ -143,3 +144,67 @@ class ThoresExampleBFS(Scene):
         self.add(graph)
         ford_fulkerson = FordFulkerson(graph, self, scale=scale)
         ford_fulkerson.find_max_flow()
+
+
+class Bacteria(Dot):
+    def __init__(self, point=ORIGIN, **kwargs):
+        Dot.__init__(self, point=point, color=GREEN, **kwargs)
+        self.velocity = 6 * np.random.random_sample(3) - 3  # [-3, 3] interval
+
+
+class Ex(Scene):
+    def construct(self):
+        x_start = -4
+        y_start = 1
+        x_end = 4
+        y_end = -1
+        width = 100
+        line = Line([x_start, y_start, 0], [x_end, y_end, 0], stroke_width=width)
+        orthogonal_vector = np.array([-(y_end - y_start), (x_end - x_start), 0])
+        (st, en) = get_offset_points(
+            width / 100 / 2, orthogonal_vector, x_start, x_end, y_start, y_end
+        )
+
+        (st_1, en_1) = get_offset_points(
+            -(width / 100 / 2), orthogonal_vector, x_start, x_end, y_start, y_end
+        )
+
+        dot = Dot(st, color=RED)
+        dot2 = Dot(en, color=BLUE)
+        self.add(dot2)
+        self.add(dot)
+        dot3 = Dot(st_1, color=GREEN)
+        dot4 = Dot(en_1, color=PINK)
+        self.add(dot3)
+        self.add(dot4)
+        self.add(line)
+
+        # ---- find point between -----
+        t = random.uniform(0, 1)
+        x = st_1 + t * (st - st_1)
+        t2 = random.uniform(0, 1)
+        x2 = en_1 + t2 * (en - en_1)
+        path_line = Line(x, x2, color=PINK)
+        self.add(path_line)
+
+        d1 = Dot().set_color(ORANGE)
+        self.add(d1, path_line)
+        ani = MoveAlongPath(
+            d1,
+            path_line,
+            rate_func=rate_functions.ease_in_out_bounce,
+            run_time=6,
+        )
+        self.play(ani)
+
+
+def get_offset_points(offset, orthogonal_vector, x_start, x_end, y_start, y_end):
+    orthogonal_unit_vector = orthogonal_vector / np.linalg.norm(orthogonal_vector)
+    scaled_orthogonal_vector = orthogonal_unit_vector * offset
+    start_coord = [x_start, y_start, 0] + scaled_orthogonal_vector
+    end_coord = [x_end, y_end, 0] + scaled_orthogonal_vector
+
+    return (
+        start_coord,
+        end_coord,
+    )
