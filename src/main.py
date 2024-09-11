@@ -154,69 +154,22 @@ class Bacteria(Dot):
 
 class Ex(Scene):
     def construct(self):
-        x_start = -4
+        x_start = -3
         y_start = 0
-        x_end = 4
+        x_end = 0
         y_end = 0
         width = 100
-        line = Line(
-            [x_start, y_start, 0],
-            [x_end, y_end, 0],
-            stroke_width=width,
-            color=AS2700.B21_ULTRAMARINE,
-        )
-        orthogonal_vector = np.array([-(y_end - y_start), (x_end - x_start), 0])
-        (st, en) = get_offset_points(
-            width / 100 / 2, orthogonal_vector, x_start, x_end, y_start, y_end
-        )
+        flow_width = 70
 
-        (st_1, en_1) = get_offset_points(
-            -(width / 100 / 2), orthogonal_vector, x_start, x_end, y_start, y_end
+        (st, en, st_1, en_1) = self.create_edge(x_end, y_end, 3, 2, width, flow_width)
+
+        (st, en, st_1, en_1) = self.create_edge(x_end, y_end, 2, -1, width, flow_width)
+
+        (st, en, st_1, en_1) = self.create_edge(
+            x_start, y_start, x_end, y_end, width, flow_width
         )
 
-        self.add(line)
-
-        d_start = (
-            Dot([x_start, y_start + 0.5, 0], color=AS2700.B41_BLUEBELL)
-            .scale(width / 7)
-            .set_z_index(10)
-        )
-        self.add(d_start)
-        d_end = (
-            Dot([x_end, y_end + 0.5, 0], color=AS2700.B41_BLUEBELL)
-            .scale(width / 7)
-            .set_z_index(10)
-        )
-        self.add(d_end)
-
-        d_back = (
-            Dot([x_start, y_start + 0.5, 0], color=BLACK)
-            .scale(width / 6.9)
-            .set_z_index(-4)
-        )
-        self.add(d_back)
-        d_end_back = (
-            Dot([x_end, y_end + 0.5, 0], color=BLACK).scale(width / 6.9).set_z_index(-4)
-        )
-        self.add(d_end_back)
-
-        baseline = Line(
-            [x_start, y_start + 0.5, 0],
-            [x_end, y_end + 0.5, 0],
-            stroke_width=width * 2,
-            color=WHITE,
-        ).set_z_index(-1)
-
-        self.add(baseline)
-
-        stroke = Line(
-            [x_start, y_start + 0.5, 0],
-            [x_end, y_end + 0.5, 0],
-            stroke_width=width * 2.05,
-            color=BLACK,
-        ).set_z_index(-2)
-
-        self.add(stroke)
+        # ---------------------------
 
         # ---- find point between -----
         ratefunctions = [
@@ -256,6 +209,95 @@ class Ex(Scene):
             turn_animation_into_updater(ani, cycle=True)
         self.wait(15)
 
+    def create_edge(self, x_start, y_start, x_end, y_end, width, flow_width):
+        baseline = Line(
+            [x_start, y_start, 0],
+            [x_end, y_end, 0],
+            stroke_width=width,
+            color=WHITE,
+        ).set_z_index(-1)
+
+        orthogonal_vector = np.array([-(y_end - y_start), (x_end - x_start), 0])
+        (st, en) = get_offset_points(
+            (width - flow_width) / 100 / 2,
+            orthogonal_vector,
+            x_start,
+            x_end,
+            y_start,
+            y_end,
+        )
+
+        (st_1, en_1) = get_offset_points(
+            -((width - flow_width) / 100 / 2),
+            orthogonal_vector,
+            x_start,
+            x_end,
+            y_start,
+            y_end,
+        )
+
+        line = Line(
+            (st_1),
+            (en_1),
+            stroke_width=flow_width,
+            color=AS2700.B21_ULTRAMARINE,
+        )
+
+        self.add(line)
+
+        d_start = (
+            Dot([x_start, y_start, 0], color=AS2700.B41_BLUEBELL)
+            .scale(width / 12)
+            .set_z_index(10)
+        )
+        self.add(d_start)
+        d_end = (
+            Dot([x_end, y_end, 0], color=AS2700.B41_BLUEBELL)
+            .scale(width / 12)
+            .set_z_index(10)
+        )
+        self.add(d_end)
+
+        d_back = (
+            Dot([x_start, y_start, 0], color=BLACK).scale(width / 11.9).set_z_index(-4)
+        )
+        self.add(d_back)
+        d_end_back = (
+            Dot([x_end, y_end, 0], color=BLACK).scale(width / 11.9).set_z_index(-4)
+        )
+        self.add(d_end_back)
+
+        self.add(baseline)
+
+        stroke = Line(
+            [x_start, y_start, 0],
+            [x_end, y_end, 0],
+            stroke_width=width * 1.02,
+            color=BLACK,
+        ).set_z_index(-2)
+
+        self.add(stroke)
+
+        (st, en) = get_offset_points(
+            (flow_width) / 100 / 2,
+            orthogonal_vector,
+            st_1[0],
+            en_1[0],
+            st_1[1],
+            en_1[1],
+        )
+
+        (st_1, en_1) = get_offset_points(
+            -((flow_width) / 100 / 2),
+            orthogonal_vector,
+            st_1[0],
+            en_1[0],
+            st_1[1],
+            en_1[1],
+        )
+
+        return (st, en, st_1, en_1)
+
 
 def get_offset_points(offset, orthogonal_vector, x_start, x_end, y_start, y_end):
     orthogonal_unit_vector = orthogonal_vector / np.linalg.norm(orthogonal_vector)
@@ -267,3 +309,26 @@ def get_offset_points(offset, orthogonal_vector, x_start, x_end, y_start, y_end)
         start_coord,
         end_coord,
     )
+
+
+class Ex2(Scene):
+    def construct(self):
+        p1 = [-1, -1, 0]
+        p2 = [-1, 1, 0]
+        p3 = [0, 3, 0]
+        p4 = [3, 4, 0]
+        line = Line(p1, p2)
+        arc = ArcBetweenPoints(p2, p3, angle=-TAU / 8)
+        l2 = Line(p3, p4)
+        dot = Dot(color=ORANGE)
+        self.play(
+            Succession(
+                MoveAlongPath(
+                    dot,
+                    line,
+                ),
+                MoveAlongPath(dot, arc),
+                MoveAlongPath(dot, l2),
+            ),
+            rate_func=rate_functions.ease_in_sine,
+        )
