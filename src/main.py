@@ -155,9 +155,9 @@ class Bacteria(Dot):
 class Ex(Scene):
     def construct(self):
         x_start = -4
-        y_start = 1
-        x_end = 4
-        y_end = -1
+        y_start = 0
+        x_end = 0
+        y_end = 0
         width = 100
         line = Line(
             [x_start, y_start, 0],
@@ -165,6 +165,23 @@ class Ex(Scene):
             stroke_width=width,
             color=AS2700.B21_ULTRAMARINE,
         )
+
+        x_end2 = 3
+        y_end2 = 2
+        y_end3 = -2
+        line2 = Line(
+            [x_end, y_end, 0],
+            [x_end2, y_end2, 0],
+            stroke_width=width / 2,
+            color=AS2700.B21_ULTRAMARINE,
+        )
+        line3 = Line(
+            [x_end, y_end, 0],
+            [x_end2, y_end3, 0],
+            stroke_width=width / 2,
+            color=AS2700.B21_ULTRAMARINE,
+        )
+
         orthogonal_vector = np.array([-(y_end - y_start), (x_end - x_start), 0])
         (st, en) = get_offset_points(
             width / 100 / 2, orthogonal_vector, x_start, x_end, y_start, y_end
@@ -174,7 +191,7 @@ class Ex(Scene):
             -(width / 100 / 2), orthogonal_vector, x_start, x_end, y_start, y_end
         )
 
-        self.add(line)
+        self.add(line, line2, line3)
 
         d_start = (
             Dot([x_start, y_start, 0], color=AS2700.B21_ULTRAMARINE)
@@ -188,6 +205,19 @@ class Ex(Scene):
             .set_z_index(10)
         )
         self.add(d_end)
+
+        d_start2 = (
+            Dot([x_end2, y_end2, 0], color=AS2700.B21_ULTRAMARINE)
+            .scale(width / 14)
+            .set_z_index(10)
+        )
+        self.add(d_start2)
+        d_end2 = (
+            Dot([x_end2, y_end3, 0], color=AS2700.B21_ULTRAMARINE)
+            .scale(width / 14)
+            .set_z_index(10)
+        )
+        self.add(d_end2)
 
         # ---- find point between -----
         ratefunctions = [
@@ -210,9 +240,6 @@ class Ex(Scene):
             t2 = random.uniform(0, 1)
             x2 = en_1 + t2 * (en - en_1)
             path_line = Line(x, x2)
-
-            for color in color_list:
-                print(color)
 
             d1 = (
                 Dot()
@@ -241,3 +268,26 @@ def get_offset_points(offset, orthogonal_vector, x_start, x_end, y_start, y_end)
         start_coord,
         end_coord,
     )
+
+
+class PathEx(Scene):
+    def construct(self):
+        starting_dot = Dot(UL * 2 + LEFT * 2, color=BLUE)
+        finish_dot = Dot(DR * 2 + RIGHT * 2, color=RED)
+
+        l1 = Line(UL * 2 + LEFT * 2, UP * 2 + RIGHT, color=GREEN_A)
+        l2 = Line(DOWN, DL * 2 + LEFT * 2, color=GREEN_C)
+        arc = ArcBetweenPoints(l1.end, l2.start, angle=-3, color=GREEN_D)
+        l3 = Line(l2.end, DR * 2 + RIGHT * 2, color=GREEN_E)
+
+        self.add(starting_dot, finish_dot, l1, l2, l3, arc)
+
+        self.play(
+            Succession(
+                MoveAlongPath(starting_dot, l1),
+                MoveAlongPath(starting_dot, arc),
+                MoveAlongPath(starting_dot, l2),
+                MoveAlongPath(starting_dot, l3),
+            ),
+            rate_func=rate_functions.ease_in_out_elastic,
+        )
