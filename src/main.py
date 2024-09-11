@@ -161,17 +161,22 @@ class Ex(Scene):
         width = 100
         flow_width = 70
 
-        (st, en, st_1, en_1) = self.create_edge(x_end, y_end, 3, 2, width, flow_width)
-
-        (st, en, st_1, en_1) = self.create_edge(x_end, y_end, 2, -1, width, flow_width)
-
         (st, en, st_1, en_1) = self.create_edge(
             x_start, y_start, x_end, y_end, width, flow_width
         )
+        (st_2nd, en_2nd, st_2nd_b, en_2nd_b) = self.create_edge(
+            x_end, y_end, 2, -1, width, flow_width
+        )
+        (st_3d, en_3d, st_3d_c, en_3d_c) = self.create_edge(
+            x_end, y_end, 3, 2, width, flow_width
+        )
 
-        # ---------------------------
+        self.create_dots(st, en, st_1, en_1, True)
+        self.create_dots(st_2nd, en_2nd, st_2nd_b, en_2nd_b)
+        self.create_dots(st_3d, en_3d, st_3d_c, en_3d_c)
+        self.wait(10)
 
-        # ---- find point between -----
+    def create_dots(self, st, en, st_1, en_1, first=False):
         ratefunctions = [
             rate_functions.double_smooth,
             rate_functions.linear,
@@ -181,7 +186,6 @@ class Ex(Scene):
             rate_functions.ease_in_cubic,
             rate_functions.ease_in_out_circ,
         ]
-
         color_list = color_gradient(
             [AS2700.B32_POWDER_BLUE, AS2700.B22_HOMEBUSH_BLUE], 6
         )
@@ -193,21 +197,23 @@ class Ex(Scene):
             x2 = en_1 + t2 * (en - en_1)
             path_line = Line(x, x2)
 
-            d1 = (
+            dot = (
                 Dot()
                 .set_color(ManimColor.from_hex(random.choice(color_list)))
                 .scale(0.5)
             )
-            self.add(d1)
+
+            self.add(dot)
             rumtime = random.randint(3, 12)
             ani = MoveAlongPath(
-                d1,
+                dot,
                 path_line,
                 rate_func=ratefunctions[i % len(ratefunctions)],
                 run_time=rumtime,
             )
             turn_animation_into_updater(ani, cycle=True)
-        self.wait(15)
+        if first:
+            self.wait(3)
 
     def create_edge(self, x_start, y_start, x_end, y_end, width, flow_width):
         baseline = Line(
