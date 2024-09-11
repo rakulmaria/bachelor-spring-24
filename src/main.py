@@ -161,17 +161,14 @@ class Ex(Scene):
         width = 100
         flow_width = 70
 
-        (st, en, st_1, en_1) = self.create_edge(x_end, y_end, 3, 2, width, flow_width)
+        (e2_st, e2_en, e2_st_1, e2_en_1) = self.create_edge(x_end, y_end, 3, 2, 30, 30)
 
-        (st, en, st_1, en_1) = self.create_edge(x_end, y_end, 2, -1, width, flow_width)
+        (e1_st, e1_en, e1_st_1, e1_en_1) = self.create_edge(x_end, y_end, 4, -3, 80, 40)
 
         (st, en, st_1, en_1) = self.create_edge(
             x_start, y_start, x_end, y_end, width, flow_width
         )
 
-        # ---------------------------
-
-        # ---- find point between -----
         ratefunctions = [
             rate_functions.double_smooth,
             rate_functions.linear,
@@ -186,12 +183,24 @@ class Ex(Scene):
             [AS2700.B32_POWDER_BLUE, AS2700.B22_HOMEBUSH_BLUE], 6
         )
 
-        for i in range(100):
-            t = random.uniform(0.05, 0.95)
-            x = st_1 + t * (st - st_1)
-            t2 = random.uniform(0, 1)
-            x2 = en_1 + t2 * (en - en_1)
-            path_line = Line(x, x2)
+        for i in range(flow_width):
+            (p1, p2, p3, p4) = (st, en, st_1, en_1)
+            if i < 30:
+                (p1, p2, p3, p4) = (e2_st, e2_en, e2_st_1, e2_en_1)
+            else:
+                (p1, p2, p3, p4) = (e1_st, e1_en, e1_st_1, e1_en_1)
+
+            x, x2 = self.find_points_between(st, en, st_1, en_1)
+            x3, x4 = self.find_points_between(p1, p2, p3, p4)
+
+            mob = VMobject(stroke_width=4, color=GREEN).set_points_as_corners(
+                [
+                    x,
+                    x2,
+                    x3,
+                    x4,
+                ]
+            )
 
             d1 = (
                 Dot()
@@ -199,15 +208,22 @@ class Ex(Scene):
                 .scale(0.5)
             )
             self.add(d1)
-            rumtime = random.randint(3, 12)
+
             ani = MoveAlongPath(
                 d1,
-                path_line,
+                mob,
                 rate_func=ratefunctions[i % len(ratefunctions)],
-                run_time=rumtime,
+                run_time=random.randint(3, 12),
             )
+
             turn_animation_into_updater(ani, cycle=True)
         self.wait(15)
+
+    def find_points_between(self, st, en, st_1, en_1):
+        x = st_1 + random.uniform(0.05, 0.95) * (st - st_1)
+        x2 = en_1 + random.uniform(0, 1) * (en - en_1)
+
+        return x, x2
 
     def create_edge(self, x_start, y_start, x_end, y_end, width, flow_width):
         baseline = Line(
@@ -245,18 +261,18 @@ class Ex(Scene):
 
         self.add(line)
 
-        d_start = (
-            Dot([x_start, y_start, 0], color=AS2700.B41_BLUEBELL)
-            .scale(width / 12)
-            .set_z_index(10)
-        )
-        self.add(d_start)
-        d_end = (
-            Dot([x_end, y_end, 0], color=AS2700.B41_BLUEBELL)
-            .scale(width / 12)
-            .set_z_index(10)
-        )
-        self.add(d_end)
+        # d_start = (
+        #     Dot([x_start, y_start, 0], color=AS2700.B41_BLUEBELL)
+        #     .scale(width / 12)
+        #     .set_z_index(10)
+        # )
+        # self.add(d_start)
+        # d_end = (
+        #     Dot([x_end, y_end, 0], color=AS2700.B41_BLUEBELL)
+        #     .scale(width / 12)
+        #     .set_z_index(10)
+        # )
+        # self.add(d_end)
 
         d_back = (
             Dot([x_start, y_start, 0], color=BLACK).scale(width / 11.9).set_z_index(-4)
@@ -321,7 +337,7 @@ class Ex2(Scene):
         arc = ArcBetweenPoints(p2, p3, angle=-TAU / 8)
         l2 = Line(p3, p4)
         dot = Dot(color=ORANGE)
-        self.play(
+        turn_animation_into_updater(
             Succession(
                 MoveAlongPath(
                     dot,
@@ -329,6 +345,7 @@ class Ex2(Scene):
                 ),
                 MoveAlongPath(dot, arc),
                 MoveAlongPath(dot, l2),
-            ),
-            rate_func=rate_functions.ease_in_sine,
+            )
         )
+        self.wait(10)
+        self.play()
