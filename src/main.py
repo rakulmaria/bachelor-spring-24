@@ -226,42 +226,27 @@ class Ex(Scene):
         return x, x2
 
     def create_edge(self, x_start, y_start, x_end, y_end, width, flow_width):
+        start = [x_start, y_start, 0]
+        end = [x_end, y_end, 0]
         baseline = Line(
-            [x_start, y_start, 0],
-            [x_end, y_end, 0],
+            start,
+            end,
             stroke_width=width,
             color=WHITE,
         ).set_z_index(-1)
 
         orthogonal_vector = np.array([-(y_end - y_start), (x_end - x_start), 0])
-        (st, en) = get_offset_points(
-            (width - flow_width) / 100 / 2,
-            orthogonal_vector,
-            x_start,
-            x_end,
-            y_start,
-            y_end,
-        )
-
-        (st_1, en_1) = get_offset_points(
-            -((width - flow_width) / 100 / 2),
-            orthogonal_vector,
-            x_start,
-            x_end,
-            y_start,
-            y_end,
-        )
 
         line = Line(
-            (st_1),
-            (en_1),
+            start,
+            end,
             stroke_width=flow_width,
             color=AS2700.B21_ULTRAMARINE,
         ).set_z_index(1)
 
         b_dot = (
             Dot(
-                en_1,
+                start,
                 color=AS2700.B21_ULTRAMARINE,
             )
             .scale(flow_width / 16)
@@ -270,7 +255,7 @@ class Ex(Scene):
 
         b_dot_2 = (
             Dot(
-                st_1,
+                end,
                 color=AS2700.B21_ULTRAMARINE,
             )
             .scale(flow_width / 16)
@@ -279,27 +264,21 @@ class Ex(Scene):
 
         self.add(line, b_dot, b_dot_2)
 
-        d_start = (
-            Dot([x_start, y_start, 0], color=WHITE).scale(width / 12).set_z_index(0)
-        )
+        d_start = Dot(start, color=WHITE).scale(width / 12).set_z_index(0)
         self.add(d_start)
-        d_end = Dot([x_end, y_end, 0], color=WHITE).scale(width / 12).set_z_index(0)
+        d_end = Dot(end, color=WHITE).scale(width / 12).set_z_index(0)
         self.add(d_end)
 
-        d_back = (
-            Dot([x_start, y_start, 0], color=BLACK).scale(width / 11.9).set_z_index(-4)
-        )
+        d_back = Dot(start, color=BLACK).scale(width / 11.9).set_z_index(-4)
         self.add(d_back)
-        d_end_back = (
-            Dot([x_end, y_end, 0], color=BLACK).scale(width / 11.9).set_z_index(-4)
-        )
+        d_end_back = Dot(end, color=BLACK).scale(width / 11.9).set_z_index(-4)
         self.add(d_end_back)
 
         self.add(baseline)
 
         stroke = Line(
-            [x_start, y_start, 0],
-            [x_end, y_end, 0],
+            start,
+            end,
             stroke_width=width * 1.01,
             color=BLACK,
         ).set_z_index(-2)
@@ -309,19 +288,19 @@ class Ex(Scene):
         (st, en) = get_offset_points(
             (flow_width) / 100 / 2,
             orthogonal_vector,
-            st_1[0],
-            en_1[0],
-            st_1[1],
-            en_1[1],
+            start[0],
+            end[0],
+            start[1],
+            end[1],
         )
 
         (st_1, en_1) = get_offset_points(
             -((flow_width) / 100 / 2),
             orthogonal_vector,
-            st_1[0],
-            en_1[0],
-            st_1[1],
-            en_1[1],
+            start[0],
+            end[0],
+            start[1],
+            end[1],
         )
 
         return (st, en, st_1, en_1)
