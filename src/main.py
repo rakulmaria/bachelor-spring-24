@@ -24,7 +24,7 @@ class SedgewickWayne(Scene):
         )
 
         self.add(graph)
-        ford_fulkerson = FordFulkerson(graph, self)
+        ford_fulkerson = FordFulkerson(graph, self, show_text=False)
         ford_fulkerson.find_max_flow()
 
 
@@ -329,14 +329,12 @@ class Ex2(Scene):
         l2 = Line(p3, p4)
         dot = Dot(color=ORANGE)
         turn_animation_into_updater(
-            Succession(
-                MoveAlongPath(
-                    dot,
-                    line,
-                ),
-                MoveAlongPath(dot, arc),
-                MoveAlongPath(dot, l2),
-            )
+            MoveAlongPath(
+                dot,
+                line,
+            ),
+            MoveAlongPath(dot, arc),
+            MoveAlongPath(dot, l2),
         )
         self.wait(10)
         self.play()
