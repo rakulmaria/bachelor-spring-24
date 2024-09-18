@@ -206,7 +206,7 @@ class Ex(Scene):
                 Dot()
                 .set_color(ManimColor.from_hex(random.choice(color_list)))
                 .scale(0.5)
-            )
+            ).set_z_index(2)
             self.add(d1)
 
             ani = MoveAlongPath(
@@ -220,8 +220,8 @@ class Ex(Scene):
         self.wait(15)
 
     def find_points_between(self, st, en, st_1, en_1):
-        x = st_1 + random.uniform(0.05, 0.95) * (st - st_1)
-        x2 = en_1 + random.uniform(0, 1) * (en - en_1)
+        x = st_1 + random.uniform(0.1, 0.9) * (st - st_1)
+        x2 = en_1 + random.uniform(0.1, 0.9) * (en - en_1)
 
         return x, x2
 
@@ -257,22 +257,34 @@ class Ex(Scene):
             (en_1),
             stroke_width=flow_width,
             color=AS2700.B21_ULTRAMARINE,
+        ).set_z_index(1)
+
+        b_dot = (
+            Dot(
+                en_1,
+                color=AS2700.B21_ULTRAMARINE,
+            )
+            .scale(flow_width / 16)
+            .set_z_index(1)
         )
 
-        self.add(line)
+        b_dot_2 = (
+            Dot(
+                st_1,
+                color=AS2700.B21_ULTRAMARINE,
+            )
+            .scale(flow_width / 16)
+            .set_z_index(1)
+        )
 
-        # d_start = (
-        #     Dot([x_start, y_start, 0], color=AS2700.B41_BLUEBELL)
-        #     .scale(width / 12)
-        #     .set_z_index(10)
-        # )
-        # self.add(d_start)
-        # d_end = (
-        #     Dot([x_end, y_end, 0], color=AS2700.B41_BLUEBELL)
-        #     .scale(width / 12)
-        #     .set_z_index(10)
-        # )
-        # self.add(d_end)
+        self.add(line, b_dot, b_dot_2)
+
+        d_start = (
+            Dot([x_start, y_start, 0], color=WHITE).scale(width / 12).set_z_index(0)
+        )
+        self.add(d_start)
+        d_end = Dot([x_end, y_end, 0], color=WHITE).scale(width / 12).set_z_index(0)
+        self.add(d_end)
 
         d_back = (
             Dot([x_start, y_start, 0], color=BLACK).scale(width / 11.9).set_z_index(-4)
@@ -288,7 +300,7 @@ class Ex(Scene):
         stroke = Line(
             [x_start, y_start, 0],
             [x_end, y_end, 0],
-            stroke_width=width * 1.02,
+            stroke_width=width * 1.01,
             color=BLACK,
         ).set_z_index(-2)
 
@@ -349,3 +361,19 @@ class Ex2(Scene):
         )
         self.wait(10)
         self.play()
+
+
+# knuder muligvis alle samme størrelse
+# og ingen farve, sådan at man kan se hvordan
+# strømningsprikkerne fordeler sig i hver knude
+#
+# strømning i midten af kanterne
+#   eller muligvis stadig i siden ?
+#
+# ingen røde pile for restgrafen
+# restgrafen simpel ligesom italienske kvinde
+#
+# lad Inge være med til næste møde, muligvis online
+#
+# thore: jeg vil se med strømning inde i midten af knude
+#        og på en hel graf!
