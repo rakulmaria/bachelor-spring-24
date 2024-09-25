@@ -22,7 +22,7 @@ class FordFulkerson:
     def find_max_flow(self):
         self.max_flow = 0
 
-        self.text_helper.play_initial_tex_animation()
+        # self.text_helper.play_initial_tex_animation()
 
         path = self.path_finder.find_path(
             source=self.graph.source,
@@ -65,7 +65,7 @@ class FordFulkerson:
 
         self.text_helper.play_tex_animation_for_residual_graph_before()
 
-        self.graph.show_residual_graph(self.scene, path_to_draw, self.text_helper)
+        # self.graph.show_residual_graph(self.scene, path_to_draw, self.text_helper)
 
         self.text_helper.play_tex_animation_for_path(path_to_draw, bottleneck)
 

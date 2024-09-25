@@ -12,11 +12,13 @@ class FlowNetwork(VMobject):
         capacities,
         source,
         sink,
+        scene: Scene = None,
         layout_scale=2,
         layout="spring",
         layers=[],
         growth_scale: GrowthScale = GrowthScale.SQRT,
     ):
+        self.scene = scene
         super().__init__()
         self.growth_scale = growth_scale
 
@@ -56,6 +58,7 @@ class FlowNetwork(VMobject):
                 vertices_as_objects.get(to),
                 capacity,
                 growth_scale=self.growth_scale,
+                scene=self.scene,
             )
             edges_as_objects.append(edge)
 

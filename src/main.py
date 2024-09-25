@@ -16,6 +16,7 @@ class SedgewickWayne(Scene):
             vertices,
             edges,
             capacities,
+            scene=self,
             layout="partite",
             layers=layers,
             growth_scale=GrowthScale.LINEAR,
@@ -24,7 +25,11 @@ class SedgewickWayne(Scene):
         )
 
         self.add(graph)
-        ford_fulkerson = FordFulkerson(graph, self, show_text=False)
+        ford_fulkerson = FordFulkerson(
+            graph,
+            self,
+            show_text=False,
+        )
         ford_fulkerson.find_max_flow()
 
 
@@ -322,22 +327,23 @@ class Ex2(Scene):
     def construct(self):
         p1 = [-1, -1, 0]
         p2 = [-1, 1, 0]
-        p3 = [0, 3, 0]
-        p4 = [3, 4, 0]
-        line = Line(p1, p2)
-        arc = ArcBetweenPoints(p2, p3, angle=-TAU / 8)
-        l2 = Line(p3, p4)
-        dot = Dot(color=ORANGE)
-        turn_animation_into_updater(
+        line = Line(p1, p2, color=BLUE_A)
+        dot = Dot(color=ORANGE).set_z_index(2)
+        self.add(dot, line)
+        a = turn_animation_into_updater(
             MoveAlongPath(
                 dot,
                 line,
             ),
-            MoveAlongPath(dot, arc),
-            MoveAlongPath(dot, l2),
+            cycle=True,
         )
-        self.wait(10)
-        self.play()
+        self.wait(3)
+        self.remove(a)
+        self.wait(2)
+        self.add(a)
+        self.wait(2)
+        self.remove(a)
+        self.wait(2)
 
 
 # knuder muligvis alle samme størrelse
