@@ -34,17 +34,6 @@ class Edge(VMobject):
         self.current_flow = current_flow
         self.growth_scale = growth_scale
 
-        # initial flow_object is empty
-        (init_start_coord, init_end_coord) = self.get_flow_coords()
-        init_direction = self.get_direction()
-        self.flow_object = FlowObject(
-            self.start_vertex.to_np_array(),
-            self.start_vertex.to_np_array(),
-            init_direction,
-            max_capacity,
-            growth_scale=self.growth_scale,
-        )
-
         start_vertex.add_adjacent_edge(self)
         end_vertex.add_adjacent_edge(self)
         start_vertex.add_to_max_outgoing_capacity(max_capacity)
@@ -164,7 +153,7 @@ class Edge(VMobject):
                 dot,
                 line,
                 rate_func=ratefunctions[i % len(ratefunctions)],
-                run_time=random.randint(3, 12),
+                run_time=random.randint(5, 12),
             )
 
             updater = turn_animation_into_updater(ani, cycle=True)
@@ -185,6 +174,15 @@ class Edge(VMobject):
         (new_start_coord, new_end_coord) = self.get_flow_coords()
         new_direction = self.get_direction()
 
+        if self.current_flow - new_flow == 0:
+            self.flow_object = FlowObject(
+                new_start_coord,
+                new_start_coord,
+                new_direction,
+                new_flow,
+                growth_scale=self.growth_scale,
+            )
+
         new_flow_object = FlowObject(
             new_start_coord,
             new_end_coord,
@@ -192,6 +190,7 @@ class Edge(VMobject):
             self.current_flow,
             self.growth_scale,
         )
+
         edge_animation = ReplacementTransform(self.flow_object, new_flow_object)
 
         if self.current_flow == self.max_capacity:
