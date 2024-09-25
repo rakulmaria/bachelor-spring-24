@@ -16,8 +16,6 @@ ratefunctions = [
     rate_functions.ease_in_out_circ,
 ]
 
-color_list = color_gradient([AS2700.B32_POWDER_BLUE, AS2700.B45_SKY_BLUE], 6)
-
 
 class FlowObject(Line):
     def __init__(
@@ -40,27 +38,32 @@ class FlowObject(Line):
             self.arrow = EdgeArrow(flow_end_coord, flow_start_coord)
             self.add(self.arrow)
 
-        for i in range(int(flow) * 20):
-            random_start, random_end = self.find_random_points(
-                flow_start_coord, flow_end_coord, flow
-            )
-            line = Line(random_start, random_end)
-            dot = (
-                Dot()
-                .set_color(ManimColor.from_hex(random.choice(color_list)))
-                .scale(0.2)
-            ).set_z_index(5)
+            self.dot_animations = []
+            # setup the dots
+            for i in range(int(flow) * 20):
+                random_start, random_end = self.find_random_points(
+                    flow_start_coord, flow_end_coord, flow
+                )
+                line = Line(random_start, random_end)
 
-            self.add(dot)
+                dot = (
+                    Dot()
+                    .set_color(ManimColor.from_hex(random.choice(colors.color_list)))
+                    .scale(0.2)
+                ).set_z_index(5)
 
-            ani = MoveAlongPath(
-                dot,
-                line,
-                rate_func=ratefunctions[i % len(ratefunctions)],
-                run_time=random.randint(3, 12),
-            )
+                # self.dot_group.add(dot)
+                # self.line_group.add(line)
+                self.add(dot)
 
-            turn_animation_into_updater(ani, cycle=True)
+                ani = MoveAlongPath(
+                    dot,
+                    line,
+                    rate_func=ratefunctions[i % len(ratefunctions)],
+                    run_time=random.randint(3, 12),
+                )
+
+                self.dot_animations.append(ani)
 
     def find_random_points(self, flow_start_coord, flow_end_coord, flow):
         (

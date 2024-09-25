@@ -1,7 +1,18 @@
+import random
 from manim import *
 from src.arrow import EdgeArrow
 from src.flow_object import FlowObject
 from src.utils import GrowthScale, get_drawn_size
+
+ratefunctions = [
+    rate_functions.double_smooth,
+    rate_functions.linear,
+    rate_functions.ease_in_sine,
+    rate_functions.ease_out_quad,
+    rate_functions.ease_in_quint,
+    rate_functions.ease_in_cubic,
+    rate_functions.ease_in_out_circ,
+]
 
 
 class Edge(VMobject):
@@ -54,6 +65,7 @@ class Edge(VMobject):
             self.current_flow,
             self.growth_scale,
         )
+
         edge_animation = ReplacementTransform(self.flow_object, new_flow_object)
 
         if self.current_flow == self.max_capacity:
@@ -70,9 +82,13 @@ class Edge(VMobject):
 
         scene.play(
             edge_animation,
+            #    *new_flow_object.dot_animations,
             vertex_animation,
             arrow_animation,
         )
+
+        for ani in new_flow_object.dot_animations:
+            cycle_animation(ani)
 
         # edge case for end vertex. end by playing the animation by coloring the sink vertex blue
         if self.end_vertex.is_sink:
@@ -80,6 +96,21 @@ class Edge(VMobject):
             scene.play(vertex_animation_end_vertex)
 
         self.flow_object = new_flow_object
+
+    def find_random_points(self, flow_start_coord, flow_end_coord, flow):
+        (
+            start_fst_coord,
+            end_fst_coord,
+            start_snd_coord,
+            end_snd_coord,
+        ) = self.get_flow_coords2(flow_start_coord, flow_end_coord, flow)
+        random_start = start_snd_coord + random.uniform(0.1, 0.9) * (
+            start_fst_coord - start_snd_coord
+        )
+        random_end = end_snd_coord + random.uniform(0.1, 0.9) * (
+            end_fst_coord - end_snd_coord
+        )
+        return random_start, random_end
 
     def get_drawn_edge_size(self, capacity):
         return get_drawn_size(self.growth_scale, capacity) * 8
