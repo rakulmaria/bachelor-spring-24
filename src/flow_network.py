@@ -98,7 +98,7 @@ class FlowNetwork(VMobject):
                 edges,
                 layout_scale=layout_scale,
                 layout=layout,
-                layout_config={"seed": 100},
+                # layout_config={"seed": 25},
             )
 
     # helper method, if you want to create a partite graph and use layers to display it

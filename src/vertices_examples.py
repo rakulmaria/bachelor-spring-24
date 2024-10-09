@@ -1,4 +1,19 @@
 class VerticesExamples:
+    def from_nx(nx_graph):
+        nodes = nx_graph.nodes()
+        edges = []
+
+        for edge in nx_graph.edges():
+            # print(edge)
+            edges.append((edge[0], edge[1]))
+            edges.append((edge[1], edge[0]))
+
+        capacities = []
+        for edge in edges:
+            capacities.append((*edge, 1))
+
+        return nodes, edges, capacities, 0, len(nodes) - 1
+
     def sedgewick_wayne():
         vertices = [0, 1, 2, 3, 4, 5]
         edges = [(0, 1), (0, 2), (1, 3), (1, 4), (2, 3), (2, 4), (3, 5), (4, 5)]

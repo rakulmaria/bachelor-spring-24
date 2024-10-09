@@ -5,6 +5,7 @@ from src.flow_network import FlowNetwork
 from src.vertices_examples import VerticesExamples as V
 from src.utils import GrowthScale
 import random
+import networkx as nx
 
 
 class SedgewickWayne(Scene):
@@ -323,27 +324,72 @@ def get_offset_points(offset, orthogonal_vector, x_start, x_end, y_start, y_end)
     )
 
 
-class Ex2(Scene):
+class KarateGraph(Scene):
     def construct(self):
-        p1 = [-1, -1, 0]
-        p2 = [-1, 1, 0]
-        line = Line(p1, p2, color=BLUE_A)
-        dot = Dot(color=ORANGE).set_z_index(2)
-        self.add(dot, line)
-        a = turn_animation_into_updater(
-            MoveAlongPath(
-                dot,
-                line,
-            ),
-            cycle=True,
+        karate = nx.karate_club_graph()
+        vertices, edges, capacities, source, sink = V.from_nx(karate)
+
+        # print(f"Vertices: {vertices}")
+        # print(f"Edges: {edges}")
+        # print(f"Capacities: {capacities}")
+        # print(f"Source: {source}")
+        # print(f"Sink: {sink}")
+
+        scale = 8
+
+        graph = FlowNetwork(
+            vertices,
+            edges,
+            capacities,
+            scene=self,
+            growth_scale=GrowthScale.LINEAR,
+            source=source,
+            layout="kamada_kawai",
+            sink=sink,
+            layout_scale=scale,
         )
-        self.wait(3)
-        self.remove(a)
-        self.wait(2)
-        self.add(a)
-        self.wait(2)
-        self.remove(a)
-        self.wait(2)
+
+        self.camera.frame_width = scale * 3.6
+        self.camera.resize_frame_shape(0)
+
+        self.add(graph)
+        ford_fulkerson = FordFulkerson(
+            graph,
+            self,
+            show_text=False,
+        )
+        ford_fulkerson.find_max_flow()
+
+
+class Sedge(Scene):
+    def construct(self):
+        karate = nx.dorogovtsev_goltsev_mendes_graph(3)
+        vertices, edges, capacities, source, sink = V.from_nx(karate)
+
+        # scale = 8
+
+        graph = FlowNetwork(
+            vertices,
+            edges,
+            capacities,
+            scene=self,
+            growth_scale=GrowthScale.LINEAR,
+            source=source,
+            layout="kamada_kawai",
+            sink=sink,
+            # layout_scale=scale,
+        )
+
+        self.camera.frame_width = 10
+        self.camera.resize_frame_shape(0)
+
+        self.add(graph)
+        ford_fulkerson = FordFulkerson(
+            graph,
+            self,
+            show_text=False,
+        )
+        ford_fulkerson.find_max_flow()
 
 
 # knuder muligvis alle samme størrelse

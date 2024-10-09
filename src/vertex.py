@@ -50,8 +50,15 @@ class Vertex(VMobject):
             .set_fill(BLACK)
         )
 
+        label_text = self.id
+
+        if self.is_sink:
+            label_text = "t"
+        elif self.is_source:
+            label_text = "s"
+
         label = (
-            Tex(self.id, color=BLACK)
+            Tex(label_text, color=BLACK)
             .set_x(self.x_coord)
             .set_y(self.y_coord)
             .set_z_index(20)
@@ -70,10 +77,10 @@ class Vertex(VMobject):
         self.is_source = True
 
     def add_to_max_ingoing_capacity(self, capacity):
-        self.ingoing_capacity += capacity
+        self.ingoing_capacity = capacity
 
     def add_to_max_outgoing_capacity(self, capacity):
-        self.outgoing_capacity += capacity
+        self.outgoing_capacity = capacity
 
     def add_adjacent_edge(self, edge):
         self.adjacent_edges.append(edge)
