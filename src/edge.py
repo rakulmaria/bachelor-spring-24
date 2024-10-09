@@ -2,7 +2,7 @@ import random
 from manim import *
 from src.arrow import EdgeArrow
 from src.flow_object import FlowObject
-from src.utils import GrowthScale, get_drawn_size
+from src.utils import *
 
 ratefunctions = [
     rate_functions.double_smooth,
@@ -25,6 +25,7 @@ class Edge(VMobject):
         max_capacity,
         current_flow=0,
         growth_scale=GrowthScale.SQRT,
+        theme=Themes.Light,
         scene: Scene = None,
     ):
         super().__init__()
@@ -33,6 +34,7 @@ class Edge(VMobject):
         self.max_capacity = max_capacity
         self.current_flow = current_flow
         self.growth_scale = growth_scale
+        self.theme = theme
 
         start_vertex.add_adjacent_edge(self)
         end_vertex.add_adjacent_edge(self)
@@ -143,7 +145,7 @@ class Edge(VMobject):
             line = Line(random_start, random_end)
             dot = (
                 Dot()
-                .set_color(ManimColor.from_hex(random.choice(color_list)))
+                .set_color(ManimColor.from_hex(random.choice(self.theme.get("DOTS"))))
                 .scale(0.2)
             ).set_z_index(5)
 
@@ -157,7 +159,6 @@ class Edge(VMobject):
             )
 
             updater = turn_animation_into_updater(ani, cycle=True)
-            # print(f"scene: {scene}")
             scene.remove(updater)
             self.start_vertex_to_updater.update(
                 {self.point_to_tuple(random_start): (random_end, updater)}
@@ -180,6 +181,7 @@ class Edge(VMobject):
                 new_start_coord,
                 new_direction,
                 new_flow,
+                theme=self.theme,
                 growth_scale=self.growth_scale,
             )
 
@@ -188,7 +190,8 @@ class Edge(VMobject):
             new_end_coord,
             new_direction,
             self.current_flow,
-            self.growth_scale,
+            theme=self.theme,
+            growth_scale=self.growth_scale,
         )
 
         edge_animation = ReplacementTransform(self.flow_object, new_flow_object)
@@ -201,7 +204,9 @@ class Edge(VMobject):
                 new_arrow_end_coord,
             ) = self.get_new_arrow_coords()
 
-            new_arrow = EdgeArrow(new_arrow_start_coord, new_arrow_end_coord)
+            new_arrow = EdgeArrow(
+                new_arrow_start_coord, new_arrow_end_coord, self.theme
+            )
             arrow_animation = ReplacementTransform(self.arrow, new_arrow)
             self.arrow = new_arrow
 
@@ -258,7 +263,7 @@ class Edge(VMobject):
         background_line = Line(
             start=self.start_vertex.to_np_array(),
             end=self.end_vertex.to_np_array(),
-            color=BLACK,
+            color=self.theme.get("BORDER"),
             stroke_width=(self.get_drawn_edge_size(self.max_capacity) + 1.6),
         )
 
@@ -268,12 +273,12 @@ class Edge(VMobject):
                 end=self.end_vertex.to_np_array(),
             )
             .set_stroke(width=self.get_drawn_edge_size(self.max_capacity), color=WHITE)
-            .set_fill(color=WHITE)
+            .set_fill(color=self.theme.get("FLOW-BACKGROUND"))
             .set_z_index(3)
         )
 
         self.arrow = EdgeArrow(
-            self.start_vertex.to_np_array(), self.end_vertex.to_np_array()
+            self.start_vertex.to_np_array(), self.end_vertex.to_np_array(), self.theme
         )
 
         self.add(background_line, self.foreground_line, self.arrow)

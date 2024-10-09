@@ -3,7 +3,7 @@ from src.DFS import DFS
 from src.ford_fulkerson import FordFulkerson
 from src.flow_network import FlowNetwork
 from src.vertices_examples import VerticesExamples as V
-from src.utils import GrowthScale
+from src.utils import *
 import random
 
 
@@ -22,6 +22,7 @@ class SedgewickWayne(Scene):
             growth_scale=GrowthScale.LINEAR,
             source=source,
             sink=sink,
+            theme=Themes.Pacman,
         )
 
         self.add(graph)

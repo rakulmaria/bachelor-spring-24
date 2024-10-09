@@ -1,6 +1,5 @@
 from manim import *
-from src.utils import GrowthScale, get_drawn_size
-import src.colors as colors
+from src.utils import *
 
 
 class Vertex(VMobject):
@@ -10,6 +9,7 @@ class Vertex(VMobject):
         x_coord,
         y_coord,
         growth_scale=GrowthScale.SQRT,
+        theme=Themes.Light,
         is_sink=False,
         is_source=False,
     ):
@@ -17,6 +17,7 @@ class Vertex(VMobject):
         self.x_coord = x_coord
         self.y_coord = y_coord
         self.growth_scale = growth_scale
+        self.theme = theme
         self.outgoing_capacity = 0
         self.ingoing_capacity = 0
         self.current_flow = 0
@@ -40,18 +41,18 @@ class Vertex(VMobject):
         self.foreground_dot = (
             Dot(self.to_np_array())
             .scale(self.get_drawn_dot_size())
-            .set_fill(WHITE)
+            .set_fill(self.theme.get("FLOW-BACKGROUND"))
             .set_z_index(10)
         )
 
         background_dot = (
             Dot(self.to_np_array())
             .scale(self.get_drawn_dot_size() + 0.1)
-            .set_fill(BLACK)
+            .set_fill(self.theme.get("BORDER"))
         )
 
         label = (
-            Tex(self.id, color=BLACK)
+            Tex(self.id, color=self.theme.get("TEXT"))
             .set_x(self.x_coord)
             .set_y(self.y_coord)
             .set_z_index(20)
@@ -95,7 +96,7 @@ class Vertex(VMobject):
             self.flow_object = (
                 Dot(self.to_np_array())
                 .scale(self.get_drawn_dot_size())
-                .set_fill(colors.light_blue)
+                .set_fill(self.theme.get("FLOW"))
                 .set_opacity(0)
                 .set_z_index(12)
             )
@@ -104,7 +105,7 @@ class Vertex(VMobject):
         new_flow_object = (
             Dot(self.to_np_array())
             .scale(self.get_drawn_dot_size())
-            .set_fill(colors.light_blue)
+            .set_fill(self.theme.get("FLOW"))
             .set_opacity(self.get_opacity())
             .set_z_index(12)
         )
