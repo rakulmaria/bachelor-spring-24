@@ -22,7 +22,7 @@ class SedgewickWayne(Scene):
             growth_scale=GrowthScale.LINEAR,
             source=source,
             sink=sink,
-            theme=Themes.Light,
+            theme=Themes.Pastel,
         )
 
         self.add(graph)

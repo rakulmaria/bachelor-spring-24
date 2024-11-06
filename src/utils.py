@@ -46,15 +46,16 @@ class Themes(Enum):
         "TEXT": "#4B4B4B",  # Dark gray text for readability without harshness
         "ARROW": "#FFABAB",  # Soft coral for arrows to add warmth
     }
-    LGBT = {
-        "FRAME-BACKGROUND": "#FFFFFF",
-        "BORDER": "#000000",
-        "OBJECT-BACKGROUND": "#FFFFFF",  # color of the edge and dot without the flow
-        "FLOW": "#5B94D1",
-        "DOTS": ["#FF3D00", "#FF9800", "#FFEB3B", "#4CAF50", "#2196F3", "#9C27B0"],
-        "TEXT": "#000000",
-        "ARROW": "#CF5044",
-    }
+    # DEPRECATED
+    # LGBT = {
+    #     "FRAME-BACKGROUND": "#FFFFFF",
+    #     "BORDER": "#000000",
+    #     "OBJECT-BACKGROUND": "#FFFFFF",  # color of the edge and dot without the flow
+    #     "FLOW": "#5B94D1",
+    #     "DOTS": ["#FF3D00", "#FF9800", "#FFEB3B", "#4CAF50", "#2196F3", "#9C27B0"],
+    #     "TEXT": "#000000",
+    #     "ARROW": "#CF5044",
+    # }
 
     def __getitem__(self, key):
         return self.value[key]
