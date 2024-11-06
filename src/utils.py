@@ -11,7 +11,7 @@ class GrowthScale(Enum):
 
 class Themes(Enum):
     Light = {
-        "BACKGROUND": "#FFFFFF",
+        "FRAME-BACKGROUND": "#FFFFFF",
         "BORDER": "#000000",  # or '#2726D9',
         "OBJECT-BACKGROUND": "#FFFFFF",  # color of the edge and dot without the flow
         "FLOW": "#5B94D1",
@@ -20,7 +20,7 @@ class Themes(Enum):
         "ARROW": "#CF5044",
     }
     Dark = {
-        "BACKGROUND": "#303240",  # Dark background
+        "FRAME-BACKGROUND": "#303240",  # Dark background
         "BORDER": "#708090",  # White or light grey for contrast
         "OBJECT-BACKGROUND": "#262626",  # Slightly lighter dark color for flow background
         "FLOW": "#446688",  # Muted blue for flow
@@ -31,7 +31,7 @@ class Themes(Enum):
         "ARROW": "#FF6F61",  # Soft red for arrows, with good contrast
     }
     Pacman = {
-        "BACKGROUND": "#0D0503",
+        "FRAME-BACKGROUND": "#0D0503",
         "BORDER": "#1A1F73",  # or '#2726D9',
         "OBJECT-BACKGROUND": "#232CD9",
         "FLOW": "#787CDF",

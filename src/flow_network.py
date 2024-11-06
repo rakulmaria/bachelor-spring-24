@@ -21,7 +21,7 @@ class FlowNetwork(VMobject):
     ):
         self.theme = theme
         self.scene = scene
-        self.scene.camera.background_color = theme.get("BACKGROUND")
+        self.scene.camera.background_color = theme.get("FRAME-BACKGROUND")
         super().__init__()
         self.growth_scale = growth_scale
 
