@@ -272,7 +272,10 @@ class Edge(VMobject):
                 start=self.start_vertex.to_np_array(),
                 end=self.end_vertex.to_np_array(),
             )
-            .set_stroke(width=self.get_drawn_edge_size(self.max_capacity), color=WHITE)
+            .set_stroke(
+                width=self.get_drawn_edge_size(self.max_capacity),
+                color=self.theme.get("FLOW-BACKGROUND"),
+            )
             .set_fill(color=self.theme.get("FLOW-BACKGROUND"))
             .set_z_index(3)
         )

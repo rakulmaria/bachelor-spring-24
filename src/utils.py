@@ -1,6 +1,6 @@
 from enum import Enum
 import math
-from manim import color_gradient
+from manim import core
 
 
 class GrowthScale(Enum):
@@ -13,21 +13,34 @@ class Themes(Enum):
     Light = {
         "BACKGROUND": "#FFFFFF",
         "BORDER": "#000000",  # or '#2726D9',
-        "FLOW-BACKGROUND": "#FFFFFF",
+        "FLOW-BACKGROUND": "#FFFFFF",  # color of the edge without the flow
+        "DOT-FOREGROUND": "#FFFFFF",  # color of the dot without the flow
         "FLOW": "#5B94D1",
-        "DOTS": color_gradient(["#B7C8DB", "#7DB7C7"], 6),
+        "DOTS": core.color_gradient(["#B7C8DB", "#7DB7C7"], 6),
         "TEXT": "#000000",
         "ARROW": "#CF5044",
     }
-    Dark = {}
+    Dark = {
+        "BACKGROUND": "#303240",  # Dark background
+        "BORDER": "#708090",  # White or light grey for contrast
+        "FLOW-BACKGROUND": "#262626",  # Slightly lighter dark color for flow background
+        "DOT-FOREGROUND": "#262626",
+        "FLOW": "#446688",  # Muted blue for flow
+        "DOTS": core.color_gradient(
+            ["#81AAC2", "#2F4E60"], 6
+        ),  # Darker gradient colors for dots
+        "TEXT": "#FFFFFF",  # White text for readability
+        "ARROW": "#FF6F61",  # Soft red for arrows, with good contrast
+    }
     Pacman = {
         "BACKGROUND": "#0D0503",
-        "BORDER": "#1A199A",  # or '#2726D9',
-        "FLOW-BACKGROUND": "#FFFFFF",
-        "FLOW": "#FEBAE1",
-        "DOTS": color_gradient(["#FFE7DF", "#FEE9FF"], 6),
-        "TEXT": "#FFFF01",
-        "ARROW": "#F20505",
+        "BORDER": "#1A1F73",  # or '#2726D9',
+        "FLOW-BACKGROUND": "#232CD9",
+        "DOT-FOREGROUND": "#FFFFFF",  # ???? TODO
+        "FLOW": "#787CDF",
+        "DOTS": core.color_gradient(["#FFB747", "#FBB8DB", "#05F2C7", "#F20505"], 6),
+        "TEXT": "#FFC3A0",
+        "ARROW": "#FFC3A0",
     }
 
     def __getitem__(self, key):
