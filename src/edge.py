@@ -274,9 +274,9 @@ class Edge(VMobject):
             )
             .set_stroke(
                 width=self.get_drawn_edge_size(self.max_capacity),
-                color=self.theme.get("FLOW-BACKGROUND"),
+                color=self.theme.get("OBJECT-BACKGROUND"),
             )
-            .set_fill(color=self.theme.get("FLOW-BACKGROUND"))
+            .set_fill(color=self.theme.get("OBJECT-BACKGROUND"))
             .set_z_index(3)
         )
 

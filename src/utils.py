@@ -13,8 +13,7 @@ class Themes(Enum):
     Light = {
         "BACKGROUND": "#FFFFFF",
         "BORDER": "#000000",  # or '#2726D9',
-        "FLOW-BACKGROUND": "#FFFFFF",  # color of the edge without the flow
-        "DOT-FOREGROUND": "#FFFFFF",  # color of the dot without the flow
+        "OBJECT-BACKGROUND": "#FFFFFF",  # color of the edge and dot without the flow
         "FLOW": "#5B94D1",
         "DOTS": core.color_gradient(["#B7C8DB", "#7DB7C7"], 6),
         "TEXT": "#000000",
@@ -23,8 +22,7 @@ class Themes(Enum):
     Dark = {
         "BACKGROUND": "#303240",  # Dark background
         "BORDER": "#708090",  # White or light grey for contrast
-        "FLOW-BACKGROUND": "#262626",  # Slightly lighter dark color for flow background
-        "DOT-FOREGROUND": "#262626",
+        "OBJECT-BACKGROUND": "#262626",  # Slightly lighter dark color for flow background
         "FLOW": "#446688",  # Muted blue for flow
         "DOTS": core.color_gradient(
             ["#81AAC2", "#2F4E60"], 6
@@ -35,8 +33,7 @@ class Themes(Enum):
     Pacman = {
         "BACKGROUND": "#0D0503",
         "BORDER": "#1A1F73",  # or '#2726D9',
-        "FLOW-BACKGROUND": "#232CD9",
-        "DOT-FOREGROUND": "#FFFFFF",  # ???? TODO
+        "OBJECT-BACKGROUND": "#232CD9",
         "FLOW": "#787CDF",
         "DOTS": core.color_gradient(["#FFB747", "#FBB8DB", "#05F2C7", "#F20505"], 6),
         "TEXT": "#FFC3A0",

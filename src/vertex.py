@@ -41,7 +41,7 @@ class Vertex(VMobject):
         self.foreground_dot = (
             Dot(self.to_np_array())
             .scale(self.get_drawn_dot_size())
-            .set_fill(self.theme.get("DOT-FOREGROUND"))
+            .set_fill(self.theme.get("OBJECT-BACKGROUND"))
             .set_z_index(10)
         )
 
