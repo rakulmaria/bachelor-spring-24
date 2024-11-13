@@ -1,0 +1,4 @@
+- LaggedStart har tomme mellemrum imellem animationerne, det ser ikke pænt ud
+- Kanter, der krydser hinanden, skaber problemer for at finde path'en som knudepunkterne
+- Vi kan stadig ikke formindske strømning i en kant
+- Evt. hard-code de veje, vi ønsker den skal tage?
