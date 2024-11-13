@@ -1,6 +1,6 @@
 from manim import *
 import random
-from shapely.geometry import LineString
+from shapely.geometry import LineString  # 3.9.1
 
 
 class MoveAlongPathWithKilter(AnimationGroup):

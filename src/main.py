@@ -25,6 +25,7 @@ class SedgewickWayne(Scene):
         self.add(graph)
         ford_fulkerson = FordFulkerson(graph, self, show_text=False)
         ford_fulkerson.find_max_flow()
+        self.wait(30)
 
 
 class WikiExample(Scene):

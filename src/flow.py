@@ -12,19 +12,22 @@ class Flow(VMobject):
     ):
         # self.draw_path(path, (kilter_end * 0.9), scene)
 
-        # group = Group()
-        for i in range(30):
-            a = turn_animation_into_updater(
-                MoveAlongPathWithKilter(
-                    path=path,
-                    dot=Dot(color=BLUE).scale(0.7).set_z_index(100),
-                    kilter=random.uniform((kilter_start * 0.9), (kilter_end * 0.9)),
-                    run_time=random.uniform(3, 8),
-                ),
-                cycle=True,
+        for _ in range(12):
+            move_along_paths = []
+            for _ in range(5):
+                move_along_paths.append(
+                    MoveAlongPathWithKilter(
+                        path=path,
+                        dot=Dot(color=BLUE).scale(0.2).set_z_index(100),
+                        kilter=random.uniform((kilter_start * 0.9), (kilter_end * 0.9)),
+                        run_time=random.uniform(3, 8),
+                    )
+                )
+                # scene.add(a)
+
+            scene.add(
+                turn_animation_into_updater(LaggedStart(*move_along_paths), cycle=True)
             )
-            # group.add(a)
-            scene.add(a)
 
         super().__init__()
 
