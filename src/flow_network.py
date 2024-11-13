@@ -31,6 +31,7 @@ class FlowNetwork(VMobject):
         self.draw_vertices_and_edges()
 
     def draw_vertices_and_edges(self):
+        # vertex has in and outgoing capacity here
         for vertex in self.vertices:
             self.add(vertex)
             vertex.draw(self.get_min_vertex_capacity(self.vertices))
