@@ -33,8 +33,7 @@ class Edge(VMobject):
 
         start_vertex.add_adjacent_edge(self)
         end_vertex.add_adjacent_edge(self)
-        start_vertex.add_to_max_outgoing_capacity(max_capacity)
-        end_vertex.add_to_max_ingoing_capacity(max_capacity)
+
         if max_capacity > start_vertex.biggest_capacity:
             start_vertex.biggest_capacity = max_capacity
         if max_capacity > end_vertex.biggest_capacity:
