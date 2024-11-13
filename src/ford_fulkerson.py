@@ -22,7 +22,7 @@ class FordFulkerson:
     def find_max_flow(self):
         self.max_flow = 0
 
-        self.text_helper.play_initial_tex_animation()
+        # self.text_helper.play_initial_tex_animation()
 
         path = self.path_finder.find_path(
             source=self.graph.source,
@@ -37,7 +37,7 @@ class FordFulkerson:
                 graph_length=len(self.graph.vertices),
             )
 
-        self.text_helper.play_final_tex_animation(int(self.max_flow))
+        # self.text_helper.play_final_tex_animation(int(self.max_flow))
 
     def augment_path(self, path):
         bottleneck = 9223372036854775807

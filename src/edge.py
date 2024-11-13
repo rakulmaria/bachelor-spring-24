@@ -35,6 +35,10 @@ class Edge(VMobject):
         end_vertex.add_adjacent_edge(self)
         start_vertex.add_to_max_outgoing_capacity(max_capacity)
         end_vertex.add_to_max_ingoing_capacity(max_capacity)
+        if max_capacity > start_vertex.biggest_capacity:
+            start_vertex.biggest_capacity = max_capacity
+        if max_capacity > end_vertex.biggest_capacity:
+            end_vertex.biggest_capacity = max_capacity
 
     def add_current_flow_towards(self, vertex_id, new_flow, scene: Scene):
         # if vertex is start_vertex, that means we want to 'undo' a previous choice
