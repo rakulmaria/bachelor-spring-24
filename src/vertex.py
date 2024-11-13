@@ -70,18 +70,3 @@ class Vertex(VMobject):
 
     def get_max_drawn_capacity(self):
         return self.biggest_capacity
-
-    def add_to_current_flow(self, new_flow):
-        if self.flow_object is None:
-            self.flow_object = (
-                Dot(self.to_np_array()).scale(self.get_drawn_dot_size()).set_z_index(12)
-            )
-
-        self.current_flow += new_flow
-        new_flow_object = (
-            Dot(self.to_np_array()).scale(self.get_drawn_dot_size()).set_z_index(12)
-        )
-
-        vertex_animation = ReplacementTransform(self.flow_object, new_flow_object)
-        self.flow_object = new_flow_object
-        return vertex_animation

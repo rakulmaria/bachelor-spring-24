@@ -44,7 +44,6 @@ class Edge(VMobject):
         if vertex_id is self.start_vertex.id:
             new_flow = -1 * new_flow
 
-        vertex_animation = self.start_vertex.add_to_current_flow(new_flow)
         self.current_flow += new_flow
 
         (new_start_coord, new_end_coord) = self.get_flow_coords()
@@ -73,14 +72,8 @@ class Edge(VMobject):
 
         scene.play(
             edge_animation,
-            vertex_animation,
             arrow_animation,
         )
-
-        # edge case for end vertex. end by playing the animation by coloring the sink vertex blue
-        if self.end_vertex.is_sink:
-            vertex_animation_end_vertex = self.end_vertex.add_to_current_flow(new_flow)
-            scene.play(vertex_animation_end_vertex)
 
         self.flow_object = new_flow_object
 
