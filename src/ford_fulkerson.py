@@ -2,6 +2,7 @@ from src.BFS import BFS
 from manim import *
 from src.flow_network import FlowNetwork
 from src.text_helper import TextHelper
+from src.flow import Flow
 
 
 class FordFulkerson:
@@ -71,5 +72,20 @@ class FordFulkerson:
 
         for vertex, edge in path_to_draw:
             edge.add_current_flow_towards(vertex, bottleneck, self.scene)
+
+        path = VMobject()
+        corner_arr = []
+        corner_arr.append(self.graph.source.to_np_array())
+        for vertex, edge in path_to_draw:
+            corner_arr.append(edge.get_vertex_from_id(vertex).to_np_array())
+
+        path.set_points_as_corners(corner_arr)
+        Flow(
+            path,
+            scene=self.scene,
+            kilter_start=-(bottleneck * 8 / 200),
+            kilter_end=(bottleneck * 8 / 200),
+        )
+        # self.scene.add(flow)
 
         return bottleneck

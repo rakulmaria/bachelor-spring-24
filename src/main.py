@@ -141,5 +141,23 @@ class ThoresExampleBFS(Scene):
         self.camera.frame_width = 3.5 * scale
         self.camera.resize_frame_shape(0)
         self.add(graph)
-        ford_fulkerson = FordFulkerson(graph, self, scale=scale)
+        ford_fulkerson = FordFulkerson(graph, self, scale=scale, show_text=False)
+        ford_fulkerson.find_max_flow()
+
+
+class SimpleGraph(Scene):
+    def construct(self):
+        vertices, edges, capacities, source, sink = V.simple_graph()
+
+        graph = FlowNetwork(
+            vertices,
+            edges,
+            capacities,
+            growth_scale=GrowthScale.LINEAR,
+            source=source,
+            sink=sink,
+        )
+
+        self.add(graph)
+        ford_fulkerson = FordFulkerson(graph, self)
         ford_fulkerson.find_max_flow()
