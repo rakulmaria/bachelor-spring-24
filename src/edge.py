@@ -1,7 +1,18 @@
 from manim import *
 from src.arrow import EdgeArrow
-from src.flow_object import FlowObject
-from src.utils import GrowthScale, get_drawn_size
+from src.utils import *
+
+ratefunctions = [
+    rate_functions.double_smooth,
+    rate_functions.linear,
+    rate_functions.ease_in_sine,
+    rate_functions.ease_out_quad,
+    rate_functions.ease_in_quint,
+    rate_functions.ease_in_cubic,
+    rate_functions.ease_in_out_circ,
+]
+
+color_list = color_gradient([AS2700.B32_POWDER_BLUE, AS2700.B45_SKY_BLUE], 6)
 
 
 class Edge(VMobject):
@@ -12,6 +23,8 @@ class Edge(VMobject):
         max_capacity,
         current_flow=0,
         growth_scale=GrowthScale.SQRT,
+        theme=Themes.Light,
+        scene: Scene = None,
     ):
         super().__init__()
         self.start_vertex = start_vertex
@@ -19,17 +32,7 @@ class Edge(VMobject):
         self.max_capacity = max_capacity
         self.current_flow = current_flow
         self.growth_scale = growth_scale
-
-        # initial flow_object is empty
-        (init_start_coord, init_end_coord) = self.get_flow_coords()
-        init_direction = self.get_direction()
-        self.flow_object = FlowObject(
-            init_start_coord,
-            init_end_coord,
-            init_direction,
-            0,
-            growth_scale=self.growth_scale,
-        )
+        self.theme = theme
 
         start_vertex.add_adjacent_edge(self)
         end_vertex.add_adjacent_edge(self)
@@ -39,15 +42,14 @@ class Edge(VMobject):
         if max_capacity > end_vertex.biggest_capacity:
             end_vertex.biggest_capacity = max_capacity
 
+        self.start_vertex_to_updater = {}
+
     def add_current_flow_towards(self, vertex_id, new_flow, scene: Scene):
         # if vertex is start_vertex, that means we want to 'undo' a previous choice
         if vertex_id is self.start_vertex.id:
             new_flow = -1 * new_flow
 
         self.current_flow += new_flow
-
-        # (new_start_coord, new_end_coord) = self.get_flow_coords()
-        # new_direction = self.get_direction()
 
     def get_drawn_edge_size(self, capacity):
         return get_drawn_size(self.growth_scale, capacity) * 8
@@ -56,7 +58,7 @@ class Edge(VMobject):
         background_line = Line(
             start=self.start_vertex.to_np_array(),
             end=self.end_vertex.to_np_array(),
-            color=BLACK,
+            color=self.theme.get("BORDER"),
             stroke_width=(self.get_drawn_edge_size(self.max_capacity) + 1.6),
         )
 
@@ -65,13 +67,16 @@ class Edge(VMobject):
                 start=self.start_vertex.to_np_array(),
                 end=self.end_vertex.to_np_array(),
             )
-            .set_stroke(width=self.get_drawn_edge_size(self.max_capacity), color=WHITE)
-            .set_fill(color=WHITE)
+            .set_stroke(
+                width=self.get_drawn_edge_size(self.max_capacity),
+                color=self.theme.get("OBJECT-BACKGROUND"),
+            )
+            .set_fill(color=self.theme.get("OBJECT-BACKGROUND"))
             .set_z_index(3)
         )
 
         self.arrow = EdgeArrow(
-            self.start_vertex.to_np_array(), self.end_vertex.to_np_array()
+            self.start_vertex.to_np_array(), self.end_vertex.to_np_array(), self.theme
         )
 
         self.add(background_line, self.foreground_line, self.arrow)

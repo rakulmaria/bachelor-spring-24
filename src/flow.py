@@ -1,6 +1,7 @@
 import random
 from manim import *
 from src.path import *
+from src.utils import *
 
 """
     The Flow class creates 30 dots to move along an augmenting path.
@@ -18,6 +19,7 @@ class Flow(VMobject):
         scene: Scene,
         kilter_start: float = 0,
         kilter_end: float = 0,
+        theme: Themes = Themes.Light,
     ):
         # self.draw_path(path, (kilter_end * 0.9), scene)
 
@@ -25,7 +27,9 @@ class Flow(VMobject):
             a = turn_animation_into_updater(
                 MoveAlongPathWithKilter(
                     path=path,
-                    dot=Dot(color=BLUE).scale(0.2).set_z_index(100),
+                    dot=Dot(color=random.choice(theme.get("DOTS")))
+                    .scale(0.2)
+                    .set_z_index(100),
                     kilter=random.uniform((kilter_start * 0.9), (kilter_end * 0.9)),
                     run_time=random.uniform(3, 8),
                     # offset=random.uniform(0, 3),

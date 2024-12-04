@@ -19,6 +19,7 @@ class Test_Graph_Log2(Scene):
             layout="partite",
             layers=layers,
             growth_scale=GrowthScale.LOG2,
+            scene=self,
         )
 
         self.camera.background_color = WHITE

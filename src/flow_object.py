@@ -1,7 +1,7 @@
 from manim import *
 
 from src.arrow import EdgeArrow
-from src.utils import GrowthScale, get_drawn_size
+from src.utils import *
 import src.colors as colors
 from src.updaters import update
 
@@ -13,22 +13,23 @@ class FlowObject(Line):
         flow_end_coord,
         direction,
         flow,
+        theme=Themes.Light,
         growth_scale=GrowthScale.SQRT,
     ):
-        self.polygons = VGroup()
         self.growth_scale = growth_scale
+        self.theme = theme
 
         super().__init__(start=flow_start_coord, end=flow_end_coord, z_index=4)
         super().set_stroke(
             width=(self.get_drawn_flow_size(flow)),
-            color=colors.light_blue,
+            color=self.theme.get("FLOW"),
         )
 
         if flow > 0:
-            self.arrow = EdgeArrow(flow_end_coord, flow_start_coord)
+            self.arrow = EdgeArrow(
+                flow_end_coord, flow_start_coord, self.theme
+            ).set_z_index(6)
             self.add(self.arrow)
-
-        self.add_polygons(direction)
 
     def get_drawn_flow_size(self, flow):
         return get_drawn_size(self.growth_scale, flow) * 8

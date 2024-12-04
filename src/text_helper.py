@@ -8,9 +8,10 @@ class TextHelper:
         self.graph = graph
         self.scene = scene
         self.tex = Tex()
+        self.theme = graph.theme
 
     def create_and_align_tex(self, text: str):
-        tex = Tex(text, color=BLACK)
+        tex = Tex(text, color=self.graph.theme.get("TEXT"))
         tex.set(font_size=(10 * self.scale))
         tex.align_to(self.graph, UP).shift((0.45 + self.scale * 0.125) * UP)
 

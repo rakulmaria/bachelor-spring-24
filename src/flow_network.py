@@ -1,7 +1,7 @@
 from manim import *
 from src.edge import Edge
 from src.vertex import Vertex
-from src.utils import GrowthScale
+from src.utils import *
 
 
 class FlowNetwork(VMobject):
@@ -12,11 +12,16 @@ class FlowNetwork(VMobject):
         capacities,
         source,
         sink,
+        scene: Scene = None,
         layout_scale=2,
         layout="spring",
         layers=[],
         growth_scale: GrowthScale = GrowthScale.SQRT,
+        theme: Themes = Themes.Light,
     ):
+        self.theme = theme
+        self.scene = scene
+        self.scene.camera.background_color = theme.get("FRAME-BACKGROUND")
         super().__init__()
         self.growth_scale = growth_scale
 
@@ -57,6 +62,8 @@ class FlowNetwork(VMobject):
                 vertices_as_objects.get(to),
                 capacity,
                 growth_scale=self.growth_scale,
+                scene=self.scene,
+                theme=self.theme,
             )
             edges_as_objects.append(edge)
 
@@ -68,7 +75,7 @@ class FlowNetwork(VMobject):
         for _, id in enumerate(graph.vertices):
             x, y, _ = graph._layout[id]
 
-            vertex = Vertex(id, x, y, self.growth_scale)
+            vertex = Vertex(id, x, y, self.growth_scale, self.theme)
             if vertex.id == source:
                 self.source = vertex
                 vertex.set_source()
@@ -136,7 +143,7 @@ class FlowNetwork(VMobject):
             width=200,
             height=200,
             fill_opacity=0.9,
-            fill_color=WHITE,
+            fill_color=self.theme.get("FRAME-BACKGROUND"),
         ).set_z_index(20)
         scene.play(FadeIn(blur))
 

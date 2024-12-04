@@ -23,6 +23,7 @@ class Test_Graph_Sedgewick_Wayne(Scene):
             growth_scale=GrowthScale.LINEAR,
             source=source,
             sink=sink,
+            scene=self,
         )
 
         self.camera.background_color = WHITE
