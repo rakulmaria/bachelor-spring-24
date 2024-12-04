@@ -38,24 +38,14 @@ class Themes(Enum):
         "ARROW": "#FFC3A0",
     }
     Pastel = {
-        "FRAME-BACKGROUND": "#FCE4EC",  # Soft cream for the background
-        "BORDER": "#C5C6D0",  # Light lavender-gray for a subtle border
-        "OBJECT-BACKGROUND": "#E8EAF6",  # Pastel blue-gray for the object background
-        "FLOW": "#A6D8D4",  # Minty pastel teal for flow elements
+        "FRAME-BACKGROUND": "#FCE4EC",
+        "BORDER": "#C5C6D0",
+        "OBJECT-BACKGROUND": "#E8EAF6",
+        "FLOW": "#A6D8D4",
         "DOTS": ["#A3C4F3", "#FEB1A9", "#FEF2CD", "#CFF2B8", "#A6D8DB", "#BD9CF9"],
-        "TEXT": "#4B4B4B",  # Dark gray text for readability without harshness
-        "ARROW": "#FFABAB",  # Soft coral for arrows to add warmth
+        "TEXT": "#4B4B4B",
+        "ARROW": "#FFABAB",
     }
-    # DEPRECATED
-    # LGBT = {
-    #     "FRAME-BACKGROUND": "#FFFFFF",
-    #     "BORDER": "#000000",
-    #     "OBJECT-BACKGROUND": "#FFFFFF",  # color of the edge and dot without the flow
-    #     "FLOW": "#5B94D1",
-    #     "DOTS": ["#FF3D00", "#FF9800", "#FFEB3B", "#4CAF50", "#2196F3", "#9C27B0"],
-    #     "TEXT": "#000000",
-    #     "ARROW": "#CF5044",
-    # }
 
     def __getitem__(self, key):
         return self.value[key]
