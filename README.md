@@ -29,6 +29,10 @@ Opsætning afsluttes ved at køre:
 
 Dokumentationen er beskrevet i [Dokumentation.md](DOCUMENTATION.md).
 
+### To do
+
+En liste af hvad der mangler for at kunne lave en flot visualisering af Ford-Fulkerson kan findes i [TODO.md](TODO.md).
+
 ### Test
 
 Det er en forudsætning, at [Imagemagick](https://imagemagick.org/script/download.php) er installeret, for at testene kan køres.
