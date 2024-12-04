@@ -25,6 +25,10 @@ Opsætning afsluttes ved at køre:
 
     pip install -e .
 
+### Dokumentation
+
+Dokumentationen er beskrevet i [Dokumentation.md](DOCUMENTATION.md).
+
 ### Test
 
 Det er en forudsætning, at [Imagemagick](https://imagemagick.org/script/download.php) er installeret, for at testene kan køres.
