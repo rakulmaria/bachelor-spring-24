@@ -1,6 +1,6 @@
 import random
 from manim import *
-from path import *
+from src.path import *
 
 """
     The Flow class creates 30 dots to move along an augmenting path.

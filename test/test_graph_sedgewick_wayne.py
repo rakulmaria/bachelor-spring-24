@@ -1,3 +1,4 @@
+import random
 from manim import *
 
 from src.ford_fulkerson import FordFulkerson
@@ -8,8 +9,9 @@ from src.utils import GrowthScale
 
 class Test_Graph_Sedgewick_Wayne(Scene):
     def construct(self):
-        vertices, edges, capacities, source, sink = V.sedgewick_wayne()
+        random.seed(0)
 
+        vertices, edges, capacities, source, sink = V.sedgewick_wayne()
         layers = [1, 2, 2, 1]
 
         graph = FlowNetwork(
