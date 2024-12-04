@@ -201,15 +201,3 @@ class FlowNetwork(VMobject):
             scene.play(Create(line))
             group.add(line)
         return group
-
-
-# fjern flow-objekt og lav en linje i stedet for
-#   evt. med start fra venstre til højre første gang (vokser diagonalt).
-#   ellers vokser horisontalt
-
-# find ud af, hvordan hele path'en skal hænge sammen mellem hver edge
-#   hvordan får vi en path, som prikkerne kan følge, fra source til sink
-#   og hvor skal dens logik høre hjemme
-
-# prikker skal slettes undervejs og hvordan
-# kan vi finde ud af til hvilke kanter prikker skal tilføjes, hvis de ikke er en del af path'en
