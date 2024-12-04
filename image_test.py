@@ -19,10 +19,10 @@ def run_manim(file_path):
     subprocess.run(manim_command, shell=True)
 
     image_path_manim = os.path.join(
-        image_directory, filename, f"{capitalized_filename}_ManimCE_v0.18.0.post0.png"
+        image_directory, filename, f"{capitalized_filename}_ManimCE_v0.18.0.png"
     )
     image_path_test = os.path.join(
-        test_image_directory, f"{capitalized_filename}_ManimCE_v0.18.0.post0.png"
+        test_image_directory, f"{capitalized_filename}_ManimCE_v0.18.0.png"
     )
     difference_image_path = os.path.join(
         difference_image_directory, f"difference_{filename}.png"
