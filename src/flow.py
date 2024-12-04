@@ -17,7 +17,7 @@ class Flow(VMobject):
             a = turn_animation_into_updater(
                 MoveAlongPathWithKilter(
                     path=path,
-                    dot=Dot(color=BLUE).scale(0.7).set_z_index(100),
+                    dot=Dot(color=BLUE).scale(0.2).set_z_index(100),
                     kilter=random.uniform((kilter_start * 0.9), (kilter_end * 0.9)),
                     run_time=random.uniform(3, 8),
                 ),
