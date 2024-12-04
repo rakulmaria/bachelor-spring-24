@@ -96,4 +96,5 @@ class FordFulkerson:
             scene=self.scene,
             kilter_start=-(bottleneck * 8 / 200),
             kilter_end=(bottleneck * 8 / 200),
+            theme=self.graph.theme,
         )

@@ -73,36 +73,4 @@ class Vertex(VMobject):
         self.adjacent_edges.append(edge)
 
     def get_max_drawn_capacity(self):
-        return max(self.outgoing_capacity, self.ingoing_capacity)
-
-    def get_opacity(self):
-        return self.current_flow / self.get_max_opacity()
-
-    def get_max_opacity(self):
-        # edge case for source and sink vertices
-        if self.ingoing_capacity == 0 or self.outgoing_capacity == 0:
-            return max(self.ingoing_capacity, self.outgoing_capacity)
-        return min(self.ingoing_capacity, self.outgoing_capacity)
-
-    def add_to_current_flow(self, new_flow):
-        if self.flow_object is None:
-            self.flow_object = (
-                Dot(self.to_np_array())
-                .scale(self.get_drawn_dot_size())
-                .set_fill(self.theme.get("FLOW"))
-                .set_opacity(0)
-                .set_z_index(12)
-            )
-
-        self.current_flow += new_flow
-        new_flow_object = (
-            Dot(self.to_np_array())
-            .scale(self.get_drawn_dot_size())
-            .set_fill(self.theme.get("FLOW"))
-            .set_opacity(self.get_opacity())
-            .set_z_index(12)
-        )
-
-        vertex_animation = ReplacementTransform(self.flow_object, new_flow_object)
-        self.flow_object = new_flow_object
-        return vertex_animation
+        return self.biggest_capacity

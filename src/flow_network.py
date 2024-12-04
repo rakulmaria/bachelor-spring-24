@@ -143,7 +143,7 @@ class FlowNetwork(VMobject):
             width=200,
             height=200,
             fill_opacity=0.9,
-            fill_color=WHITE,
+            fill_color=self.theme.get("FRAME-BACKGROUND"),
         ).set_z_index(20)
         scene.play(FadeIn(blur))
 
