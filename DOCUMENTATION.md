@@ -12,6 +12,8 @@ Hvis man ønsker at oprette en ny graf, bør denne oprettes i [vertices_examples
 
 [ford_fulkerson.py](src/ford_fulkerson.py) er selvforklarende. Det er metoden `display_flow_path_helper(path_to_draw, bottleneck)` der opretter selve [Flow](src/flow.py) objekterne.
 
+Læg mærke til, at det er i [ford_fulkerson.py](src/ford_fulkerson.py) at alle LaTex animationerne oprettes og afspilles. For at slå dette til/fra sættes variablen `show_text` i konstruktøren. Derudover afspilles animationen af restgrafen også i denne klasse. Dette kan deaktiveres, ved at udkommentere linje 69.
+
 ## Flow.py
 
 

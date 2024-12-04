@@ -11,7 +11,7 @@ class FordFulkerson:
         graph: FlowNetwork,
         scene: Scene,
         scale=2,
-        show_text=True,
+        show_text=True,  # Set to false to disable LaTex animations
         path_finder=BFS(),
     ):
         self.graph = graph
@@ -66,6 +66,7 @@ class FordFulkerson:
 
         self.text_helper.play_tex_animation_for_residual_graph_before()
 
+        # disable to hide the animation of playing the residual graph
         self.graph.show_residual_graph(self.scene, path_to_draw, self.text_helper)
 
         self.text_helper.play_tex_animation_for_path(path_to_draw, bottleneck)
