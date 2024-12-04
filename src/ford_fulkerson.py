@@ -23,7 +23,7 @@ class FordFulkerson:
     def find_max_flow(self):
         self.max_flow = 0
 
-        # self.text_helper.play_initial_tex_animation()
+        self.text_helper.play_initial_tex_animation()
 
         path = self.path_finder.find_path(
             source=self.graph.source,
