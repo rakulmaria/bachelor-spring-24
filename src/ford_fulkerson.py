@@ -2,6 +2,7 @@ from src.BFS import BFS
 from manim import *
 from src.flow_network import FlowNetwork
 from src.text_helper import TextHelper
+from src.flow import Flow
 
 
 class FordFulkerson:
@@ -10,7 +11,7 @@ class FordFulkerson:
         graph: FlowNetwork,
         scene: Scene,
         scale=2,
-        show_text=True,
+        show_text=True,  # Set to false to disable LaTex animations
         path_finder=BFS(),
     ):
         self.graph = graph
@@ -65,11 +66,34 @@ class FordFulkerson:
 
         self.text_helper.play_tex_animation_for_residual_graph_before()
 
-        # self.graph.show_residual_graph(self.scene, path_to_draw, self.text_helper)
+        # disable to hide the animation of playing the residual graph
+        self.graph.show_residual_graph(self.scene, path_to_draw, self.text_helper)
 
         self.text_helper.play_tex_animation_for_path(path_to_draw, bottleneck)
 
         for vertex, edge in path_to_draw:
             edge.add_current_flow_towards(vertex, bottleneck, self.scene)
 
+        self.display_flow_path_helper(path_to_draw, bottleneck)
+
         return bottleneck
+
+    """ Helper method to displays the flow VMobjects on the path from s to t """
+
+    def display_flow_path_helper(self, path_to_draw, bottleneck):
+        corner_arr = []
+        corner_arr.append(self.graph.source.to_np_array())
+
+        for vertex, edge in path_to_draw:
+            corner_arr.append(edge.get_vertex_from_id(vertex).to_np_array())
+
+        path = VMobject()
+        path.set_points_as_corners(corner_arr)
+
+        # The way this is currently done, you cannot undo a flow. You would need to save this flow to undo it later.
+        Flow(
+            path,
+            scene=self.scene,
+            kilter_start=-(bottleneck * 8 / 200),
+            kilter_end=(bottleneck * 8 / 200),
+        )

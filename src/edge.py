@@ -1,7 +1,6 @@
 import random
 from manim import *
 from src.arrow import EdgeArrow
-from src.flow_object import FlowObject
 from src.utils import *
 
 ratefunctions = [
@@ -38,8 +37,11 @@ class Edge(VMobject):
 
         start_vertex.add_adjacent_edge(self)
         end_vertex.add_adjacent_edge(self)
-        start_vertex.add_to_max_outgoing_capacity(max_capacity)
-        end_vertex.add_to_max_ingoing_capacity(max_capacity)
+
+        if max_capacity > start_vertex.biggest_capacity:
+            start_vertex.biggest_capacity = max_capacity
+        if max_capacity > end_vertex.biggest_capacity:
+            end_vertex.biggest_capacity = max_capacity
 
         self.start_vertex_to_updater = {}
 
@@ -169,60 +171,10 @@ class Edge(VMobject):
         if vertex_id is self.start_vertex.id:
             new_flow = -1 * new_flow
 
-        vertex_animation = self.start_vertex.add_to_current_flow(new_flow)
         self.current_flow += new_flow
 
-        (new_start_coord, new_end_coord) = self.get_flow_coords()
-        new_direction = self.get_direction()
-
-        if self.current_flow - new_flow == 0:
-            self.flow_object = FlowObject(
-                new_start_coord,
-                new_start_coord,
-                new_direction,
-                new_flow,
-                theme=self.theme,
-                growth_scale=self.growth_scale,
-            )
-
-        new_flow_object = FlowObject(
-            new_start_coord,
-            new_end_coord,
-            new_direction,
-            self.current_flow,
-            theme=self.theme,
-            growth_scale=self.growth_scale,
-        )
-
-        edge_animation = ReplacementTransform(self.flow_object, new_flow_object)
-
-        if self.current_flow == self.max_capacity:
-            arrow_animation = Uncreate(self.arrow)
-        else:
-            (
-                new_arrow_start_coord,
-                new_arrow_end_coord,
-            ) = self.get_new_arrow_coords()
-
-            new_arrow = EdgeArrow(
-                new_arrow_start_coord, new_arrow_end_coord, self.theme
-            )
-            arrow_animation = ReplacementTransform(self.arrow, new_arrow)
-            self.arrow = new_arrow
-
-        self.add_flow(new_flow, scene, new_start_coord, new_end_coord)
-        scene.play(
-            edge_animation,
-            vertex_animation,
-            arrow_animation,
-        )
-
-        # edge case for end vertex. end by playing the animation by coloring the sink vertex blue
-        if self.end_vertex.is_sink:
-            vertex_animation_end_vertex = self.end_vertex.add_to_current_flow(new_flow)
-            scene.play(vertex_animation_end_vertex)
-
-        self.flow_object = new_flow_object
+        # (new_start_coord, new_end_coord) = self.get_flow_coords()
+        # new_direction = self.get_direction()
 
     def add_flow(self, new_flow, scene: Scene, new_start_coord, new_end_coord):
         (

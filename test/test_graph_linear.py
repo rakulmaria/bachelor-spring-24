@@ -19,6 +19,7 @@ class Test_Graph_Linear(Scene):
             layout="partite",
             layers=layers,
             growth_scale=GrowthScale.LINEAR,
+            scene=self,
         )
 
         self.camera.background_color = WHITE

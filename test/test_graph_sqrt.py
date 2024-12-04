@@ -19,6 +19,7 @@ class Test_Graph_Sqrt(Scene):
             layout="partite",
             layers=layers,
             growth_scale=GrowthScale.SQRT,
+            scene=self,
         )
 
         self.camera.background_color = WHITE

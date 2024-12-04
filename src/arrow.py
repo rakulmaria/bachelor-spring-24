@@ -1,6 +1,6 @@
 from manim import *
 from numpy import ndarray
-from utils import Themes
+from src.utils import Themes
 
 
 class EdgeArrow(Arrow):

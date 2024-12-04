@@ -6,7 +6,7 @@ Dette bachelorprojekt er udarbejdet i foråret 2024 ved IT Universitetet i Købe
 
 ### Opsætning
 
-Vi har fulgt [Manim's guide til opsætning af conda miljø](https://docs.manim.community/en/stable/installation/conda.html) for at installere Manim biblioteket i et lokalt miljø. Vi har yderligere installeret LaTex pakken, for at gøre brug af flottere skrift.
+Følg [Manim's guide til opsætning af conda miljø](https://docs.manim.community/en/stable/installation/conda.html) for at installere Manim biblioteket i et lokalt miljø. Vi har yderligere installeret LaTex pakken, for at gøre brug af flottere skrift. Følg [Manim's guide til opsætning af yderligere afhængigheder](https://docs.manim.community/en/stable/installation/macos.html#macos-optional-dependencies) for at installere LaTex pakken.
 
 I requirements.txt findes alle de pakker, som vi bruger i projektet. Kør følgende kommando i terminalen, for at installere disse:
 
@@ -16,13 +16,26 @@ Når pakkerne er installeret, er det nødvendigt at sætte pre-commit op med pro
 
     pre-commit install
 
-For at sætte projectet op kan det være nødvendigt at køre:
+[Imagemagick](https://imagemagick.org/script/download.php) skal installeres før at testene kan køres.
+
+    brew install imagemagick
+    brew install ghostscript
+
+Opsætning afsluttes ved at køre:
 
     pip install -e .
 
+### Dokumentation
+
+Dokumentationen er beskrevet i [Dokumentation.md](DOCUMENTATION.md).
+
+### To do
+
+En liste af hvad der mangler for at kunne lave en flot visualisering af Ford-Fulkerson kan findes i [TODO.md](TODO.md).
+
 ### Test
 
-[Imagemagick](https://imagemagick.org/script/download.php) skal installeres før at testene kan køres.
+Det er en forudsætning, at [Imagemagick](https://imagemagick.org/script/download.php) er installeret, for at testene kan køres.
 
 For at køre billede testene:
 
