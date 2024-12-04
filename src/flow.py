@@ -1,5 +1,14 @@
+import random
 from manim import *
 from path import *
+
+"""
+    The Flow class creates 30 dots to move along an augmenting path.
+    Currently, this only works if no backwards edges are used in the path, meaning that the path
+    is not "undooing" a previous flow.
+
+    Uncomment the offset parameter in the MoveAlongPathWithKilter class to make the dots start with a random offset.
+"""
 
 
 class Flow(VMobject):
@@ -12,21 +21,24 @@ class Flow(VMobject):
     ):
         # self.draw_path(path, (kilter_end * 0.9), scene)
 
-        # group = Group()
-        for i in range(30):
+        for _ in range(30):
             a = turn_animation_into_updater(
                 MoveAlongPathWithKilter(
                     path=path,
                     dot=Dot(color=BLUE).scale(0.2).set_z_index(100),
                     kilter=random.uniform((kilter_start * 0.9), (kilter_end * 0.9)),
                     run_time=random.uniform(3, 8),
+                    # offset=random.uniform(0, 3),
                 ),
                 cycle=True,
             )
-            # group.add(a)
             scene.add(a)
 
         super().__init__()
+
+    """
+        Helper function to draw the path with kilter. Uncomment line 13 to use this function.
+    """
 
     def draw_path(self, path: VMobject, offset, scene: Scene) -> None:
         path_points = path.get_points()
